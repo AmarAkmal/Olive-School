@@ -12,7 +12,7 @@ class User(db.Model):
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self, name,email, role, password):
+    def __init__(self, name, email, role, password):
         self.id = uuid.uuid4().hex
         self.name = name
         self.email = email
@@ -24,30 +24,44 @@ class Student(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     ic_no = db.Column(db.String(32))
     name = db.Column(db.String(300))
+    intake = db.Column(db.String(32))
     password = db.Column(db.String(100))
+    address = db.Column(db.TEXT)
+    picture = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academy_detail = db.relationship("Academy", backref="student", cascade="all, delete-orphan")
+
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self, name, ):
+    def __init__(self, name, ic_no, intake, address, password):
         self.id = uuid.uuid4().hex
+        self.ic_no = ic_no
         self.name = name
+        self.intake = intake
+        self.password = password
+        self.address = address
+
+        self.is_deleted = 1
 
 
 class Parent(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     type = db.Column(db.String(32))
-    name = db.Column(db.String(250))
+    name = db.Column(db.String(500))
     phone = db.Column(db.String(100))
-    email = db.Column(db.String(100))
+    email = db.Column(db.String(500))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self, name):
+    def __init__(self,type, name, phone,email):
         self.id = uuid.uuid4().hex
+        self.type = type
         self.name = name
+        self.phone = phone
+        self.email = email
+        # self.email = phone
 
 
 class Payment(db.Model):

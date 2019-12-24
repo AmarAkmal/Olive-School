@@ -17,12 +17,12 @@ def auth():
         email = request.form["inputEmail3"]
         password = request.form["inputPassword3"]
         user = User.query.filter_by(email=email).first()
-
-        if user.password == password:
-            session['logged_in'] = True
-            return redirect(url_for('bp_main.index', id=user.id))
+        if user:
+            if user.password == password:
+                session['logged_in'] = True
+                return redirect(url_for('bp_main.index', id=user.id))
         else:
-            flash('An error has occured', 'error')
+            flash('wrong email or password', 'error')
 
     return render_template('auth.html')
 
