@@ -179,58 +179,39 @@
                         list_del: function () {
                             return selection;
                         },
-                        list_data: function () {
-                            return $scope.smartTableData;
-                        },
 
                     },
-                    controller: function ($scope, $uibModalInstance, list_del, list_data) {
+                    controller: function ($scope, $uibModalInstance, list_del) {
                         $scope.confirmDel = function () {
-                            // var check = 0;
-                            // if ($scope.totalpagenum == $scope.pagenum) { /*Check Kalau ad Last page delete semua */
-                            //
-                            //     for (var x in list_data) {
-                            //         if (list_del.includes(list_data[x]["id"]))
-                            //             check = check + 1;
-                            //     }
-                            //
-                            // }
+
+                            var data = $.param({
+                                data: JSON.stringify({
+                                    "item_id": list_del
+                                })
+                            });
 
 
-                            // list_del = process_celery(list_del, "start_delete_process_celery");
+                            $http.post(ip_server + 'delete_student', data, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                                }
+                            }).then(function (response) {
+                                console.log(response)
+                                if (response.data['status'] == "OK") {
 
-                            // $http.delete(ip_report + 'delete_report/' + JSON.stringify(list_del)).then(function (response) {
-                            //     toastr.success('Delete data in process.', 'Process!');
-                            //     var timer = setInterval(function () {
-                            //         $.getJSON(ip_report + "status_delete_report_long/" + response.data['task_id'], function (data) {
-                            //             list_del = process_celery(list_del, "start_delete_process_celery");
-                            //             if (data["status"] == "SUCCESS") {
-                            //                 clearInterval(timer);
-                            //                 if (check == list_data.length) {
-                            //                     // paging_last_page()
-                            //
-                            //                 }
-                            //                 loadData();
-                            //                 process_celery(list_del, "finish_delete_process_celery");
-                            //             }
-                            //             if (data["status"] == "FAILURE") {
-                            //                 clearInterval(timer);
-                            //                 if (check == list_data.length) {
-                            //                     // paging_last_page()
-                            //
-                            //                 }
-                            //                 loadData();
-                            //                 process_celery(list_del, "finish_delete_process_celery");
-                            //             }
-                            //         })
-                            //     }, 2000);
-                            //
-                            //
-                            // }).catch(function (error) {
-                            //     console.log(error, "ERROR")
-                            //     // if (error.status === 401)
-                            //     //     denied()
-                            // });
+                                    toastr.success('Data has been deleted.', 'Success!');
+                                    $rootScope.$broadcast('load_list_student')
+
+                                } else {
+                                    toastr.error("Data hasn't been updated.", 'Error!');
+                                    // $scope.dismissM = '$close()'
+                                }
+
+
+                            }).catch(function (error) {
+                                console.log(error, "ERROR")
+
+                            });
 
 
                         }; //function end
