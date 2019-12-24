@@ -1,0 +1,145 @@
+<style>
+    textarea {
+        border: 0 none;
+        overflow: hidden; /*overflow is set to auto at max height using JS */
+        background: lightcyan;
+        font-family: sans-serif;
+        outline: none;
+        min-height: 130%;
+        height: auto;
+        resize: none;
+        width: 100%;
+    }
+</style>
+<div class="col-md-12  panel panel-blur profile-page">
+    <div class="panel-body">
+        <form ng-submit="submit()" class="form-horizontal">
+            <div class="panel-content">
+                <h3 class="with-line">Student Information</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3 control-label">Picture</label>
+                            <div class="col-sm-9">
+                                <div class="userpic">
+                                    <div class="userpic-wrapper">
+                                        <img ng-src="{{ picture }}" ng-click="uploadPicture()"
+                                             src="../static/assets/img/theme/student.png">
+                                    </div>
+                                    <i class="ion-ios-close-outline" ng-click="removePicture()" ng-if="!noPicture"></i>
+                                    <a href class="change-userpic" ng-click="uploadPicture()">Change Profile Picture</a>
+                                    <input type="file" ng-show="false" id="uploadFile"
+                                           ng-file-select="onFileSelect($files)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <h3 class="with-line"></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-1 control-label">Name</label>
+
+                            <div class="col-sm-11">
+                                <input type="text" class="form-control" ng-model="student_name" required/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-2 control-label">IC</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="student_ic" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3 control-label">Address</label>
+
+                            <div class="col-sm-9">
+                                <textarea style="min-width:100%;max-width:100% ;   max-height:100%;"
+                                          class="form-control" ng-model="student_address" required> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="with-line">Father Information</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-1 control-label">Name</label>
+                            <div class="col-sm-11">
+                                <input type="text" class="form-control" ng-model="father_name" required/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="father_email" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-2 control-label">Contact</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="father_contact" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="with-line">Mother Information</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-1 control-label">Name</label>
+                            <div class="col-sm-11">
+                                <input type="text" class="form-control" ng-model="mother_name" required/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="mother_email" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-2 control-label">Contact</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="mother_contact" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <h3 class="with-line"></h3>
+            <div style="float: right">
+
+
+                <button type="submit" style="width: 150px;" class="btn btn-primary btn-with-icon save-profile">
+                    <i class="ion-android-checkmark-circle"></i>Submit
+                </button>
+
+                <button type="button" style="width: 150px;" ng-click="$dismiss()"
+                        class="btn btn-danger btn-with-icon save-profile">
+                    <i class="ion-android-close"></i>Close
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

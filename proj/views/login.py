@@ -19,6 +19,7 @@ def auth():
         user = User.query.filter_by(email=email).first()
 
         if user.password == password:
+            session['logged_in'] = True
             return redirect(url_for('bp_main.index', id=user.id))
         else:
             flash('An error has occured', 'error')
@@ -29,6 +30,7 @@ def auth():
 @bp_login.route('/logout')
 def logout():
     try:
+        session.clear()
         flash('You were logged out')
     except Exception as e:
         print(e)

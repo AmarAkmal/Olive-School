@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.account')
-        .controller('student_createCtrl', ['$http', '$scope', 'toastr', '$uibModalInstance', '$uibModal', 'items', 'status', '$rootScope', '$sce', '$uibModalStack',student_createCtrl]);
+        .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$uibModalInstance', '$uibModal', 'items', 'status', '$rootScope', '$sce', '$uibModalStack',account_createCtrl]);
 
-    function student_createCtrl($http, $scope, toastr, $uibModalInstance, $uibModal, items, status, $rootScope, $sce, $uibModalStack) {
+    function account_createCtrl($http, $scope, toastr, $uibModalInstance, $uibModal, items, status, $rootScope, $sce, $uibModalStack) {
 
     }
 })();

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BlurAdmin.pages.student', ['ui.select', 'summernote', 'ngMask', 'angularjs-datetime-picker'])
+    angular.module('BlurAdmin.pages.student', ['ui.select', 'ngMask', 'angularjs-datetime-picker'])
         .config(routeConfig);
 
     function routeConfig($stateProvider, $urlRouterProvider) {
@@ -17,7 +17,6 @@
                     order: 10
                 }
             });
-        // $urlRouterProvider.when('/report', '/report');
     }
 
 })();

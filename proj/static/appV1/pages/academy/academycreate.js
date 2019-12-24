@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.academy')
-        .controller('student_createCtrl', ['$http', '$scope', 'toastr', '$uibModalInstance', '$uibModal', 'items', 'status', '$rootScope', '$sce', '$uibModalStack',student_createCtrl]);
+        .controller('academy_createCtrl', ['$http', '$scope', 'toastr', '$uibModalInstance', '$uibModal', '$rootScope', academy_createCtrl]);
 
-    function student_createCtrl($http, $scope, toastr, $uibModalInstance, $uibModal, items, status, $rootScope, $sce, $uibModalStack) {
+    function academy_createCtrl($http, $scope, toastr, $uibModalInstance, $uibModal, status, $rootScope,) {
 
     }
 })();

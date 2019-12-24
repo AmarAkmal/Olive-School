@@ -94,26 +94,20 @@
 <script type="text/javascript">
 
     if (window.location.hostname !== "localhost") {
-        var ip_gui = window.location.protocol + "//" + window.location.hostname + "/agency/";
-        var ip_report = window.location.protocol + "//" + window.location.hostname + "/agency_be/report/";
-        var ip_report_category = window.location.protocol + "//" + window.location.hostname + "/pta_be/category/";
+        var ip_gui = window.location.protocol + "//" + window.location.hostname + "/gui/";
+        var ip_server = window.location.protocol + "//" + window.location.hostname + "/app/";
 
         // console.log(ip_report)
     } else {
-        var ip_gui = 'http://localhost:8081/';     /*GUI*/
-        var ip_report = 'http://localhost:8080/report/';     /*REPORT*/
-        var ip_report_category = 'http://192.168.5.92:8080/category/';
+        var ip_gui = 'http://localhost:5000/';     /*GUI*/
+        var ip_server = 'http://localhost:5000/';   /*Logic*/
 
-        // var ip_gui = "https://myhardrockbit.asuscomm.com/agency/";
-        // var ip_report = "https://myhardrockbit.asuscomm.com/agency_be/report/";
-        // var ip_report_category = "https://myhardrockbit.asuscomm.com/pta_be/category/";
 
 
     }
 
 
     var gversion = '{{config.VERSION}}';
-    var agency = "MPKJ";
     var user_id = "{{id}}";
     var role = "{{role}}";
 

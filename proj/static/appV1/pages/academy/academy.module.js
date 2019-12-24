@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BlurAdmin.pages3.academy', ['ui.select', 'summernote', 'ngMask', 'angularjs-datetime-picker'])
+    angular.module('BlurAdmin.pages.academy', ['ui.select', 'summernote', 'ngMask', 'angularjs-datetime-picker'])
         .config(routeConfig);
 
     function routeConfig($stateProvider, $urlRouterProvider) {

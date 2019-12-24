@@ -11,6 +11,6 @@
 
     /** @ngInject */
     function routeConfig($urlRouterProvider) {
-        // $urlRouterProvider.otherwise('/report/list');
+        $urlRouterProvider.otherwise('/account-list');
     }
 })();

@@ -29,10 +29,13 @@ from proj.views.login import bp_login
 
 app.register_blueprint(bp_login, url_prefix='/login')
 
-
 from proj.views.main import bp_main
 
 app.register_blueprint(bp_main, url_prefix='/main')
+
+from proj.views.student import bp_student
+
+app.register_blueprint(bp_student, url_prefix='/student')
 
 from proj.views.Insertdata import bp_insertdata
 

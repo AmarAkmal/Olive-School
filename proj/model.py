@@ -22,8 +22,6 @@ class User(db.Model):
 
 class Student(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    intake = db.Column(db.String(32))
-    student_no = db.Column(db.String(32))
     ic_no = db.Column(db.String(32))
     name = db.Column(db.String(300))
     password = db.Column(db.String(100))
@@ -43,8 +41,6 @@ class Parent(db.Model):
     name = db.Column(db.String(250))
     phone = db.Column(db.String(100))
     email = db.Column(db.String(100))
-    ic_no = db.Column(db.String(100))
-    password = db.Column(db.String(100))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     is_deleted = db.Column(db.Boolean, default=1)

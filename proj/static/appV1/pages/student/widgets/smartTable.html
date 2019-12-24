@@ -18,16 +18,21 @@
 
 <div>
     <div class="table table-striped" style="padding-top: 10px;padding-left: 30px;">
-        <button style="width: 100px" type="button" class="btn btn-danger ion-trash-b" data-toggle="modal"
+        <button style="width: 130px" type="button" class="btn btn-success ion-person-add" data-toggle="modal"
+                ng-click="add_student()">
+            &nbsp;&nbsp;&nbsp;Add Student
+        </button>
+
+        <button style="width: 130px" type="button" class="btn btn-danger ion-trash-b" data-toggle="modal"
                 ng-click="delete()">
             &nbsp;&nbsp;&nbsp;&nbsp;Delete
         </button>
-        <button style="width: 100px" type="button" class="btn btn-info ion-refresh" ng-click="clear()">
+        <button style="width: 130px" type="button" class="btn btn-info ion-refresh" ng-click="clear()">
             &nbsp;&nbsp;&nbsp;Refresh
         </button>
     </div>
     <!--    <p style="float: right">Page {{pagenum}} of {{count_result}} results</p>-->
-    <p style="float: right">{{count_result}} results</p>
+    <p style="float: right">{{ count_result }} results</p>
     <table class="table " st-table="smartTableCopy" st-safe-src="smartTableData">
         <thead>
         <tr class="sortable ">
@@ -97,33 +102,34 @@
                 No Data Available
             </td>
         </tr>
-        <tr id="tr{{item['id']}}" ng-repeat="item in smartTableCopy">
+        <tr id="tr{{ item['id'] }}" ng-repeat="item in smartTableCopy">
             <td>
-                <div id="celery_process{{item.id}}" class="mail-checkbox">
+                <div id="celery_process{{ item.id }}" class="mail-checkbox">
                     <label class="checkbox-inline custom-checkbox nowrap">
-                        <input type="checkbox" id="{{item.id}}" ng-model="selectedList[item.id]">
+                        <input type="checkbox" id="{{ item.id }}" ng-model="selectedList[item.id]">
                         <span></span>
                     </label>
                 </div>
             </td>
-            <td class="elipsis" ng-click="view(item.id,item.status)" style="cursor: pointer;">{{item.date_report}}</td>
-            <td class="elipsis" ng-click="view(item.id,item.status)" style="cursor: pointer;">{{item.no_rujukan}}</td>
-            <td class="elipsis" ng-click="view(item.id,item.status)" style="cursor: pointer;">{{item.category}}</td>
+            <td class="elipsis" ng-click="view(item.id,item.status)"
+                style="cursor: pointer;">{{ item.date_report }}</td>
+            <td class="elipsis" ng-click="view(item.id,item.status)" style="cursor: pointer;">{{ item.no_rujukan }}</td>
+            <td class="elipsis" ng-click="view(item.id,item.status)" style="cursor: pointer;">{{ item.category }}</td>
 
             <td style="text-align: center;">
 
                 <!--                <img class="kameleon-icon with-round-bg {{item.color}}"><img-->
-                <img uib-tooltip="{{item.status}}" style="width:35px " ng-src="{{::( item.status | kameleonImg )}}">
+                <img uib-tooltip="{{ item.status }}" style="width:35px " ng-src="{{::( item.status | kameleonImg )}}">
                 <!--                <a>{{item.status}}</a>-->
 
             </td>
-            <td id="td{{item['id']}}" style=" padding-top: 3px;text-align: center">
-                <button id="forward{{item['id']}}" class="btn btn-icon btn-default"
+            <td id="td{{ item['id'] }}" style=" padding-top: 3px;text-align: center">
+                <button id="forward{{ item['id'] }}" class="btn btn-icon btn-default"
                         ng-hide="item.status != 'Failed'"
                         ng-click="resend_report(item.id)">
                     <i class="ion-android-share"></i></button>
 
-                <button id="loading_return{{item['id']}}" ng-show="item.status == 'Failed'"
+                <button id="loading_return{{ item['id'] }}" ng-show="item.status == 'Failed'"
                         class=" btn btn-icon btn-default">
                     <i class="fa fa-spinner fa-spin"></i>
                 </button>
@@ -160,7 +166,7 @@
                             ng-click="prev()"><i class="ion-arrow-left-a"></i></button>
                     <button ng-repeat="x in paging" class="btn"
                             ng-class="pagenum == x ?'':'btn-default'" ng-click="pressnum(x)">
-                        {{x}}
+                        {{ x }}
                     </button>
                     <button class="btn btn-icon btn-default" ng-disabled="pagenum >= totalpagenum"
                             ng-click="next()">
@@ -172,7 +178,7 @@
                                    ng-enter="gopage()"
                                    style="width: 33px;display: initial;text-align: center;padding: unset;border: 1px solid #dcdcdc;"
                                    id="input_gopage"
-                                   onkeypress="this.style.width = ((this.value.length + 4) * 8) + 'px';"/> / {{totalpagenum}}</span>
+                                   onkeypress="this.style.width = ((this.value.length + 4) * 8) + 'px';"/> / {{ totalpagenum }}</span>
                 <button ng-disabled="goto.page == 0" class="btn btn-icon btn-primary" ng-click="gopage()">Go</button>
 
             </td>
