@@ -66,7 +66,7 @@
             });
             fd.append('data', data);
 
-            $http.post(ip_server + "add?id=" + user_id, fd, {
+            $http.post(ip_server + "student/add?id=" + user_id, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             }).then(function (response) {

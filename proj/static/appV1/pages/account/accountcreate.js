@@ -5,91 +5,58 @@
         .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", account_createCtrl]);
 
     function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes) {
-        $scope.format1 = function () {
-            // console.log(input)
-            console.log($scope.month)
-            if ($scope.month <= 9) {
-                // console.log($scope.month = 0 + $scope.month)
-                $scope.month = "0" + $scope.month;
-            }
-        }
+        // $scope.format1 = function () {
+        //
+        //     if ($scope.month <= 9) {
+        //         // console.log($scope.month = 0 + $scope.month)
+        //         $scope.month = "0" + $scope.month;
+        //     }
+        // };
+        $http({
+            method: 'GET',
+            url: ip_server + 'student/get_student'
+        }).then(function (result) {
+            // console.log(result)
+            $scope.student_name = result.data
+        });
 
-        // $(function () {
-        //     // var d = new Date();
-        //     $('#datepicker').datepicker({
-        //         changeMonth: true,
-        //         showButtonPanel: true,
-        //         // dateFormat: 'mm',
-        //         dateFormat: 'dd MM yy', showOtherMonths: true, selectOtherMonths: true,
-        //         changeYear: true,
-        //         onClose: function (selectedDate,) {
-        //             console.log(selectedDate)
-        //             // scope.formData.date_report = selectedDate;
-        //             // rootScope.$broadcast('load_list_report')
-        //
-        //
-        //         }
-        //     });
-        //     // $(".date-picker-month").focus(function () {
-        //     //     $(".ui-datepicker-year").hide();
-        //     // });
-        //
-        //
-        //     // var d = new Date();
-        //     // $('#datepicker1').datepicker({
-        //     //     changeYear: true,
-        //     //     changeMonth: true,
-        //     //     showButtonPanel: true,
-        //     //     dateFormat: 'yy-mmdd' + d.getHours() + d.getMinutes() + d.getSeconds(),
-        //     //     onClose: function (dateText, inst) {
-        //     //         $scope.generate_running = create_UUID();
-        //     //         console.log($scope.generate_running)
-        //     //         $scope.code = dateText
-        //     //
-        //     //     }
-        //     // });
-        //
-        //
-        //     // function create_UUID() {
-        //     //     var dt = new Date().getTime();
-        //     //     var uuid = 'xxxxxxxx'.replace(/[xy]/g, function (c) {
-        //     //         var r = (dt + Math.random() * 16) % 16 | 0;
-        //     //         dt = Math.floor(dt / 16);
-        //     //         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        //     //     });
-        //     //     return uuid;
-        //     // }
-        //
-        //     //   $('#datepicker2').datepicker({
-        //     //       changeYear: true,
-        //     //      changeMonth: true,
-        //     //     showButtonPanel: true,
-        //     //    dateFormat: 'yy-mm-dd',
-        //     //     onClose: function (dateText, inst) {
-        //     //         var year = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        //     //         $scope.month = year
-        //     //         $(this).datepicker('setDate', new Date(year, 1));
-        //     //     }
-        //     // });
-        //     // $(".date-picker-year").focus(function () {
-        //     //     $(".ui-datepicker-month").hide();
-        //     // });
-        //
-        //
-        //     // $('#datemonthpicker').datepicker({
-        //     //     changeMonth: true,
-        //     //     showButtonPanel: true,
-        //     //     dateFormat: 'mm',
-        //     //     onClose: function (dateText, inst) {
-        //     //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        //     //         $(this).datepicker('setDate', new Date(month));
-        //     //     }
-        //     // });
-        //     // $(".date-picker-month").focus(function () {
-        //     //     $(".ui-datepicker-year").hide();
-        //     // });
-        // });
-        //################################################################################################
+        // $scope.student_name= [{'id':123 ,'name':'Amar'},{'id':456 ,'name':'Samad'}]
+        $scope.submit = function () {
+            var fd = new FormData();
+            var data = {
+                "student_name": $scope.student_name.selected.id,
+                "year": $scope.year,
+                "items": $scope.items,
+                "desc": $scope.desc,
+            };
+
+
+            if ($scope.attachment) {
+                for (var i = 0; i < $scope.attachment.length; i++) {
+                    fd.append('attachment', $scope.attachment[i]);
+                }
+            }
+
+            fd.append('data', JSON.stringify(data));
+            console.log(fd)
+
+            // var config = {transformRequest: angular.identity, headers: {'Content-Type': undefined}};
+            $http.post(ip_server + 'account/add_invoice', fd, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }
+            ).then(function (response) {
+                if (response.data.status === "OK") {
+                    toastr.success('Data successfully saved.', 'Success');
+                    $state.go('task.assigned', {page: '1'});
+                }
+            }).catch(function (error) {
+                if (error.status === 401) {
+                    denied();
+                }
+            });
+        };
+        // };
 
         $scope.items = [
             {
@@ -136,10 +103,10 @@
                 calculate();
             }
         };
-        $scope.submit = function () {
-            console.log($scope.items)
-
-        }
+        // $scope.submit = function () {
+        //     console.log($scope.items)
+        //
+        // }
         $scope.add_item = function () {
             $scope.inserted = {
                 // id: $scope.items.length + 1,

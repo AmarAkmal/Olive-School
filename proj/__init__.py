@@ -37,6 +37,10 @@ from proj.views.student import bp_student
 
 app.register_blueprint(bp_student, url_prefix='/student')
 
+from proj.views.account import bp_account
+
+app.register_blueprint(bp_account, url_prefix='/account')
+
 from proj.views.Insertdata import bp_insertdata
 
 app.register_blueprint(bp_insertdata, url_prefix='/insert')

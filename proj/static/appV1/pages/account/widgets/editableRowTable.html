@@ -10,7 +10,8 @@
 <div>
     <div style=" float: right;" class="add-row-editable-table">
         <!--    <button class="btn btn-primary" ng-click="addUser()"></button>-->
-        <button style="border-radius: 25px;" ng-click="add_item()" class="btn btn-primary ion-android-add"></button>
+        <button ng-disabled="!student_name.selected" style="border-radius: 25px;" ng-click="add_item()"
+                class="btn btn-primary ion-android-add"></button>
     </div>
     <table class="table table-bordered table-hover table-condensed">
         <tr>
@@ -53,9 +54,11 @@
 
                 </form>
                 <div class="buttons" ng-show="!rowform.$visible">
-                    <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit
+                    <button ng-disabled="!student_name.selected" class="btn btn-primary editable-table-button btn-xs"
+                            ng-click="rowform.$show()">Edit
                     </button>
-                    <button class="btn btn-danger editable-table-button btn-xs" ng-click="remove_items($index)">Delete
+                    <button ng-disabled="!student_name.selected" class="btn btn-danger editable-table-button btn-xs"
+                            ng-click="remove_items($index)">Delete
                     </button>
                 </div>
             </td>

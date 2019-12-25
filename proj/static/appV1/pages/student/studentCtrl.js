@@ -20,6 +20,9 @@
 
 
     function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
+
+
+
         $scope.formData = {};
         $scope.formData.student_name = "";
         $scope.formData.student_ic = "";
@@ -42,7 +45,7 @@
         function loadData() {
             $scope.formData.isAllSelected = false;
             console.log($scope.formData)
-            $http.get(ip_server + 'list_student/' + $scope.pagenum, {
+            $http.get(ip_server + 'student/list_student/' + $scope.pagenum, {
                 params: {
                     student_name: $scope.formData.student_name,
                     student_ic: $scope.formData.student_ic,
@@ -191,7 +194,7 @@
                             });
 
 
-                            $http.post(ip_server + 'delete_student', data, {
+                            $http.post(ip_server + 'student/delete_student', data, {
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                                 }
