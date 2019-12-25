@@ -22,7 +22,7 @@ def list_student(pagenum):
 
     # status = keyword["status"]
 
-    codeSql = Student.query.filter_by(is_deleted=1)
+    codeSql = Student.query.filter_by(is_deleted=0)
 
     if student_name:
         codeSql = codeSql.filter(Student.name.like('%' + student_name + '%'))
@@ -212,16 +212,7 @@ def delete_student():
     else:
 
         for i in users:
-            i.is_deleted = 0
-            # i.email += '#Software#' + datetime.now().strftime('%Y%m%d%H%M%S')
-            # i.phone += '#Software#' + datetime.now().strftime('%Y%m%d%H%M%S')
-            # i.staff_id += '#Software#' + datetime.now().strftime('%Y%m%d%H%M%S')
-            # folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], i.id)
-            #
-            # if os.path.exists(folder):
-            #     shutil.rmtree(folder)
-            # db.session.delete(i)
-
+            i.is_deleted = 1
         try:
 
             db.session.commit()
@@ -234,7 +225,7 @@ def delete_student():
 
 @bp_student.route('/get_student', methods=['GET'])
 def get_student():
-    get_student = Student.query.filter_by(is_deleted=1).all()
+    get_student = Student.query.filter_by(is_deleted=0).all()
     data = []
     for x in get_student:
         dictV = dict()

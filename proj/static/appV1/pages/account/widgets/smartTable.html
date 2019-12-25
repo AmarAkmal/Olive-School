@@ -38,8 +38,9 @@
         <tr class="sortable ">
             <th style="width: 3%;"></th>
             <th st-sort="receipt_no" style="width: 20%;">Receipt No.</th>
-            <th st-sort="month_payment" style="width: 15%;">Month Payment</th>
-            <th st-sort="desc" style="width: 42%;">Student Name</th>
+            <th st-sort="month_payment" style="width: 15%;">Code</th>
+            <th st-sort="desc" style="width: 27%;">Student Name</th>
+            <th st-sort="desc" style="width: 15%;">Total</th>
             <th st-sort="status" style="width: 20%;">Status</th>
 
         </tr>
@@ -59,7 +60,7 @@
                        type="search"/>
             </th>
             <th>
-                <input ng-enter="getfilter()" ng-model="formData.month_payment" placeholder="YYYY-MM(2019-01)"
+                <input ng-enter="getfilter()" ng-model="formData.code" placeholder="YYYY-MM(2019-01)"
                        class="input-sm form-control search-input"
                        type="search"/>
             </th>
@@ -68,11 +69,31 @@
                        class="input-sm form-control search-input"
                        type="search"/>
             </th>
+            <th>
+                <input ng-enter="getfilter()" ng-model="formData.total" placeholder="Search Total"
+                       class="input-sm form-control search-input"
+                       type="search"/>
+            </th>
             <th style="   padding-left: inherit;">
                 <div class="col-sm-9">
-                    <input ng-enter="getfilter()" ng-model="formData.status" placeholder="Search Status"
-                           class="input-sm form-control search-input"
-                           type="search"/>
+                    <!--                    <input ng-enter="getfilter()" ng-model="formData.status" placeholder="Search Status"-->
+                    <!--                           class="input-sm form-control search-input"-->
+                    <!--                           type="search"/>-->
+
+                    <ui-select ng-model="formData.status.selected"
+                               class="btn-group bootstrap-select form-control"
+                               append-to-body="true"
+                               search-enabled="false"
+                               ng-change="getfilter()">
+                        <ui-select-match placeholder="Please Choose">
+                            <span> {{$select.selected.name }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="x in formData.status.options | filter: $select.search"
+                                           ng-hide="!$select.open">
+                            <span ng-bind-html="x.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+
                 </div>
                 <div class="col-sm-1">
                     <button uib-tooltip="Clear filter " class="btn btn-sm btn-default"
@@ -104,8 +125,9 @@
             <td class="elipsis" ng-click="view(item)"
                 style="cursor: pointer;">{{ item.receipt_no }}
             </td>
-            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.month_payment }}</td>
+            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.code }}</td>
             <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.student_name }}</td>
+            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.total }}</td>
             <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.status }}</td>
 
 
@@ -118,7 +140,7 @@
         <!--            </td>-->
         <!--        </tr>-->
         <tr>
-            <td colspan="4" class="text-center" ng-show="totalpagenum >= 2">
+            <td colspan="6" class="text-center" ng-show="totalpagenum >= 2">
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <button class="btn btn-icon btn-default" ng-disabled="pagenum < 2" style="margin-left:10px"

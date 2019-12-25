@@ -25,10 +25,12 @@
 
             var fd = new FormData();
             var data = {
-                "student_name": $scope.student_name.selected.id,
+                "student_id": $scope.student_name.selected.id,
                 "year": $scope.year,
+                "month": $scope.month,
                 "items": $scope.items,
                 "desc": $scope.desc,
+                "total_pay": $scope.total,
             };
 
 
@@ -80,15 +82,17 @@
 
         function calculate() {
             // console.log( $scope.items,"$data$data$data$data$data$data$data")
-            $scope.subtotal = 0;
+            $scope.calculate_sub = 0;
             // $scope.$scope.total_price = 0;
             for (var x in $scope.items) {
                 console.log($scope.items[x])
-                $scope.subtotal = $scope.subtotal + $scope.items[x]["amount"]
+                $scope.calculate_sub = $scope.calculate_sub + $scope.items[x]["amount"]
             }
-            $scope.subtotal = $scope.subtotal.toFixed(2);
-            $scope.total = Math.round($scope.subtotal * 10) / 10
-            // console.log($scope.total_price_1, " $scope.total_price_1 $scope.total_price_1 $scope.total_price_1")
+            $scope.subtotal = $scope.calculate_sub.toFixed(2);
+            $scope.total = (Math.round($scope.subtotal * 10) / 10).toFixed(1)
+            // $scope.total =  $scope.subtotal.toFixed(1)
+            // $scope.total = $scope.total.toFixed(2)
+            console.log($scope.total)
         }
 
         $scope.remove_items = function (index) {

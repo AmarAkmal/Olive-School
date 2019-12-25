@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, name, email, role, password):
         self.id = uuid.uuid4().hex
@@ -31,8 +31,9 @@ class Student(db.Model):
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academy_detail = db.relationship("Academy", backref="student", cascade="all, delete-orphan")
+    payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
 
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, name, ic_no, intake, address, password):
         self.id = uuid.uuid4().hex
@@ -41,8 +42,6 @@ class Student(db.Model):
         self.intake = intake
         self.password = password
         self.address = address
-
-        self.is_deleted = 1
 
 
 class Parent(db.Model):
@@ -55,7 +54,7 @@ class Parent(db.Model):
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self,type, name, phone,email):
+    def __init__(self, type, name, phone, email):
         self.id = uuid.uuid4().hex
         self.type = type
         self.name = name
@@ -64,29 +63,37 @@ class Parent(db.Model):
         # self.email = phone
 
 
-class Payment(db.Model):
+class Invoice(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     receipt_no = db.Column(db.String(32))
+    year = db.Column(db.String(32))
+    month = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
-    payment_detail = db.relationship("PaymentDetail", backref="payment", cascade="all, delete-orphan")
+    payment_detail = db.relationship("InvoiceDetail", backref="payment", cascade="all, delete-orphan")
+    attchement_detail = db.relationship("PaymentAttachment", backref="payment", cascade="all, delete-orphan")
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_pay = db.Column(db.Boolean, default=1)
+    total_pay = db.Column(db.Float)
+    date_pay = db.Column(db.DateTime)
+    is_pay = db.Column(db.Boolean, default=0)
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self, receipt_no, desc):
+    def __init__(self, receipt_no, year, month, total_pay):
         self.id = uuid.uuid4().hex
         self.receipt_no = receipt_no
-        self.desc = desc
+        self.year = year
+        self.month = month
+        self.total_pay = total_pay
 
 
-class PaymentDetail(db.Model):
+class InvoiceDetail(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     type = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
     price = db.Column(db.String(32))
-    payment_id = db.Column(db.ForeignKey('payment.id', ondelete="CASCADE", onupdate="CASCADE"))
+    payment_id = db.Column(db.ForeignKey('invoice.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, price, desc):
         self.id = uuid.uuid4().hex
@@ -94,20 +101,30 @@ class PaymentDetail(db.Model):
         self.desc = desc
 
 
-class Academy(db.Model):
+class PaymentAttachment(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    year = db.Column(db.String(10))
-    sem = db.Column(db.String(32))
-    desc = db.Column(db.TEXT)
+    name = db.Column(db.String(250))
+    student_id = db.Column(db.ForeignKey('invoice.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     is_deleted = db.Column(db.Boolean, default=1)
 
-    def __init__(self, year, sem, desc):
+    def __init__(self, name):
         self.id = uuid.uuid4().hex
-        self.year = year
-        self.sem = sem
+        self.name = name
+
+
+class Academy(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    desc = db.Column(db.TEXT)
+    amount = db.Column(db.TEXT)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+    is_deleted = db.Column(db.Boolean, default=0)
+
+    def __init__(self, desc, amount):
+        self.id = uuid.uuid4().hex
         self.desc = desc
+        self.amount = amount
 
 
 class AcademyDetail(db.Model):
@@ -116,7 +133,7 @@ class AcademyDetail(db.Model):
     grade = db.Column(db.String(25))
     desc = db.Column(db.TEXT)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, name, grade):
         self.id = uuid.uuid4().hex
