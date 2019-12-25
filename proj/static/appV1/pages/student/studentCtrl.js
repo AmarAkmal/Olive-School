@@ -22,7 +22,6 @@
     function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
 
 
-
         $scope.formData = {};
         $scope.formData.student_name = "";
         $scope.formData.student_ic = "";
@@ -166,6 +165,8 @@
                     animation: true,
                     templateUrl: '../static/app' + gversion + '/pages/asset/widgets/alert.html',
                     size: "sm",
+                    backdrop: 'static',
+                    keyboard: false,
                     resolve: {
                         items: function () {
                             return selection;
@@ -178,6 +179,8 @@
                     animation: true,
                     templateUrl: '../static/app' + gversion + '/pages/asset/widgets/delete.html',
                     size: "sm",
+                    backdrop: 'static',
+                    keyboard: false,
                     resolve: {
                         list_del: function () {
                             return selection;
@@ -234,10 +237,11 @@
         $scope.view = function (item) {
             var modalInstance = $uibModal.open({
                 animation: false,
-                keyboard: false,
+
                 templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
                 controller: 'studentViewCtrl',
                 size: 'lg',
+                keyboard: false,
                 backdrop: 'static',
                 resolve: {
                     items: function () {

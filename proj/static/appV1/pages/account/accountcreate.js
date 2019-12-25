@@ -22,6 +22,7 @@
 
         // $scope.student_name= [{'id':123 ,'name':'Amar'},{'id':456 ,'name':'Samad'}]
         $scope.submit = function () {
+
             var fd = new FormData();
             var data = {
                 "student_name": $scope.student_name.selected.id,

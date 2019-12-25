@@ -74,7 +74,7 @@
             </div>
             <div class="col-md-12" style="padding-top: 10px;">
                 <div style="float: right">
-                    <button ng-click="submit()" style="width: 120px ;" type="submit"
+                    <button ng-disabled="!student_name.selected || !month || !year" ng-click="submit()" style="width: 120px ;" type="submit"
                             class="btn btn-success ion-android-cloud">
                         &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
                     </button>&nbsp;&nbsp;
