@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BlurAdmin.pages.account', ['ui.select', 'summernote', 'ngMask', 'angularjs-datetime-picker'])
+    angular.module('BlurAdmin.pages.account', ['ui.select', 'ngMask', 'angularjs-datetime-picker'])
         .config(routeConfig);
 
     function routeConfig($stateProvider, $urlRouterProvider) {
@@ -13,7 +13,7 @@
                 controller: 'account_listCtrl',
                 title: 'Account List',
                 sidebarMeta: {
-                     icon: 'ion-compose',
+                    icon: 'ion-compose',
                     order: 1
                 }
             });

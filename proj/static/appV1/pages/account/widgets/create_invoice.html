@@ -1,0 +1,109 @@
+<style>
+    .hr_ {
+        margin-top: 0px;
+    }
+
+</style>
+<div class="col-md-12  panel panel-blur">
+    <div class="panel-body">
+
+        <!--        <div class="panel-heading">-->
+        <!--            <button type="button" class="close" ng-click="close_tab()" aria-label="Close">-->
+        <!--                <em class="ion-ios-close-empty sn-link-close"></em>-->
+        <!--            </button>-->
+        <!--        </div>-->
+
+        <div class="panel-body">
+            <!--        <uib-tabset>-->
+
+            <!--            <uib-tab index="1" heading="Detail">-->
+
+            <div class="row">
+                <div class=" col-sm-12" style="padding-top: 10px;">
+                    <label>Add Invoice</label>
+                    <hr class="hr_">
+
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <label>Student</label>
+                    <ui-select ng-model="student_name.selected"
+                               class="btn-group bootstrap-select form-control"
+                               append-to-body="false"
+                               search-enabled="false">
+                        <ui-select-match placeholder="Please Choose">
+                            <span> {{$select.selected.name}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="x in status_analysis | filter: $select.search"
+                                           ng-hide="!$select.open">
+                            <span ng-bind-html="x.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-sm-12" style="padding-top: 30px;">
+                    <label>CODE</label>
+                </div>
+                <div class="col-sm-4" style="padding-top: 10px;">
+                    <!--                    <input id="datepicker" readonly style="max-width: 100%;min-width: 100%;resize: none;"-->
+                    <!--                           class="form-control"-->
+                    <!--                           placeholder="yyyy-mmdd"-->
+                    <!--                           ng-model="code">-->
+
+                    <input placeholder="Year example (2020)"
+                           class="form-control"
+                           type="number"
+                           name="year"
+
+                           data-ng-model="year" onkeydown="getfilter()" ng-enter="getfilter()"/>
+
+                </div>
+                <div class="col-sm-4" style="padding-top: 10px;">
+
+                    <input type="text" style="max-width: 100%;min-width: 100%;resize: none;"
+                           class="form-control"
+                           placeholder="Month example (04)"
+                           min="1"
+                           max="12"
+                           ng-keyup='format1()'
+                           ng-model="month">
+
+                </div>
+
+                <!--                <div class="col-sm-4" style="padding-top: 10px;">-->
+                <!--                    <input style="border-radius: 25px;"  id="datepicker"-->
+                <!--                            class="btn btn-primary ion-android-add">-->
+
+
+                <!--                </div>-->
+
+                <!--                <div class="row">-->
+                <div class="col-md-12" style="padding-top: 40px;">
+                    <div include-with-scope="../static/app/pages/account/widgets/editableRowTable.html"></div>
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <label>Remark</label>
+                    <textarea style="max-width: 100%;min-width: 100%;resize: none;" class="form-control"
+
+                              ng-model="desc"></textarea>
+
+                </div>
+                <!--                </div>-->
+                <div class="col-md-12" style="padding-top: 10px;">
+                    <div style="float: right">
+                        <button ng-click="submit()" style="width: 120px ;" type="submit"
+                                class="btn btn-success ion-android-cloud">
+                            &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                        </button>&nbsp;&nbsp;
+                        <button style="width: 120px ;" type="button"
+                                class="btn btn-danger ion-android-close"
+                                ng-click="$close()">
+                            &nbsp;&nbsp;&nbsp;Close
+                        </button>
+                    </div>
+                </div>
+                <!--            </uib-tab>-->
+                <!--        </uib-tabset>-->
+            </div>
+        </div>
+    </div>
+</div>
+
