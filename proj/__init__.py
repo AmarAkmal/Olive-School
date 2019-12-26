@@ -29,6 +29,10 @@ from proj.views.login import bp_login
 
 app.register_blueprint(bp_login, url_prefix='/login')
 
+from proj.views.login import bp_login
+
+app.register_blueprint(bp_login, url_prefix='/')
+
 from proj.views.main import bp_main
 
 app.register_blueprint(bp_main, url_prefix='/main')

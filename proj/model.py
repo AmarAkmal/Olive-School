@@ -69,8 +69,8 @@ class Invoice(db.Model):
     year = db.Column(db.String(32))
     month = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
-    payment_detail = db.relationship("InvoiceDetail", backref="payment", cascade="all, delete-orphan")
-    attchement_detail = db.relationship("PaymentAttachment", backref="payment", cascade="all, delete-orphan")
+    payment_detail = db.relationship("InvoiceDetail", backref="invoice", cascade="all, delete-orphan")
+    attchement_detail = db.relationship("PaymentAttachment", backref="invoice", cascade="all, delete-orphan")
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     total_pay = db.Column(db.Float)
@@ -106,7 +106,7 @@ class PaymentAttachment(db.Model):
     name = db.Column(db.String(250))
     student_id = db.Column(db.ForeignKey('invoice.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, name):
         self.id = uuid.uuid4().hex

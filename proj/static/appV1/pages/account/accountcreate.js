@@ -51,12 +51,9 @@
             ).then(function (response) {
                 if (response.data.status === "OK") {
                     toastr.success('Data successfully saved.', 'Success');
-                    $state.go('task.assigned', {page: '1'});
                 }
             }).catch(function (error) {
-                if (error.status === 401) {
-                    denied();
-                }
+
             });
         };
         // };
@@ -143,8 +140,6 @@
                 if (data.length == 0) {          /*Add new save length 0/"" */
                     return "Required,Must Integer!";
                 }
-
-
             }
 
 

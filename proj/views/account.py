@@ -52,8 +52,10 @@ def list_student(pagenum):
             dict1 = dict()
             dict1['id'] = x.id
             dict1['receipt_no'] = x.receipt_no
+            dict1['student_ic'] = x.student.ic_no
             dict1['student_name'] = x.student.name
-            # dict1['year'] = x.year
+            dict1['year'] = x.year
+            dict1['month'] = x.month
             dict1['code'] = x.year + "-" + x.month
             dict1['desc'] = x.desc
             dict1['date_pay'] = x.date_pay
@@ -64,20 +66,31 @@ def list_student(pagenum):
                 dict1['status'] = "Pending"
 
             dict1['total'] = "%.2f" % x.total_pay
-            get_detail = InvoiceDetail.query.filter_by(payment_id=x.id, ).all()
+            get_detail = InvoiceDetail.query.filter_by(payment_id=x.id, is_deleted=0).all()
             dict1['invoice_detail'] = []
 
             if get_detail:
-                # calculation = 0
+
                 for j in get_detail:
                     list_1 = dict()
+
                     list_1['desc'] = j.desc
                     list_1['price'] = j.price
+                    list_1['old'] = True
                     # calculation = calculation + float(j.price)
                     dict1['invoice_detail'].append(list_1)
                 # total = round(calculation, 1)
                 # dict1['total'] = "RM%.2f" % total
                 # print("%.2f" % total)
+            get_att = PaymentAttachment.query.filter_by(student_id=x.id, is_deleted=0).all()
+            dict1['attachment'] = []
+
+            if get_att:
+                for k in get_att:
+                    list_1 = dict()
+                    list_1['id'] = k.invoice.id
+                    list_1['name'] = k.name
+                    dict1['attachment'].append(list_1)
 
             list['data'].append(dict1)
         totalpagenum = math.ceil(count_result / 10)

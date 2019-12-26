@@ -90,23 +90,6 @@
         }
 
 
-        $scope.add_invoice = function () {
-            var modalInstance = $uibModal.open({
-                animation: false,
-                keyboard: false,
-                backdrop: 'static',
-                templateUrl: '../static/app' + gversion + '/pages/account/widgets/create_invoice.html',
-                controller: 'account_createCtrl',
-                size: 'lg',
-
-            });
-
-            modalInstance.result.finally(function () {
-                // loadDatauser();
-            });
-
-        };
-
         $scope.getfilter = function () {
 
             $scope.filterflag = true;
@@ -162,6 +145,47 @@
             loadData();
 
         }
+
+        //    ############################################
+        $scope.add_invoice = function () {
+            var modalInstance = $uibModal.open({
+                animation: false,
+                keyboard: false,
+                backdrop: 'static',
+                templateUrl: '../static/app' + gversion + '/pages/account/widgets/create_invoice.html',
+                controller: 'account_createCtrl',
+                size: 'lg',
+
+            });
+
+            modalInstance.result.finally(function () {
+                // loadDatauser();
+            });
+
+        };
+
+
+        $scope.view = function (item) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                keyboard: false,
+                backdrop: 'static',
+                templateUrl: '../static/app' + gversion + '/pages/account/widgets/update_invoice.html',
+                controller: 'accountViewCtrl',
+                size: 'lg',
+                resolve: {
+                    items: function () {
+                        return item;
+                    }
+                }
+
+            });
+
+            modalInstance.result.finally(function () {
+                // loadDatauser();
+            });
+
+        };
 
     }
 
