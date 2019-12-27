@@ -76,7 +76,7 @@ class Invoice(db.Model):
     total_pay = db.Column(db.Float)
     date_pay = db.Column(db.DateTime)
     is_pay = db.Column(db.Boolean, default=0)
-    is_deleted = db.Column(db.Boolean, default=1)
+    is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, receipt_no, year, month, total_pay):
         self.id = uuid.uuid4().hex

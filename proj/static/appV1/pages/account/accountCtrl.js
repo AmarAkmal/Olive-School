@@ -30,6 +30,10 @@
             'options': [{id: 'All', name: 'All'}, {id: 0, name: 'Pending'}, {id: 1, name: 'Done'}]
         };
         $scope.formData.status.selected = {id: 'All', name: 'All'};
+             $scope.$on('load_list_account', function () {
+            loadData();
+        });
+
         loadData();
 
         function loadData() {
@@ -165,7 +169,7 @@
         };
 
 
-        $scope.view = function (item) {
+        $scope.view = function (id) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 keyboard: false,
@@ -174,8 +178,8 @@
                 controller: 'accountViewCtrl',
                 size: 'lg',
                 resolve: {
-                    items: function () {
-                        return item;
+                    invoice_id: function () {
+                        return id;
                     }
                 }
 

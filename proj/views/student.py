@@ -10,17 +10,12 @@ bp_student = Blueprint('bp_student', __name__)
 
 @bp_student.route('/list_student/<pagenum>', methods=['GET'])
 def list_student(pagenum):
-    # print(keyword)
-    # print(pagenum)
 
     student_name = request.args["student_name"]
     student_ic = request.args["student_ic"]
     student_intake = request.args["student_intake"]
-    # return "ok"
-    # keyword = json.loads(keyword)
-    pagenum = json.loads(pagenum)
 
-    # status = keyword["status"]
+    pagenum = json.loads(pagenum)
 
     codeSql = Student.query.filter_by(is_deleted=0)
 
@@ -32,8 +27,6 @@ def list_student(pagenum):
     if student_intake:
         codeSql = codeSql.filter(Student.intake.like('%' + student_intake + '%'))
 
-    # if status and status != "All":
-    #     codeSql = codeSql.filter(Report.status.like('%' + status + '%'))
 
     report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
     count_result = codeSql.order_by(Student.date_created.desc()).count()
@@ -65,7 +58,7 @@ def list_student(pagenum):
 
             list['data'].append(dict1)
         totalpagenum = math.ceil(count_result / 10)
-        list['totalpagenum'] = str(totalpagenum)
+        list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
 

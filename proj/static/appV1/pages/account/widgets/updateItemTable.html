@@ -53,7 +53,7 @@
                     </button>
 
                 </form>
-                <div  class="buttons" ng-show="!rowform.$visible">
+                <div class="buttons" ng-show="!rowform.$visible">
                     <button ng-disabled="is_pay == 1" class="btn btn-primary editable-table-button btn-xs"
                             ng-click="rowform.$show()">Edit
                     </button>
@@ -91,11 +91,17 @@
 
         <!--    <div>total{{total_price}}</div>-->
     </table>
-    <div class="col-sm-12">
+    <div ng-show="!items[0].desc" class="col-sm-12">
         <div align="center">
-            <span> <font color="red">*** Minimum 1 item ***</font></span>
+            <span> <font color="red">***Required!, Minimum 1 item ***</font></span>
         </div>
 
     </div>
+    <!--    <div class="col-sm-12">-->
+    <!--        <div align="center">-->
+    <!--            <span> <font color="red">*** Minimum 1 item ***</font></span>-->
+    <!--        </div>-->
+
+    <!--    </div>-->
 
 </div>

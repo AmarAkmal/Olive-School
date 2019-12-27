@@ -37,7 +37,7 @@
         <thead>
         <tr class="sortable ">
             <th style="width: 3%;"></th>
-            <th st-sort="receipt_no" style="width: 20%;">Receipt No.</th>
+            <th st-sort="receipt_no" style="width: 20%;">Invoice No.</th>
             <th st-sort="month_payment" style="width: 15%;">Code</th>
             <th st-sort="desc" style="width: 27%;">Student Name</th>
             <th st-sort="desc" style="width: 15%;">Total</th>
@@ -122,13 +122,13 @@
                     </label>
                 </div>
             </td>
-            <td class="elipsis" ng-click="view(item)"
+            <td class="elipsis" ng-click="view(item.id)"
                 style="cursor: pointer;">{{ item.receipt_no }}
             </td>
-            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.code }}</td>
-            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.student_name }}</td>
-            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.total }}</td>
-            <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.status }}</td>
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.code }}</td>
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.student_name }}</td>
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.total }}</td>
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.status }}</td>
 
 
         </tr>

@@ -58,7 +58,7 @@
                             ng-click="rowform.$show()">Edit
                     </button>
                     <button ng-disabled="!student_name.selected" class="btn btn-danger editable-table-button btn-xs"
-                            ng-click="remove_items($index)">Delete
+                            ng-click="remove_items($index);">Delete
                     </button>
                 </div>
             </td>
@@ -91,9 +91,9 @@
 
         <!--    <div>total{{total_price}}</div>-->
     </table>
-    <div class="col-sm-12">
+    <div ng-show="!items[0].desc" class="col-sm-12">
         <div align="center">
-            <span> <font color="red">*** Minimum 1 item ***</font></span>
+            <span> <font color="red">***Required!, Minimum 1 item ***</font></span>
         </div>
 
     </div>

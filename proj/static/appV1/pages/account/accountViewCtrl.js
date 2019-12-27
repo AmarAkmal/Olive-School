@@ -2,37 +2,61 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.account')
-        .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", account_createCtrl]);
+        .controller('accountViewCtrl', ['$scope', '$uibModal', '$http', 'invoice_id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', accountViewCtrl]);
 
-    function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
-        $scope.ok_boleh = false
+    function accountViewCtrl($scope, $uibModal, $http, invoice_id, toastr, $rootScope, editableOptions, editableThemes) {
+        // console.log(items)
         $scope.items = [];
-        // $scope.format1 = function () {
-        //
-        //     if ($scope.month <= 9) {
-        //         // console.log($scope.month = 0 + $scope.month)
-        //         $scope.month = "0" + $scope.month;
-        //     }
-        // };
-        $http({
-            method: 'GET',
-            url: ip_server + 'student/get_student'
-        }).then(function (result) {
-            // console.log(result)
-            $scope.student_name = result.data
-        });
+        // $scope.is_pay = 1;
+        loadData();
 
-        // $scope.student_name= [{'id':123 ,'name':'Amar'},{'id':456 ,'name':'Samad'}]
+        function loadData() {
+            $http({
+                method: 'GET',
+                url: ip_server + 'account/get_invoice?invoice_id=' + invoice_id
+            }).then(function (result) {
+                console.log(result)
+                result = result.data;
+                $scope.student_id = result.student_id;
+                $scope.year = parseFloat(result.year);
+                $scope.month = parseFloat(result.month);
+                $scope.desc = result.desc;
+                $scope.is_pay = result.is_pay;
+                $scope.attachment_lama = result.attachment;
+                $scope.invoice_no = result.invoice_no;
+                $scope.items = result.invoice_detail;
+                $scope.total = result.total;
+                $scope.subtotal = result.subtotal;
+                $scope.student_name = result.student_name + '(' + result.student_ic + ')';
+                calculate();
+            });
+
+        }
+
+        $scope.attachment_deleted = [];
+        $scope.removeAtt = function (index) {
+            console.log($scope.attachment_lama)
+            if ($scope.attachment_lama[index].id) {
+                // alert(1111)
+                $scope.attachment_deleted.push($scope.attachment_lama[index].id)
+            }
+            console.log($scope.attachment_deleted)
+            $scope.attachment_lama.splice(index, 1);
+        };
+
+        // $scope.student_name.selected = {'ic_no': items.student_ic, 'name': items.student_name}
         $scope.submit = function () {
 
             var fd = new FormData();
             var data = {
-                "student_id": $scope.student_name.selected.id,
+                "student_id": $scope.student_id,
                 "year": $scope.year,
                 "month": $scope.month,
                 "items": $scope.items,
                 "desc": $scope.desc,
                 "total_pay": $scope.total,
+                "deleted_items": $scope.items_delete,
+                "attachment_deleted": $scope.attachment_deleted,
             };
 
 
@@ -43,32 +67,31 @@
             }
 
             fd.append('data', JSON.stringify(data));
-
-            // var config = {transformRequest: angular.identity, headers: {'Content-Type': undefined}};
-            $http.post(ip_server + 'account/add_invoice', fd, {
+            $http.post(ip_server + 'account/update_invoice?invoice_id=' + invoice_id, fd, {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
                 }
             ).then(function (response) {
                 if (response.data.status === "OK") {
-                    $rootScope.$broadcast('load_list_account')
                     toastr.success('Data successfully saved.', 'Success');
                     $uibModalStack.dismissAll();
-
                 } else {
                     toastr.error("Data hasn't been save.", 'Error!');
                 }
             }).catch(function (error) {
 
+                console.log(error)
+
             });
         };
 
-        calculate();
+
         $scope.calculate = calculate;
 
+        // $scope.total_price = 0;
 
         function calculate() {
-
+            // console.log( $scope.items,"$data$data$data$data$data$data$data")
             $scope.calculate_sub = 0;
             // $scope.$scope.total_price = 0;
             for (var x in $scope.items) {
@@ -81,7 +104,13 @@
 
         }
 
+        $scope.items_delete = [];
         $scope.remove_items = function (index) {
+            if ($scope.items[index].id) {
+                alert(1111)
+                $scope.items_delete.push($scope.items[index].id)
+            }
+            // console.log($scope.items_delete)
             $scope.items.splice(index, 1);
             calculate();
         };
@@ -94,9 +123,14 @@
                 calculate();
             }
         };
+        // $scope.submit = function () {
+        //     console.log($scope.items)
+        //
+        // }
+
         $scope.add_item = function () {
             $scope.inserted = {
-                // id: $scope.items.length + 1,
+                check: "new",
                 desc: '',
                 amount: "",
             };
@@ -139,10 +173,11 @@
                 if (data.length == 0) {          /*Add new save length 0/"" */
                     return "Required,Must Integer!";
                 }
+
+
             }
 
 
         }
-
     }
 })();

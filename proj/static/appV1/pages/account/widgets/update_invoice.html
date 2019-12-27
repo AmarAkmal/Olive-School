@@ -8,26 +8,20 @@
     <div class="panel-body">
         <div class="row">
             <div class=" col-sm-12" style="padding-top: 10px;">
-                <label>Add Invoice</label>
+                <label>Update Invoice</label>
                 <hr class="hr_">
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
-                <label>Student</label>
+                <label>Student and IC</label>
                 <input class="form-control" data-ng-model="student_name" readonly/>
-                <!--                <ui-select ng-model="student_name.selected"-->
-                <!--                           class="btn-group bootstrap-select form-control"-->
-                <!--                           append-to-body="false"-->
-                <!--                           search-enabled="false"-->
-                <!--                           ng-change="studnet_selected"-->
-                <!--                            disabled>-->
-                <!--                    <ui-select-match placeholder="Please Choose">-->
-                <!--                        <span> {{$select.selected.name }}  ({{$select.selected.ic_no }} )</span>-->
-                <!--                    </ui-select-match>-->
-                <!--&lt;!&ndash;                    <ui-select-choices repeat="x in student_name | filter: $select.search"&ndash;&gt;-->
-                <!--&lt;!&ndash;                                       ng-hide="!$select.open">&ndash;&gt;-->
-                <!--                        <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>-->
-                <!--&lt;!&ndash;                    </ui-select-choices>&ndash;&gt;-->
-                <!--                </ui-select>-->
+
+            </div>
+            <div class="col-sm-6" style="padding-top: 10px;">
+                <label>Invoice No.</label>
+                <input readonly type="text"
+                       style="max-width: 100%;min-width: 100%;resize: none;"
+                       class="form-control"
+                       ng-model="invoice_no">
             </div>
             <div class="col-sm-12" style="padding-top: 30px;">
                 <label>CODE</label>
@@ -54,6 +48,7 @@
                        ng-model="month">
                 <span ng-show="!month"> <font color="red">Please insert 2 digit Min 01,Max 12,Required! </font></span>
             </div>
+
             <div class="col-md-12" style="padding-top: 40px;">
                 <div include-with-scope="../static/app/pages/account/widgets/updateItemTable.html"></div>
             </div>
@@ -74,11 +69,7 @@
                             <i class="file-icon ion-document"></i>
                             <span class="file-name"></span>&nbsp;{{$index + 1}} - {{x.name}}
                         </li>
-
-
                     </ul>
-
-
                 </div>
             </div>
             <div class="col-sm-12">
@@ -95,7 +86,10 @@
                         <li ng-repeat="x in  attachment_lama">
                             <i class="file-icon ion-document"></i>
                             <span class="file-name"></span>{{ x.name }} - <a download
-                                                                             href="../static/uploads/{{ x.id }}/{{ x.name }}">Download</a>
+                                                                             href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">Download</a>
+
+                            <span>| <a
+                                    ng-click="removeAtt($index)">Delete</a></span>
                             <!--<span ng-show="!vCtrl.disableEdit">| <a-->
                             <!--<span ng-show="!vCtrl.disableEdit">| <a-->
                             <!--ng-click="projectView.removeAtt(x)">Delete</a></span>-->
@@ -107,7 +101,7 @@
         </div>
         <div class="col-md-12" style="padding-top: 10px;">
             <div style="float: right">
-                <button ng-disabled="is_pay == 1 || !month || !year || items.length  == 0"
+                <button ng-disabled="is_pay == 1 || !month || !year || !items.length" ng-hide="is_pay == 1"
                         ng-click="submit()" style="width: 120px ;" type="submit"
                         class="btn btn-success ion-android-cloud">
                     &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
