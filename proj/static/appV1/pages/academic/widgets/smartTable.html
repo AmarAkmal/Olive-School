@@ -19,8 +19,8 @@
 <div>
     <div class="table table-striped" style="padding-top: 10px;padding-left: 30px;">
         <button style="width: 130px" type="button" class="btn btn-success ion-person-add" data-toggle="modal"
-                ng-click="add_student()">
-            &nbsp;&nbsp;&nbsp;Add Student
+                ng-click="add()">
+            &nbsp;&nbsp;&nbsp;Add
         </button>
 
         <button style="width: 130px" type="button" class="btn btn-danger ion-trash-b" data-toggle="modal"
@@ -37,9 +37,10 @@
         <thead>
         <tr class="sortable ">
             <th style="width: 3%;"></th>
-            <th st-sort="student_name" style="width: 50%;">Student Name</th>
-            <th st-sort="student_ic" style="width: 20%;">IC Student</th>
-            <th st-sort="student_intake" style="width: 27%;">Intake</th>
+            <th st-sort="ic_no" style="width: 40%;">IC. No.</th>
+            <th st-sort="desc" style="width: 57%;">Student Name</th>
+
+
         </tr>
         <tr>
             <th class="check-td">
@@ -50,32 +51,27 @@
                     </label>
                 </div>
             </th>
-
             <th>
-                <input ng-enter="getfilter()" ng-model="formData.student_name" placeholder="Search Name"
+                <input ng-enter="getfilter()" ng-model="formData.ic_no" placeholder="Search IC. No."
                        class="input-sm form-control search-input"
                        type="search"/>
             </th>
-            <th >
-                <input ng-enter="getfilter()" ng-model="formData.student_ic" placeholder="Search IC"
-                       class="input-sm form-control search-input"
-                       type="search"/>
-            </th>
-            <th style="   padding-left: inherit;">
-                <div class="col-sm-10">
-                    <input ng-enter="getfilter()" ng-model="formData.student_intake" placeholder="Search Intake"
+            <!--            <th>-->
+            <th>
+                <div class="col-sm-11">
+                    <input ng-enter="getfilter()" ng-model="formData.student_name" placeholder="Search Student name"
                            class="input-sm form-control search-input"
                            type="search"/>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <button uib-tooltip="Clear" class="btn btn-sm btn-default"
                             ng-click="clear()">
                         <i class="fa fa-eraser"></i>
                     </button>
                 </div>
 
-
             </th>
+            <!--            </th>-->
 
         </tr>
         </thead>
@@ -94,12 +90,8 @@
                     </label>
                 </div>
             </td>
-            <td class="elipsis" ng-click="view(item.student_ic)"
-                style="cursor: pointer;">{{ item.student_name }}
-            </td>
-            <td class="elipsis" ng-click="view(item.student_ic)" style="cursor: pointer;">{{ item.student_ic }}</td>
-            <td class="elipsis" ng-click="view(item.student_ic)" style="cursor: pointer;">{{ item.student_intake }}</td>
-
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.ic_no }}</td>
+            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.student_name }}</td>
 
         </tr>
         </tbody>
@@ -110,7 +102,7 @@
         <!--            </td>-->
         <!--        </tr>-->
         <tr>
-            <td colspan="4" class="text-center" ng-show="totalpagenum >= 2">
+            <td colspan="6" class="text-center" ng-show="totalpagenum >= 2">
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <button class="btn btn-icon btn-default" ng-disabled="pagenum < 2" style="margin-left:10px"

@@ -23,7 +23,7 @@ from flask_cors import CORS
 db = SQLAlchemy(app)
 from proj import model
 
-# db.create_all()
+db.create_all()
 # ---
 from proj.views.login import bp_login
 
@@ -44,6 +44,10 @@ app.register_blueprint(bp_student, url_prefix='/student')
 from proj.views.account import bp_account
 
 app.register_blueprint(bp_account, url_prefix='/account')
+
+from proj.views.academic import bp_academic
+
+app.register_blueprint(bp_academic, url_prefix='/academic')
 
 from proj.views.Insertdata import bp_insertdata
 

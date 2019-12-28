@@ -5,12 +5,12 @@
         'ui.router',
         'BlurAdmin.pages.account',
         'BlurAdmin.pages.student',
-        'BlurAdmin.pages.academy',
+        'BlurAdmin.pages.academic',
     ]).config(routeConfig);
 
 
     /** @ngInject */
     function routeConfig($urlRouterProvider) {
-        $urlRouterProvider.otherwise('/account-list');
+        $urlRouterProvider.otherwise('/student-list');
     }
 })();

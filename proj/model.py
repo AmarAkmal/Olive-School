@@ -34,7 +34,7 @@ class Student(db.Model):
     picture = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
-    academy_detail = db.relationship("Academy", backref="student", cascade="all, delete-orphan")
+    academic_detail = db.relationship("Academic", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
 
     is_deleted = db.Column(db.Boolean, default=0)
@@ -123,29 +123,35 @@ class PaymentAttachment(db.Model):
         self.name = name
 
 
-class Academy(db.Model):
+class Academic(db.Model):
     id = db.Column(db.String(32), primary_key=True)
+    category = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
-    amount = db.Column(db.TEXT)
+    year = db.Column(db.String(32))
+    sem = db.Column(db.String(32))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
-    is_deleted = db.Column(db.Boolean, default=0)
+    academic_detail = db.relationship("AcademicDetail", backref="academic", cascade="all, delete-orphan")
 
-    def __init__(self, desc, amount):
+    def __init__(self, category, desc, year, sem):
         self.id = uuid.uuid4().hex
+        self.category = category
         self.desc = desc
-        self.amount = amount
+        self.year = year
+        self.sem = sem
 
 
-class AcademyDetail(db.Model):
+class AcademicDetail(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    name = db.Column(db.String(250))
-    grade = db.Column(db.String(25))
-    desc = db.Column(db.TEXT)
+    code = db.Column(db.String(32))
+    subject = db.Column(db.String(200))
+    score = db.Column(db.String(32))
+    student_id = db.Column(db.ForeignKey('academic.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_deleted = db.Column(db.Boolean, default=0)
 
-    def __init__(self, name, grade):
+    def __init__(self, code, subject,score):
         self.id = uuid.uuid4().hex
-        self.name = name
-        self.grade = grade
+        self.code = code
+        self.subject = subject
+        self.score = score

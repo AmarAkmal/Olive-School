@@ -11,10 +11,10 @@
                 url: '/student-list',
                 templateUrl: '../static/app' + gversion + '/pages/student/student.html',
                 controller: 'student_listCtrl',
-                title: 'Student List',
+                title: 'Student',
                 sidebarMeta: {
                      icon: 'ion-compose',
-                    order: 10
+                    order: 1
                 }
             });
     }

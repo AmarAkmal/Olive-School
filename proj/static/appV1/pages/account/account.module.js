@@ -11,10 +11,10 @@
                 url: '/account-list',
                 templateUrl: '../static/app' + gversion + '/pages/account/account.html',
                 controller: 'account_listCtrl',
-                title: 'Account List',
+                title: 'Account',
                 sidebarMeta: {
                     icon: 'ion-compose',
-                    order: 1
+                    order: 10
                 }
             });
         // $urlRouterProvider.when('/report', '/report');

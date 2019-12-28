@@ -1,0 +1,93 @@
+<style>
+    .hr_ {
+        margin-top: 0px;
+    }
+
+</style>
+<div class="col-md-12  panel panel-blur">
+    <div class="panel-body">
+        <div class="row">
+            <div class=" col-sm-12" style="padding-top: 10px;">
+                <label>Add Invoice</label>
+                <hr class="hr_">
+            </div>
+            <div class="col-sm-12" style="padding-top: 10px;">
+                <label>Student</label>
+                <ui-select ng-model="student_name.selected"
+                           class="btn-group bootstrap-select form-control"
+                           append-to-body="false"
+                           search-enabled="true"
+                           ng-change="studnet_selected">
+                    <ui-select-match placeholder="Please Choose">
+                        <span> {{$select.selected.name }}  ({{$select.selected.ic_no }} )</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="x in student_name | filter: $select.search"
+                                       ng-hide="!$select.open">
+                        <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div ng-hide="!student_name.selected">
+                <div class="col-sm-12" style="padding-top: 30px;">
+                    <label>Sem</label>
+                </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <input ng-disabled="!student_name.selected" placeholder="Year example (2020)"
+                           class="form-control"
+                           type="number"
+                           name="year" required
+                           pattern="^[0-9]{4}$"
+                           data-ng-model="year" ng-enter="getfilter()"/>
+                    <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
+                </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+
+                    <ui-select ng-model="select_sem.selected"
+                               class="btn-group bootstrap-select form-control"
+                               append-to-body="false"
+                               search-enabled="false">
+                        <ui-select-match placeholder="Please Choose">
+                            <span> {{$select.selected }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="x in select_sem.options | filter: $select.search"
+                                           ng-hide="!$select.open">
+                            <span ng-bind-html="x"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <span ng-show="select_sem.selected.length == 0"> <font
+                            color="red">Required! </font></span>
+                </div>
+                <div class="col-md-12" style="padding-top: 40px;">
+                    <label>Items</label>
+                    <div include-with-scope="../static/app/pages/academic/widgets/addItemTable.html"></div>
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <!--                    <label>Remark {{items.lengtn}}</label>-->
+                    <label>Remark</label>
+                    <textarea ng-disabled="!student_name.selected" style="max-width: 100%;min-width: 100%;resize: none;"
+                              class="form-control"
+                              required
+                              ng-model="desc"></textarea>
+                </div>
+
+
+            </div>
+            <div class="col-md-12" style="padding-top: 10px;">
+                <div style="float: right">
+                    <button ng-disabled="!student_name.selected.length == 0 || !year || select_sem.selected.length == 0 || !items[0].code "
+                            ng-click="submit()" style="width: 120px ;" type="submit"
+                            class="btn btn-success ion-android-cloud">
+                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
+                    <button style="width: 120px ;" type="button"
+                            class="btn btn-danger ion-android-close"
+                            ng-click="$close()">
+                        &nbsp;&nbsp;&nbsp;Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
