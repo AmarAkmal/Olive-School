@@ -2,32 +2,48 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.student')
-        .controller('studentViewCtrl', ['$http', '$scope', 'toastr', 'fileReader', '$filter', 'items','$rootScope', studentViewCtrl]);
+        .controller('studentViewCtrl', ['$http', '$scope', 'toastr', 'fileReader', '$filter', 'items', '$rootScope', studentViewCtrl]);
 
-    function studentViewCtrl($http, $scope, toastr, fileReader, $filter, items,$rootScope) {
+    function studentViewCtrl($http, $scope, toastr, fileReader, $filter, items, $rootScope) {
         $scope.submit_name = "Update"
         // console.log(items);
 
-        $scope.id = items.id;
-        $scope.student_name = items.student_name;
-        $scope.student_ic = items.student_ic;
-        $scope.student_address = items.student_address;
-        $scope.intake = items.student_intake;
-        $scope.student_picture = items.student_picture;
+        loadData();
 
-        $scope.father_name = items.father_name;
-        $scope.father_email = items.father_email;
-        $scope.father_contact = items.father_phone;
+        function loadData() {
+            $http({
+                method: 'GET',
+                url: ip_server + 'student/get_student_detail?id=' + items
+            }).then(function (result) {
+                console.log(result)
+                result = result.data
+                $scope.id = result.id;
+                $scope.student_name = result.student_name;
+                $scope.student_ic = result.student_ic;
+                $scope.student_address = result.student_address;
+                $scope.intake = result.student_intake;
+                // $scope.student_picture = result.student_picture;
+
+                $scope.father_name = result.father_name;
+                $scope.father_email = result.father_email;
+                $scope.father_contact = result.father_phone;
 
 
-        $scope.mother_name = items.mother_name;
-        $scope.mother_email = items.mother_email;
-        $scope.mother_contact = items.mother_phone;
-        if ($scope.student_picture){
-             $scope.picture = '../static/uploads' + '/' + $scope.id + '/' + $scope.student_picture;
-        }else{
-              $scope.picture = $filter('appImage')('theme/student.png');
+                $scope.mother_name = result.mother_name;
+                $scope.mother_email = result.mother_email;
+                $scope.mother_contact = result.mother_phone;
+                $scope.picture  = result.picture
+            });
+
         }
+        //
+        //
+        // if ($scope.student_picture) {
+        //     $scope.picture = '../static/uploads' + '/' + $scope.id + '/' + $scope.student_picture;
+        // } else {
+        //     $scope.picture = $filter('appImage')('theme/student.png');
+        //     console.log($scope.picture)
+        // }
 
 
         $scope.submit = function () {

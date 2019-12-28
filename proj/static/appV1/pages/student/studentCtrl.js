@@ -43,7 +43,6 @@
 
         function loadData() {
             $scope.formData.isAllSelected = false;
-            console.log($scope.formData)
             $http.get(ip_server + 'student/list_student/' + $scope.pagenum, {
                 params: {
                     student_name: $scope.formData.student_name,
@@ -234,7 +233,7 @@
                 });
             }
         };
-        $scope.view = function (item) {
+        $scope.view = function (id) {
             var modalInstance = $uibModal.open({
                 animation: false,
 
@@ -245,7 +244,7 @@
                 backdrop: 'static',
                 resolve: {
                     items: function () {
-                        return item;
+                        return id;
                     }
                 }
             });
