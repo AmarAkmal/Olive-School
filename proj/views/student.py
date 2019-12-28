@@ -10,7 +10,6 @@ bp_student = Blueprint('bp_student', __name__)
 
 @bp_student.route('/list_student/<pagenum>', methods=['GET'])
 def list_student(pagenum):
-
     student_name = request.args["student_name"]
     student_ic = request.args["student_ic"]
     student_intake = request.args["student_intake"]
@@ -27,7 +26,6 @@ def list_student(pagenum):
     if student_intake:
         codeSql = codeSql.filter(Student.intake.like('%' + student_intake + '%'))
 
-
     report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
     count_result = codeSql.order_by(Student.date_created.desc()).count()
 
@@ -42,19 +40,6 @@ def list_student(pagenum):
             dict1['student_ic'] = x.ic_no
             dict1['student_name'] = x.name
             dict1['student_intake'] = x.intake
-            dict1['student_address'] = x.address
-            dict1['student_picture'] = x.picture
-            get_father = Parent.query.filter_by(student_id=x.id, type="father").first()
-            if get_father:
-                dict1['father_name'] = get_father.name
-                dict1['father_email'] = get_father.email
-                dict1['father_phone'] = get_father.phone
-
-            get_mother = Parent.query.filter_by(student_id=x.id, type="mother").first()
-            if get_mother:
-                dict1['mother_name'] = get_mother.name
-                dict1['mother_email'] = get_mother.email
-                dict1['mother_phone'] = get_mother.phone
 
             list['data'].append(dict1)
         totalpagenum = math.ceil(count_result / 10)
@@ -62,6 +47,42 @@ def list_student(pagenum):
         list['count_result'] = str(count_result)
         return jsonify(list)
 
+
+@bp_student.route('/get_student_detail', methods=['GET'])
+def get_student_detail():
+    id = request.args.get("id")
+    print(id)
+    x = Student.query.filter_by(is_deleted=0, ic_no=id).first()
+    if x:
+        dictV = dict()
+        dictV["id"] = x.id
+        dictV['student_ic'] = x.ic_no
+        dictV['student_name'] = x.name
+        dictV['student_intake'] = x.intake
+        dictV['student_address'] = x.address
+        # dictV['student_picture'] = x.picture
+        get_father = Parent.query.filter_by(student_id=x.id, type="father").first()
+        if get_father:
+            dictV['father_name'] = get_father.name
+            dictV['father_email'] = get_father.email
+            dictV['father_phone'] = get_father.phone
+
+        get_mother = Parent.query.filter_by(student_id=x.id, type="mother").first()
+        if get_mother:
+            dictV['mother_name'] = get_mother.name
+            dictV['mother_email'] = get_mother.email
+            dictV['mother_phone'] = get_mother.phone
+        print(x.id)
+        if x.picture:
+            dictV["picture"] = "../static/uploads/" + x.id + "/" + x.picture
+        else:
+            dictV["picture"] = "../static/assets/img/theme/student.png"
+        # data.append(dictV)
+        return jsonify(dictV)
+    return "no data"
+
+
+# $scope.picture = '../static/uploads' + '/' + $scope.id + '/' + $scope.student_picture;
 
 @bp_student.route('/add', methods=['POST'])
 def add():
@@ -80,19 +101,23 @@ def add():
     mother_name = data["mother_name"]
     mother_email = data["mother_email"]
     mother_contact = data["mother_contact"]
-
     response = dict()
+    student = Student.query.filter_by(ic_no=student_ic).first()
+    if student:
+        student.is_deleted = 0
+        student.date_created = datetime.now()
 
-    student = Student(name=student_name, ic_no=student_ic, intake=intake, address=student_address,
-                      password=student_ic)
-    db.session.add(student)
-    father = Parent(type="father", name=father_name, phone=father_contact, email=father_email)
-    father.student_id = student.id
-    db.session.add(father)
+    else:
+        student = Student(name=student_name, ic_no=student_ic, intake=intake, address=student_address,
+                          password=student_ic)
+        db.session.add(student)
+        father = Parent(type="father", name=father_name, phone=father_contact, email=father_email)
+        father.student_id = student.id
+        db.session.add(father)
 
-    mother = Parent(type="mother", name=mother_name, phone=mother_contact, email=mother_email)
-    mother.student_id = student.id
-    db.session.add(mother)
+        mother = Parent(type="mother", name=mother_name, phone=mother_contact, email=mother_email)
+        mother.student_id = student.id
+        db.session.add(mother)
     folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], student.id)
     if os.path.exists(folder):
         pass
@@ -102,6 +127,11 @@ def add():
 
         except Exception as e:
             print(e)
+    if student.picture:
+        check = os.path.join(folder, student.picture)
+        exists = os.path.isfile(check)
+        if exists:
+            os.remove(os.path.join(folder, student.picture))
 
     if 'file' in request.files:
         file = request.files['file']
@@ -166,17 +196,18 @@ def update_student():
     if 'file' in request.files:
         file = request.files['file']
         if 'image' in file.content_type:
+
             filename = secure_filename(file.filename)
             fullfilename = os.path.join(folder, filename)
             student = Student.query.filter_by(id=id).first()
-            check = str(os.path.join(folder, student.picture))
-            exists = os.path.isfile(check)
-            if exists:
-                os.remove(os.path.join(folder, student.picture))
-            file.save(fullfilename)
-
+            if student.picture:
+                check = os.path.join(folder, student.picture)
+                exists = os.path.isfile(check)
+                if exists:
+                    os.remove(os.path.join(folder, student.picture))
             student.picture = filename
-    # db.session.add(student)
+            file.save(fullfilename)
+            # db.session.commit()
 
     try:
         db.session.commit()
@@ -216,8 +247,8 @@ def delete_student():
     return jsonify(response)
 
 
-@bp_student.route('/get_student', methods=['GET'])
-def get_student():
+@bp_student.route('/get_student_list', methods=['GET'])
+def get_student_list():
     get_student = Student.query.filter_by(is_deleted=0).all()
     data = []
     for x in get_student:
@@ -225,5 +256,7 @@ def get_student():
         dictV["id"] = x.id
         dictV["ic_no"] = x.ic_no
         dictV["name"] = x.name
+        # dictV["path"] = "../static/uploads/" + x.id + "/" + x.picture
         data.append(dictV)
     return jsonify(data)
+# $scope.picture = '../static/uploads' + '/' + $scope.id + '/' + $scope.student_picture;

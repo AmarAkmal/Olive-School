@@ -37,3 +37,17 @@ def logout():
         flash('Failed')
 
     return redirect(url_for('bp_login.auth'))
+
+
+@bp_login.route('/mobile_login', methods=['GET'])
+def mobile_login():
+    if request.method == 'GET':
+        ic_no = request.form["ic_no"]
+        user = Student.query.filter_by(ic_no=ic_no).first()
+        if user:
+            if user.ic_no == ic_no:
+                return jsonify({"id": user.id, "ic_no": user.ic_no})
+        else:
+            return "Not Found"
+
+    return "nothing"

@@ -32,7 +32,6 @@ class Student(db.Model):
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academy_detail = db.relationship("Academy", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
-
     is_deleted = db.Column(db.Boolean, default=0)
 
     def __init__(self, name, ic_no, intake, address, password):
@@ -72,9 +71,14 @@ class Invoice(db.Model):
     payment_detail = db.relationship("InvoiceDetail", backref="invoice", cascade="all, delete-orphan")
     attchement_detail = db.relationship("PaymentAttachment", backref="invoice", cascade="all, delete-orphan")
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+    created_by = db.Column(db.String(300))
+    last_update = db.Column(db.DateTime)
+    last_update_name = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    total_pay = db.Column(db.Float)
+
+    total_pay = db.Column(db.String(32))
     date_pay = db.Column(db.DateTime)
+
     is_pay = db.Column(db.Boolean, default=0)
     is_deleted = db.Column(db.Boolean, default=0)
 
