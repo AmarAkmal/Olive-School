@@ -23,7 +23,7 @@ from flask_cors import CORS
 db = SQLAlchemy(app)
 from proj import model
 
-db.create_all()
+# db.create_all()
 # ---
 from proj.views.login import bp_login
 
