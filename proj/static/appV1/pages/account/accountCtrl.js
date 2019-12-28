@@ -2,10 +2,10 @@
     'use strict';
 
 
-    angular.module('BlurAdmin.pages.account').controller('account_listCtrl', ['$scope', '$uibModal', '$http', 'toastr', '$rootScope', account_listCtrl]);
+    angular.module('BlurAdmin.pages.account').controller('account_listCtrl', ['$scope', '$uibModal', '$http', 'toastr', '$rootScope','$uibModalStack', account_listCtrl]);
 
 
-    function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope) {
+    function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope,$uibModalStack) {
         $scope.formData = {};
 
 
@@ -30,7 +30,7 @@
             'options': [{id: 'All', name: 'All'}, {id: 0, name: 'Pending'}, {id: 1, name: 'Done'}]
         };
         $scope.formData.status.selected = {id: 'All', name: 'All'};
-             $scope.$on('load_list_account', function () {
+        $scope.$on('load_list_account', function () {
             loadData();
         });
 
@@ -151,6 +151,79 @@
         }
 
         //    ############################################
+        $scope.delete = function () {
+            var selection = [];
+            angular.forEach($scope.selectedList, function (selected, bind) {
+                if (selected) {
+                    selection.push(bind);
+                }
+            });
+
+            if (selection.length == 0) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: '../static/app' + gversion + '/pages/asset/widgets/alert.html',
+                    size: "sm",
+                    resolve: {
+                        items: function () {
+                            return selection;
+                        }
+                    }
+                });
+            } else {
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: '../static/app' + gversion + '/pages/asset/widgets/delete.html',
+                    // controller: 'dltReportCtrl',
+                    // controllerAs: 'dAssetCtrl',
+                    size: "sm",
+                    resolve: {
+                        list_del: function () {
+                            return selection;
+                        }
+                    },
+                    controller: function ($scope, $uibModalInstance, list_del) {
+                        $scope.confirmDel = function () {
+
+                            // $scope.confirmDel = function () {
+                            $http.delete(ip_server + 'account/deleted_account/' + JSON.stringify(list_del)).then(function (response) {
+                                if (response.data.status === "OK") {
+                                    toastr.success('Data has been deleted !', 'Success');
+                                    $rootScope.$broadcast('load_list_account')
+                                    $uibModalStack.dismissAll();
+                                } else {
+                                    toastr.error("Data hasn't been deleted.", 'Error!');
+                                    $rootScope.$broadcast('load_list_account')
+                                    $uibModalStack.dismissAll();
+                                }
+                                // toastr.success('Data has been deleted!');
+
+
+                            }).catch(function (error) {
+                                console.log(error, "ERROR")
+                                // if (error.status === 401)
+                                //     denied()
+                            });
+
+
+                            // }
+
+                        }; //function end
+                    }, //controller end
+
+
+                });
+
+
+                modalInstance.result.finally(function () {
+                    $scope.selectedList = {};
+                    $scope.selection = [];
+                    $scope.formData.isAllSelected = false;
+                });
+            }
+        };
+
         $scope.add_invoice = function () {
             var modalInstance = $uibModal.open({
                 animation: false,

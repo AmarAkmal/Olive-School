@@ -16,7 +16,7 @@
         // };
         $http({
             method: 'GET',
-            url: ip_server + 'student/get_student'
+            url: ip_server + 'student/get_student_list'
         }).then(function (result) {
             // console.log(result)
             $scope.student_name = result.data
@@ -27,6 +27,7 @@
 
             var fd = new FormData();
             var data = {
+                "user_id": user_id,
                 "student_id": $scope.student_name.selected.id,
                 "year": $scope.year,
                 "month": $scope.month,
@@ -51,7 +52,7 @@
                 }
             ).then(function (response) {
                 if (response.data.status === "OK") {
-                    $rootScope.$broadcast('load_list_account')
+                    $rootScope.$broadcast('load_list_account');
                     toastr.success('Data successfully saved.', 'Success');
                     $uibModalStack.dismissAll();
 
@@ -76,8 +77,8 @@
                     $scope.calculate_sub = $scope.calculate_sub + parseFloat($scope.items[x]["amount"])
                 }
             }
-            $scope.subtotal = $scope.calculate_sub.toFixed(2);
-            $scope.total = (Math.round($scope.subtotal * 10) / 10).toFixed(1)
+            $scope.total = $scope.calculate_sub.toFixed(2);
+            // $scope.total = (Math.round($scope.subtotal * 10) / 10).toFixed(1)
 
         }
 

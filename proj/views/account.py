@@ -59,7 +59,7 @@ def list_student(pagenum):
             else:
                 dict1['status'] = "Pending"
 
-            dict1['total'] = "%.2f" % x.total_pay
+            dict1['total'] = "%.2f" % float(x.total_pay)
             get_detail = InvoiceDetail.query.filter_by(payment_id=x.id, is_deleted=0).all()
             dict1['invoice_detail'] = []
 
@@ -68,14 +68,14 @@ def list_student(pagenum):
                 for j in get_detail:
                     list_1 = dict()
                     list_1['desc'] = j.desc
-                    list_1['price'] = j.price
+                    list_1['price'] = float(j.price)
                     list_1['old'] = True
                     # calculation = calculation + float(j.price)
                     dict1['invoice_detail'].append(list_1)
 
             list['data'].append(dict1)
         totalpagenum = math.ceil(count_result / 10)
-        list['totalpagenum'] = str(totalpagenum)
+        list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
 
@@ -86,6 +86,7 @@ def add_invoice():
 
     student_id = data["student_id"]
 
+    user_id = data["user_id"]
     year = data["year"]
     month = data["month"]
     items = data["items"]
@@ -101,6 +102,9 @@ def add_invoice():
             receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f") + str(check_len + 1)
 
             student_payment = Invoice(receipt_no=receipt_no, year=year, month=month, total_pay=total_pay)
+            print(user_id)
+            student_payment.created_by = user_id
+
             if "desc" in data:
                 student_payment.desc = data["desc"]
             # student_payment.date_pay = datetime.now()
@@ -109,7 +113,8 @@ def add_invoice():
             # db.session.commit()
 
             for x in items:
-                payment_detail = InvoiceDetail(price=x["amount"], desc=x["desc"])
+                price = '%.2f' % x["amount"]
+                payment_detail = InvoiceDetail(price=price, desc=x["desc"])
                 payment_detail.payment_id = student_payment.id
                 db.session.add(payment_detail)
                 # db.session.commit()
@@ -167,7 +172,7 @@ def get_invoice():
     dictV["year"] = get_detail.year
     dictV["month"] = get_detail.month
     dictV["desc"] = get_detail.desc
-    dictV["is_pay"] = get_detail.is_pay
+    dictV["is_pay"] = float(get_detail.is_pay)
     get_att = PaymentAttachment.query.filter_by(student_id=get_detail.id, is_deleted=0).all()
     dictV['attachment'] = []
     if get_att:
@@ -177,7 +182,7 @@ def get_invoice():
             list_1['name'] = k.name
             dictV['attachment'].append(list_1)
 
-    dictV['total'] = "%.2f" % get_detail.total_pay
+    dictV['total'] = "%.2f" % float(get_detail.total_pay)
     get_detail_items = InvoiceDetail.query.filter_by(payment_id=invoice_id, is_deleted=0).all()
     dictV['invoice_detail'] = []
 
@@ -189,7 +194,7 @@ def get_invoice():
             list_1['id'] = j.id
             list_1['desc'] = j.desc
             list_1['check'] = "old"
-            list_1['amount'] = j.price
+            list_1['amount'] = float(j.price)
             list_1['old'] = True
             # calculation = calculation + float(j.price)
             dictV['invoice_detail'].append(list_1)
@@ -207,79 +212,104 @@ def update_invoice():
     if not invoice_no:
         return "need invoice no."
 
-    update_invoice_detail = Invoice.query.filter_by(id=invoice_no, is_deleted=0)
-    if update_invoice_detail:
-        year = data['year']
-        month = data['month']
-        total_pay = data['total_pay']
-        desc = data['desc']
-        items = data['items']
-        attachment_deleted = data['attachment_deleted']
-        deleted_items = data['deleted_items']
+    check = Invoice.query.filter_by(id=invoice_no, is_deleted=0, is_pay=1).first()
+    if check:
+        return "Already pay"
+    else:
 
-        update_invoice_detail.update(dict(year=year, month=month, total_pay=total_pay, desc=desc))
-        # db.session.commit()
+        update_invoice_detail = Invoice.query.filter_by(id=invoice_no, is_deleted=0)
 
-        for x in items:
-            if x["check"] == "new":  # Check kalau new bru add
+        if update_invoice_detail:
 
-                payment_detail = InvoiceDetail(price=x["amount"], desc=x["desc"])
-                payment_detail.payment_id = invoice_no
-                db.session.add(payment_detail)
-                # db.session.commit()
-        if deleted_items:
-            aa = InvoiceDetail.query.filter(InvoiceDetail.id.in_(deleted_items))
-            for x in aa:
-                db.session.delete(x)
-                # db.session.commit()
+            user_id = data['user_id']
+            year = data['year']
+            month = data['month']
+            desc = data['desc']
+            items = data['items']
+            attachment_deleted = data['attachment_deleted']
+            deleted_items = data['deleted_items']
 
-        folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], invoice_no)
-        if os.path.exists(folder):
-            pass
-        else:
+            total_pay = float(data['total_pay'])
+            update_invoice_detail.update(
+                dict(year=year, month=month, total_pay=total_pay, desc=desc, update_by=user_id,
+                     last_update=datetime.now()))
+            # db.session.commit()
+
+            for x in items:
+                if x["check"] == "new":  # Check kalau new bru add
+
+                    payment_detail = InvoiceDetail(price=str('%.2f' % x["amount"]), desc=x["desc"])
+                    payment_detail.payment_id = invoice_no
+                    db.session.add(payment_detail)
+                    # db.session.commit()
+            if deleted_items:
+                aa = InvoiceDetail.query.filter(InvoiceDetail.id.in_(deleted_items))
+                for x in aa:
+                    db.session.delete(x)
+                    # db.session.commit()
+
+            folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], invoice_no)
+            if os.path.exists(folder):
+                pass
+            else:
+                try:
+                    os.mkdir(folder)
+
+                except Exception as e:
+                    print(e)
+            if 'attachment' in request.files:
+                file = request.files.getlist('attachment')
+                for j in file:
+                    filename = secure_filename(j.filename)
+                    t = PaymentAttachment(name=filename)
+
+                    fullfilename = os.path.join(folder, t.id)
+                    if os.path.exists(fullfilename):
+                        pass
+                    else:
+                        try:
+                            os.mkdir(fullfilename)
+
+                        except Exception as e:
+                            print(e)
+                    fullfilename = os.path.join(folder, t.id, filename)
+                    j.save(fullfilename)
+                    t.student_id = invoice_no
+                    db.session.add(t)
+
+            if attachment_deleted:
+                bb = PaymentAttachment.query.filter(PaymentAttachment.id.in_(attachment_deleted))
+                for x in bb:
+
+                    db.session.delete(x)
+                    db.session.commit()
+                    try:
+                        shutil.rmtree(os.path.join(folder, x.id))  # delete folder
+                    except Exception as e:
+                        response = {"status": "Failed"}
+                        print(e)
+                        return jsonify(response)
             try:
-                os.mkdir(folder)
-
+                db.session.commit()
+                response = {"status": "OK"}
             except Exception as e:
                 print(e)
-        if 'attachment' in request.files:
-            file = request.files.getlist('attachment')
-            for j in file:
-                filename = secure_filename(j.filename)
-                t = PaymentAttachment(name=filename)
+                response = {"status": "Failed"}
 
-                fullfilename = os.path.join(folder, t.id)
-                if os.path.exists(fullfilename):
-                    pass
-                else:
-                    try:
-                        os.mkdir(fullfilename)
+        return jsonify(response)
 
-                    except Exception as e:
-                        print(e)
-                fullfilename = os.path.join(folder, t.id, filename)
-                j.save(fullfilename)
-                t.student_id = invoice_no
-                db.session.add(t)
 
-        if attachment_deleted:
-            bb = PaymentAttachment.query.filter(PaymentAttachment.id.in_(attachment_deleted))
-            for x in bb:
-
-                db.session.delete(x)
-                db.session.commit()
-                try:
-                    shutil.rmtree(os.path.join(folder, x.id))  # delete folder
-                except Exception as e:
-                    response = {"status": "Failed"}
-                    print(e)
-                    return jsonify(response)
-        try:
-            db.session.commit()
-            response = {"status": "OK"}
-        except Exception as e:
-            print(e)
-            response = {"status": "Failed"}
-            pass
+@bp_account.route('/deleted_account/<data>', methods=['DELETE'])
+def deleted_account(data):
+    data = json.loads(data)
+    get_list = Invoice.query.filter(Invoice.id.in_(data))
+    for x in get_list:
+        x.is_deleted = 1
+    try:
+        db.session.commit()
+        response = {"status": "OK"}
+    except Exception as e:
+        print(e)
+        response = {"status": "Failed"}
 
     return jsonify(response)

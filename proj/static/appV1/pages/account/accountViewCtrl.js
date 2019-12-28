@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.account')
-        .controller('accountViewCtrl', ['$scope', '$uibModal', '$http', 'invoice_id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', accountViewCtrl]);
+        .controller('accountViewCtrl', ['$scope', '$uibModal', '$http', 'invoice_id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', accountViewCtrl]);
 
-    function accountViewCtrl($scope, $uibModal, $http, invoice_id, toastr, $rootScope, editableOptions, editableThemes) {
+    function accountViewCtrl($scope, $uibModal, $http, invoice_id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
         // console.log(items)
         $scope.items = [];
         // $scope.is_pay = 1;
@@ -18,6 +18,7 @@
                 console.log(result)
                 result = result.data;
                 $scope.student_id = result.student_id;
+                $scope.student_id = result.student_id;
                 $scope.year = parseFloat(result.year);
                 $scope.month = parseFloat(result.month);
                 $scope.desc = result.desc;
@@ -26,7 +27,7 @@
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
-                $scope.subtotal = result.subtotal;
+                // $scope.subtotal = result.subtotal;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
                 calculate();
             });
@@ -49,6 +50,7 @@
 
             var fd = new FormData();
             var data = {
+                "user_id": user_id,
                 "student_id": $scope.student_id,
                 "year": $scope.year,
                 "month": $scope.month,
@@ -72,8 +74,13 @@
                     headers: {'Content-Type': undefined}
                 }
             ).then(function (response) {
+
+                if (response.data == "Already pay") {
+                    toastr.success('User Already Pay.', 'Warning');
+                }
                 if (response.data.status === "OK") {
                     toastr.success('Data successfully saved.', 'Success');
+                    $rootScope.$broadcast('load_list_account');
                     $uibModalStack.dismissAll();
                 } else {
                     toastr.error("Data hasn't been save.", 'Error!');
@@ -99,8 +106,8 @@
                     $scope.calculate_sub = $scope.calculate_sub + parseFloat($scope.items[x]["amount"])
                 }
             }
-            $scope.subtotal = $scope.calculate_sub.toFixed(2);
-            $scope.total = (Math.round($scope.subtotal * 10) / 10).toFixed(1)
+            $scope.total = $scope.calculate_sub.toFixed(2);
+            // $scope.total = (Math.round($scope.subtotal * 10) / 10).toFixed(1)
 
         }
 
@@ -155,6 +162,8 @@
         // editableThemes['bs3'].submitTpl = '<button type="submit" class="btn btn-primary btn-with-icon"><i class="ion-checkmark-round">1111</i></button>';
         // editableThemes['bs3'].cancelTpl = '<button type="button" ng-click="$form.$cancel()" class="btn btn-default btn-with-icon"><i class="ion-close-round"></i></button>';
         $scope.checkValidity = function (data, type) {
+
+
             if (type == 'desc') {
                 if (data == undefined) {           /*Add new deleted data  undefined*/
                     return "Description Required!";
