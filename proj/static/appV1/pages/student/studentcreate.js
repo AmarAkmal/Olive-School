@@ -6,21 +6,21 @@
 
     function student_createCtrl($http, $scope, toastr, fileReader, $filter, $rootScope) {
         $scope.submit_name = "Submit";
-
-        $scope.student_name = "$scope.student_name";
-        $scope.student_ic = "$scope.student_ic";
-        $scope.student_address = "$scope.student_address";
-
-        $scope.father_name = "scope.father_name";
-        $scope.father_email = " $scope.father_email";
-        $scope.father_contact = "$scope.father_contact";
-
-
-        $scope.mother_name = "$scope.mother_name";
-        $scope.mother_email = " $scope.mother_email";
-        $scope.mother_contact = "$scope.mother_contact";
-        $scope.intake = "$scope.intake";
-
+        //
+        // $scope.student_name = "$scope.student_name";
+        // $scope.student_ic = "$scope.student_ic";
+        // $scope.student_address = "$scope.student_address";
+        //
+        // $scope.father_name = "scope.father_name";
+        // $scope.father_email = " $scope.father_email";
+        // $scope.father_contact = "$scope.father_contact";
+        //
+        //
+        // $scope.mother_name = "$scope.mother_name";
+        // $scope.mother_email = " $scope.mother_email";
+        // $scope.mother_contact = "$scope.mother_contact";
+        // $scope.intake = "$scope.intake";
+        //
 
         $scope.removePicture = function () {
             $scope.picture = $filter('appImage')('theme/student.png');
