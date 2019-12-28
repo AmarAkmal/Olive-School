@@ -70,11 +70,12 @@ class Invoice(db.Model):
     desc = db.Column(db.TEXT)
     payment_detail = db.relationship("InvoiceDetail", backref="invoice", cascade="all, delete-orphan")
     attchement_detail = db.relationship("PaymentAttachment", backref="invoice", cascade="all, delete-orphan")
-    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
-    created_by = db.Column(db.String(300))
-    last_update = db.Column(db.DateTime)
-    last_update_name = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+    created_by = db.relationship("User", backref="invoice", cascade="all, delete-orphan")
+    last_update = db.Column(db.DateTime)
+    update_by = db.relationship("User", backref="invoice", cascade="all, delete-orphan")
 
     total_pay = db.Column(db.String(32))
     date_pay = db.Column(db.DateTime)
