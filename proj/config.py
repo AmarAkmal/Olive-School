@@ -24,7 +24,7 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/testdb'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@localhost/olive'
     DEBUG = True
 
 
