@@ -122,6 +122,9 @@ def add_invoice():
 
             if "desc" in data:
                 student_payment.desc = data["desc"]
+            else:
+                student_payment.desc = ""
+
             # student_payment.date_pay = datetime.now()
             student_payment.student_id = get_student.id
             db.session.add(student_payment)
@@ -240,10 +243,14 @@ def update_invoice():
             year = data['year']
             month = data['month']
 
-            desc = data['desc']
             items = data['items']
             attachment_deleted = data['attachment_deleted']
             deleted_items = data['deleted_items']
+
+            if "desc" in data:
+                desc = data['desc']
+            else:
+                desc = ""
 
             total_pay = float(data['total_pay'])
             update_invoice_detail.update(

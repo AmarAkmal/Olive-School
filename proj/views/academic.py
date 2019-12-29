@@ -183,12 +183,15 @@ def update():
 
             year = data['year']
             sem = data['sem']
-            desc = data['desc']
             items = data['items']
             deleted_items = data['deleted_items']
 
+            if "desc" in data:
+                desc = data["desc"]
+            else:
+                desc = ""
+
             update_academic_detail.update(dict(year=year, sem=sem, desc=desc))
-            # db.session.commit()
 
             for x in items:
                 if x["check"] == "new":  # Check kalau new bru add
