@@ -13,7 +13,7 @@
                 controller: 'account_listCtrl',
                 title: 'Account',
                 sidebarMeta: {
-                    icon: 'ion-compose',
+                    icon: 'fa fa-briefcase',
                     order: 10
                 }
             });

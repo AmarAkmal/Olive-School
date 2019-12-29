@@ -125,17 +125,16 @@ class PaymentAttachment(db.Model):
 
 class Academic(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    category = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
     year = db.Column(db.String(32))
     sem = db.Column(db.String(32))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
     academic_detail = db.relationship("AcademicDetail", backref="academic", cascade="all, delete-orphan")
+    is_deleted = db.Column(db.Boolean, default=0)
 
-    def __init__(self, category, desc, year, sem):
+    def __init__(self, desc, year, sem):
         self.id = uuid.uuid4().hex
-        self.category = category
         self.desc = desc
         self.year = year
         self.sem = sem
@@ -146,11 +145,11 @@ class AcademicDetail(db.Model):
     code = db.Column(db.String(32))
     subject = db.Column(db.String(200))
     score = db.Column(db.String(32))
-    student_id = db.Column(db.ForeignKey('academic.id', ondelete="CASCADE", onupdate="CASCADE"))
+    academic_id = db.Column(db.ForeignKey('academic.id', ondelete="CASCADE", onupdate="CASCADE"))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_deleted = db.Column(db.Boolean, default=0)
 
-    def __init__(self, code, subject,score):
+    def __init__(self, code, subject, score):
         self.id = uuid.uuid4().hex
         self.code = code
         self.subject = subject

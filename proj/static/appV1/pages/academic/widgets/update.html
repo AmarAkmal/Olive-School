@@ -8,114 +8,78 @@
     <div class="panel-body">
         <div class="row">
             <div class=" col-sm-12" style="padding-top: 10px;">
-                <label>Update Invoice</label>
+                <label>Update Academic</label>
                 <hr class="hr_">
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
+                <!--                <label>Student</label>-->
+                <!--               <div class="col-sm-12" style="padding-top: 10px;">-->
                 <label>Student and IC</label>
                 <input class="form-control" data-ng-model="student_name" readonly/>
 
+                <!--            </div>-->
             </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
-                <label>Invoice No.</label>
-                <input readonly type="text"
-                       style="max-width: 100%;min-width: 100%;resize: none;"
-                       class="form-control"
-                       ng-model="invoice_no">
-            </div>
-            <div class="col-sm-12" style="padding-top: 30px;">
-                <label>CODE</label>
-            </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
-                <input ng-disabled="is_pay == 1" placeholder="Year example (2020)"
-                       class="form-control"
-                       type="number"
-                       name="year" required
-                       pattern="^[0-9]{4}$"
-                       data-ng-model="year" ng-enter="getfilter()"/>
-                <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
-            </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
-
-                <input ng-disabled="is_pay == 1" type="number"
-                       style="max-width: 100%;min-width: 100%;resize: none;"
-                       class="form-control"
-                       placeholder="Month example (04)"
-                       min="1"
-                       max="12"
-                       required
-                       pattern="^[0-9]{2}$"
-                       ng-model="month">
-                <span ng-show="!month"> <font color="red">Please insert 2 digit Min 01,Max 12,Required! </font></span>
-            </div>
-
-            <div class="col-md-12" style="padding-top: 40px;">
-                <div include-with-scope="../static/app/pages/account/widgets/updateItemTable.html"></div>
-            </div>
-            <div class="col-sm-12" style="padding-top: 10px;">
-                <label>Remark</label>
-                <textarea ng-disabled="is_pay == 1" style="max-width: 100%;min-width: 100%;resize: none;"
-                          class="form-control"
-                          required
-                          ng-model="desc"></textarea>
-            </div>
-            <div class="col-sm-12" style="padding-top: 10px;">
-                <label class="col-sm-2 control-label">Upload attachment</label>
-                <div class="col-sm-10">
-
-                    <input ng-disabled="is_pay == 1" type="file" ng-file-model="attachment" multiple/>
-                    <ul>
-                        <li ng-repeat="x in attachment" style="padding-top: 5px;">
-                            <i class="file-icon ion-document"></i>
-                            <span class="file-name"></span>&nbsp;{{$index + 1}} - {{x.name}}
-                        </li>
-                    </ul>
+            <div>
+                <div class="col-sm-12" style="padding-top: 30px;">
+                    <label>Sem </label>
                 </div>
-            </div>
-            <div class="col-sm-12">
-                <!--                        <label>Uploaded</label>-->
-                <hr>
-            </div>
-
-            <div class="col-sm-10">
-                <label class="col-sm-2 control-label">Uploaded</label>
-                <div class="col-sm-10">
-                    <ul ng-show="attachment_lama.length > 0">
-
-
-                        <li ng-repeat="x in  attachment_lama">
-                            <i class="file-icon ion-document"></i>
-                            <span class="file-name"></span>{{ x.name }} - <a download
-                                                                             href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">Download</a>
-
-                            <span>| <a
-                                    ng-click="removeAtt($index)">Delete</a></span>
-                            <!--<span ng-show="!vCtrl.disableEdit">| <a-->
-                            <!--<span ng-show="!vCtrl.disableEdit">| <a-->
-                            <!--ng-click="projectView.removeAtt(x)">Delete</a></span>-->
-                            <!--ng-click="vCtrl.removeAtt(x)">Delete</a></span>-->
-                        </li>
-                    </ul>
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <input placeholder="Year example (2020)"
+                           class="form-control"
+                           type="number"
+                           name="year" required
+                           pattern="^[0-9]{4}$"
+                           data-ng-model="year" ng-enter="getfilter()"/>
+                    <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
                 </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+
+                    <ui-select ng-model="select_sem.selected"
+                               class="btn-group bootstrap-select form-control"
+                               append-to-body="false"
+                               search-enabled="false">
+                        <ui-select-match placeholder="Please Choose">
+                            <span> {{$select.selected }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="x in select_sem.options| filter: $select.search"
+                                           ng-hide="!$select.open">
+                            <span ng-bind-html="x"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <span ng-show="select_sem.selected.length == 0"> <font
+                            color="red">Required! </font></span>
+                </div>
+                <div class="col-md-12" style="padding-top: 40px;">
+                    <label>Items</label>
+                    <div include-with-scope="../static/app/pages/academic/widgets/updateItemTable.html"></div>
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <!--                    <label>Remark {{items.lengtn}}</label>-->
+                    <label>Remark</label>
+                    <textarea style="max-width: 100%;min-width: 100%;resize: none;"
+                              class="form-control"
+                              required
+                              ng-model="desc"></textarea>
+                </div>
+
+
             </div>
-        </div>
-        <div class="col-md-12" style="padding-top: 10px;">
-            <div style="float: right">
-                <button ng-disabled="is_pay == 1 || !month || !year || !items.length" ng-hide="is_pay == 1"
-                        ng-click="submit()" style="width: 120px ;" type="submit"
-                        class="btn btn-success ion-android-cloud">
-                    &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
-                </button>&nbsp;&nbsp;
-                <button style="width: 120px ;" type="button"
-                        class="btn btn-danger ion-android-close"
-                        ng-click="$close()">
-                    &nbsp;&nbsp;&nbsp;Close
-                </button>
+            <div class="col-md-12" style="padding-top: 10px;">
+                <div style="float: right">
+                    <button ng-disabled="!student_name.selected.length == 0 || !year || select_sem.selected.length == 0 || !items[0].code "
+                            ng-click="submit()" style="width: 120px ;" type="submit"
+                            class="btn btn-success ion-android-cloud">
+                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
+                    <button style="width: 120px ;" type="button"
+                            class="btn btn-danger ion-android-close"
+                            ng-click="$close()">
+                        &nbsp;&nbsp;&nbsp;Close
+                    </button>
+                </div>
             </div>
         </div>
 
     </div>
-
-</div>
 </div>
 

@@ -15,7 +15,6 @@
                 method: 'GET',
                 url: ip_server + 'account/get_invoice?invoice_id=' + invoice_id
             }).then(function (result) {
-                console.log(result)
                 result = result.data;
                 $scope.student_id = result.student_id;
                 $scope.student_id = result.student_id;
@@ -36,12 +35,9 @@
 
         $scope.attachment_deleted = [];
         $scope.removeAtt = function (index) {
-            console.log($scope.attachment_lama)
             if ($scope.attachment_lama[index].id) {
-                // alert(1111)
                 $scope.attachment_deleted.push($scope.attachment_lama[index].id)
             }
-            console.log($scope.attachment_deleted)
             $scope.attachment_lama.splice(index, 1);
         };
 
@@ -98,7 +94,6 @@
         // $scope.total_price = 0;
 
         function calculate() {
-            // console.log( $scope.items,"$data$data$data$data$data$data$data")
             $scope.calculate_sub = 0;
             // $scope.$scope.total_price = 0;
             for (var x in $scope.items) {
@@ -114,10 +109,8 @@
         $scope.items_delete = [];
         $scope.remove_items = function (index) {
             if ($scope.items[index].id) {
-                alert(1111)
                 $scope.items_delete.push($scope.items[index].id)
             }
-            // console.log($scope.items_delete)
             $scope.items.splice(index, 1);
             calculate();
         };
@@ -130,10 +123,7 @@
                 calculate();
             }
         };
-        // $scope.submit = function () {
-        //     console.log($scope.items)
-        //
-        // }
+
 
         $scope.add_item = function () {
             $scope.inserted = {
@@ -152,10 +142,6 @@
                     toastr.warning('Please save before add new item !', 'Warning');
                 }
             }
-            // console.log($scope.items[$scope.items.length] )
-
-
-            // console.log($scope.items)
         };
 
         editableOptions.theme = 'bs3';

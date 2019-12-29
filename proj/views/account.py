@@ -39,8 +39,24 @@ def list_student(pagenum):
     if status != "All":
         codeSql = codeSql.filter(Invoice.is_pay == int(status))
 
-    report = codeSql.order_by(Invoice.date_created.desc()).paginate(int(pagenum), 10)
     count_result = codeSql.order_by(Invoice.date_created.desc()).count()
+    if count_result:
+        totalpagenum = math.ceil(count_result / 10)
+
+    else:
+        totalpagenum = 0
+
+    if totalpagenum >= int(pagenum):
+        report = codeSql.order_by(Invoice.date_created.desc()).paginate(int(pagenum), 10)
+    else:
+        pagenum = int(pagenum)
+        pagenum = pagenum - (pagenum - totalpagenum)
+        if pagenum == 0:
+            pagenum = 1
+        report = codeSql.order_by(Invoice.date_created.desc()).paginate(int(pagenum), 10)
+
+    # report = codeSql.order_by(Invoice.date_created.desc()).paginate(int(pagenum), 10)
+    # count_result = codeSql.order_by(Invoice.date_created.desc()).count()
 
     if not report:
         return "Report does not exist"
@@ -74,7 +90,7 @@ def list_student(pagenum):
                     dict1['invoice_detail'].append(list_1)
 
             list['data'].append(dict1)
-        totalpagenum = math.ceil(count_result / 10)
+        # totalpagenum = math.ceil(count_result / 10)
         list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
@@ -102,7 +118,6 @@ def add_invoice():
             receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f") + str(check_len + 1)
 
             student_payment = Invoice(receipt_no=receipt_no, year=year, month=month, total_pay=total_pay)
-            print(user_id)
             student_payment.created_by = user_id
 
             if "desc" in data:
@@ -241,6 +256,10 @@ def update_invoice():
                     payment_detail = InvoiceDetail(price=str('%.2f' % x["amount"]), desc=x["desc"])
                     payment_detail.payment_id = invoice_no
                     db.session.add(payment_detail)
+                if x["check"] == "old":
+                    InvoiceDetail.query.filter_by(id=x["id"]).update(
+                        dict(price=str('%.2f' % x["amount"]), desc=x["desc"]))
+
                     # db.session.commit()
             if deleted_items:
                 aa = InvoiceDetail.query.filter(InvoiceDetail.id.in_(deleted_items))

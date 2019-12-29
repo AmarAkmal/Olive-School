@@ -80,7 +80,6 @@
                     }
 
                 } else {
-                    // console.log(response.totalpagenum)
                     for (let i = 1; i <= response.totalpagenum; i++) {
                         $scope.paging.push(i);
                         if (i == 5) {
@@ -201,7 +200,6 @@
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                                 }
                             }).then(function (response) {
-                                console.log(response)
                                 if (response.data['status'] == "OK") {
 
                                     toastr.success('Data has been deleted.', 'Success!');

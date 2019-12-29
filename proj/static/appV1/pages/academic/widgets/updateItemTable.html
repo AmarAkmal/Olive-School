@@ -10,14 +10,15 @@
 <div>
     <div style=" float: right;" class="add-row-editable-table">
         <!--    <button class="btn btn-primary" ng-click="addUser()"></button>-->
-        <button ng-hide="is_pay == 1" style="border-radius: 25px;" ng-click="add_item()"
+        <button  style="border-radius: 25px;" ng-click="add_item()"
                 class="btn btn-primary ion-android-add"></button>
     </div>
     <table class="table table-bordered table-hover table-condensed">
         <tr>
             <td style="width: 10%">No.</td>
-            <td style="width: 45%">Description</td>
-            <td style="width: 20%">Amount(RM)</td>
+            <td style="width: 10%">Code</td>
+            <td style="width: 30%">Subject</td>
+            <td style="width: 20%">Score</td>
             <td style="width:35%">Action</td>
 
         </tr>
@@ -26,18 +27,22 @@
                 {{$index + 1}}
             </td>
             <td class="select-td amar">
-        <span editable-text="item.desc" e-name="desc" e-form="rowform" e-required
-              onbeforesave="checkValidity($data,'desc')">
-          {{ item.desc || 'empty' }}
-        </span>
+                <span editable-text="item.code" e-name="code" e-form="rowform" e-required
+                      onbeforesave="checkValidity($data,'code')">
+                  {{ item.code || 'empty' }}
+                </span>
             </td>
             <td class="select-td amar">
-        <span editable-number="item.amount" e-name="amount" e-step="any" e-form="rowform" e-required
-              onbeforesave="checkValidity($data,'price')" onaftersave="calculate()">
-          {{ item.amount || 'Enter Price' }}
-        </span>
-
-
+                <span editable-text="item.subject" e-name="subject" e-form="rowform" e-required
+                      onbeforesave="checkValidity($data,'subject')">
+                  {{ item.subject || 'empty' }}
+                </span>
+            </td>
+            <td class="select-td amar">
+                <span editable-text="item.score" e-name="score" e-form="rowform" e-required
+                      onbeforesave="checkValidity($data,'score')">
+                  {{ item.score || 'empty' }}
+                </span>
             </td>
             <td>
                 <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline"
@@ -47,61 +52,28 @@
                         Save
                     </button>
                     <button type="button" ng-disabled="rowform.$waiting"
-                            ng-click="rowform.$cancel();remove_item_edit( $index,item.desc ,item.amount)"
+                            ng-click="rowform.$cancel();remove_item_edit( $index,item.code ,item.subject)"
                             class="btn btn-default editable-table-button btn-xs">
                         Cancel
                     </button>
 
                 </form>
                 <div class="buttons" ng-show="!rowform.$visible">
-                    <button ng-disabled="is_pay == 1" class="btn btn-primary editable-table-button btn-xs"
+                    <button  class="btn btn-primary editable-table-button btn-xs"
                             ng-click="rowform.$show()">Edit
                     </button>
-                    <button ng-disabled="is_pay == 1" class="btn btn-danger editable-table-button btn-xs"
-                            ng-click="remove_items($index)">Delete
+                    <button  class="btn btn-danger editable-table-button btn-xs"
+                            ng-click="remove_items($index);">Delete
                     </button>
                 </div>
             </td>
         </tr>
-<!--        <tr class="editable-row">-->
-<!--            <td style="width: 10%"></td>-->
-<!--            <td style="width: 45%"><font color="yellow">Subtotal</font></td>-->
-<!--            <td style="width: 20%"><font color="yellow">{{subtotal}}</font></td>-->
-<!--            <td style="width:35%"></td>-->
-<!--            &lt;!&ndash;        <td style="width:35%">&ndash;&gt;-->
-<!--            &lt;!&ndash;            &lt;!&ndash;            <div style="text-align: center">&ndash;&gt;&ndash;&gt;-->
-<!--            &lt;!&ndash;            &lt;!&ndash;                   <button style="border-radius: 25px;" ng-click="calculate()" class="btn btn-primary ion-calculator"></button>&ndash;&gt;&ndash;&gt;-->
-<!--            &lt;!&ndash;            &lt;!&ndash;            </div>&ndash;&gt;&ndash;&gt;-->
-
-<!--            &lt;!&ndash;        </td>&ndash;&gt;-->
-<!--        </tr>-->
-
-        <tr class="editable-row">
-            <td style="width: 10%"></td>
-            <td style="width: 45%"><font color="black"><b>TOTAL</b></font></td>
-            <td style="width: 20%"><font color="black"><b>{{total}}</b></font></td>
-            <td style="width:35%"></td>
-            <!--        <td style="width:35%">-->
-            <!--            &lt;!&ndash;            <div style="text-align: center">&ndash;&gt;-->
-            <!--            &lt;!&ndash;                   <button style="border-radius: 25px;" ng-click="calculate()" class="btn btn-primary ion-calculator"></button>&ndash;&gt;-->
-            <!--            &lt;!&ndash;            </div>&ndash;&gt;-->
-
-            <!--        </td>-->
-        </tr>
-
-        <!--    <div>total{{total_price}}</div>-->
     </table>
-    <div ng-show="!items[0].desc" class="col-sm-12">
+    <div ng-show="!items[0].code" class="col-sm-12">
         <div align="center">
             <span> <font color="red">***Required!, Minimum 1 item ***</font></span>
         </div>
 
     </div>
-    <!--    <div class="col-sm-12">-->
-    <!--        <div align="center">-->
-    <!--            <span> <font color="red">*** Minimum 1 item ***</font></span>-->
-    <!--        </div>-->
-
-    <!--    </div>-->
 
 </div>

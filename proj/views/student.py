@@ -26,8 +26,24 @@ def list_student(pagenum):
     if student_intake:
         codeSql = codeSql.filter(Student.intake.like('%' + student_intake + '%'))
 
-    report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
     count_result = codeSql.order_by(Student.date_created.desc()).count()
+    if count_result:
+        totalpagenum = math.ceil(count_result / 10)
+
+    else:
+        totalpagenum = 0
+
+    if totalpagenum >= int(pagenum):
+        report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
+    else:
+        pagenum = int(pagenum)
+        pagenum = pagenum - (pagenum - totalpagenum)
+        if pagenum == 0:
+            pagenum = 1
+        report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
+
+    # report = codeSql.order_by(Student.date_created.desc()).paginate(int(pagenum), 10)
+    # count_result = codeSql.order_by(Student.date_created.desc()).count()
 
     if not report:
         return "Report does not exist"
@@ -42,7 +58,7 @@ def list_student(pagenum):
             dict1['student_intake'] = x.intake
 
             list['data'].append(dict1)
-        totalpagenum = math.ceil(count_result / 10)
+        # totalpagenum = math.ceil(count_result / 10)
         list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
@@ -51,7 +67,6 @@ def list_student(pagenum):
 @bp_student.route('/get_student_detail', methods=['GET'])
 def get_student_detail():
     id = request.args.get("id")
-    print(id)
     x = Student.query.filter_by(is_deleted=0, ic_no=id).first()
     if x:
         dictV = dict()
@@ -72,7 +87,6 @@ def get_student_detail():
             dictV['mother_name'] = get_mother.name
             dictV['mother_email'] = get_mother.email
             dictV['mother_phone'] = get_mother.phone
-        print(x.id)
         if x.picture:
             dictV["picture"] = "../static/uploads/" + x.id + "/" + x.picture
         else:
@@ -87,7 +101,6 @@ def get_student_detail():
 @bp_student.route('/add', methods=['POST'])
 def add():
     data = json.loads(request.form["data"])
-    print(data)
 
     student_name = data["student_name"]
     student_ic = data["student_ic"]
@@ -102,6 +115,7 @@ def add():
     mother_email = data["mother_email"]
     mother_contact = data["mother_contact"]
     response = dict()
+
     student = Student.query.filter_by(ic_no=student_ic).first()
     if student:
         student.is_deleted = 0

@@ -13,7 +13,7 @@
                 controller: 'student_listCtrl',
                 title: 'Student',
                 sidebarMeta: {
-                     icon: 'ion-compose',
+                     icon: 'ion-person',
                     order: 1
                 }
             });

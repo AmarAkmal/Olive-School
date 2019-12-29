@@ -7,18 +7,10 @@
     function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
         $scope.ok_boleh = false
         $scope.items = [];
-        // $scope.format1 = function () {
-        //
-        //     if ($scope.month <= 9) {
-        //         // console.log($scope.month = 0 + $scope.month)
-        //         $scope.month = "0" + $scope.month;
-        //     }
-        // };
         $http({
             method: 'GET',
             url: ip_server + 'student/get_student_list'
         }).then(function (result) {
-            // console.log(result)
             $scope.student_name = result.data
         });
 
@@ -112,10 +104,7 @@
                     toastr.warning('Please save before add new item !', 'Warning');
                 }
             }
-            // console.log($scope.items[$scope.items.length] )
 
-
-            // console.log($scope.items)
         };
 
         editableOptions.theme = 'bs3';

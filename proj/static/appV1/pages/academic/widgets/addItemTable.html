@@ -16,9 +16,9 @@
     <table class="table table-bordered table-hover table-condensed">
         <tr>
             <td style="width: 10%">No.</td>
-            <td style="width: 15%">Code</td>
+            <td style="width: 10%">Code</td>
             <td style="width: 30%">Subject</td>
-            <td style="width: 10%">Score</td>
+            <td style="width: 20%">Score</td>
             <td style="width:35%">Action</td>
 
         </tr>
@@ -28,7 +28,7 @@
             </td>
             <td class="select-td amar">
                 <span editable-text="item.code" e-name="code" e-form="rowform" e-required
-                      onbeforesave="checkValidity($data,'desc')">
+                      onbeforesave="checkValidity($data,'code')">
                   {{ item.code || 'empty' }}
                 </span>
             </td>
@@ -40,7 +40,7 @@
             </td>
             <td class="select-td amar">
                 <span editable-text="item.score" e-name="score" e-form="rowform" e-required
-                      onbeforesave="checkValidity($data,'desc')">
+                      onbeforesave="checkValidity($data,'score')">
                   {{ item.score || 'empty' }}
                 </span>
             </td>

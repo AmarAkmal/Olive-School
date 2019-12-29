@@ -44,7 +44,6 @@
         $scope.submit = function () {
             var fd = new FormData();
             if (typeof $scope.file !== "undefined") {
-                console.log($scope.file)
                 if ($scope.file.type.indexOf('image') != -1) {
                     fd.append('file', $scope.file);
                 }

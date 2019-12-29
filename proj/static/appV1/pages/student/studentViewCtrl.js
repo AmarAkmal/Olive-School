@@ -6,7 +6,6 @@
 
     function studentViewCtrl($http, $scope, toastr, fileReader, $filter, items, $rootScope) {
         $scope.submit_name = "Update"
-        // console.log(items);
 
         loadData();
 
@@ -36,15 +35,6 @@
             });
 
         }
-        //
-        //
-        // if ($scope.student_picture) {
-        //     $scope.picture = '../static/uploads' + '/' + $scope.id + '/' + $scope.student_picture;
-        // } else {
-        //     $scope.picture = $filter('appImage')('theme/student.png');
-        //     console.log($scope.picture)
-        // }
-
 
         $scope.submit = function () {
             var fd = new FormData();
