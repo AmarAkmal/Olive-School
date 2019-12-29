@@ -5,8 +5,9 @@
         .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", "$uibModal", account_createCtrl]);
 
     function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
-        $scope.ok_boleh = false
+        $scope.ok_boleh = false;
         $scope.items = [];
+        $scope.desc = "";
         $http({
             method: 'GET',
             url: ip_server + 'student/get_student_list'

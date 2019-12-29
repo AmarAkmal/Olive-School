@@ -7,6 +7,7 @@
     function academicViewCtrl($scope, $uibModal, $http, id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
         $scope.select_sem = {selected: [], options: ['1', '2', '3']};
         $scope.items = [];
+        $scope.desc = "";
         loadData();
 
         function loadData() {

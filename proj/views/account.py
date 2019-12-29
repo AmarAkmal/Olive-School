@@ -239,7 +239,7 @@ def update_invoice():
             user_id = data['user_id']
             year = data['year']
             month = data['month']
-            print(month)
+
             desc = data['desc']
             items = data['items']
             attachment_deleted = data['attachment_deleted']

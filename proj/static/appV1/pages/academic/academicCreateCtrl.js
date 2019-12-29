@@ -6,6 +6,7 @@
 
         function academicCreateCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
             $scope.select_sem = {'selected': [], 'options': ['1', '2', '3']};
+             $scope.desc = "";
             $scope.items = [];
             $http({
                 method: 'GET',
