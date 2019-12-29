@@ -10,7 +10,7 @@ bp_academic = Blueprint('bp_academic', __name__)
 
 
 @bp_academic.route('/list/<pagenum>', methods=['GET'])
-def list_student(pagenum):
+def list(pagenum):
     time.sleep(20)
     student_name = request.args["student_name"]
     student_ic = request.args["student_ic"]
