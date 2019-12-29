@@ -5,12 +5,13 @@ from flask import Blueprint, render_template, request, jsonify, json, abort
 from werkzeug.utils import secure_filename
 from proj.model import *
 from sqlalchemy import or_
-
+import time
 bp_academic = Blueprint('bp_academic', __name__)
 
 
 @bp_academic.route('/list/<pagenum>', methods=['GET'])
 def list_student(pagenum):
+    time.sleep(20)
     student_name = request.args["student_name"]
     student_ic = request.args["student_ic"]
     year = request.args["year"]
