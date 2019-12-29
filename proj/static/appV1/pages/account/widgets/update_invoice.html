@@ -87,7 +87,7 @@
                             <span class="file-name"></span>{{ x.name }} - <a download
                                                                              href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">Download</a>
 
-                            <span>| <a
+                            <span ng-hide="is_pay == 1">| <a
                                     ng-click="removeAtt($index)">Delete</a></span>
                             <!--<span ng-show="!vCtrl.disableEdit">| <a-->
                             <!--<span ng-show="!vCtrl.disableEdit">| <a-->

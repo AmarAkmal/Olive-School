@@ -235,7 +235,7 @@ def update_invoice():
         return "Already pay"
     else:
 
-        update_invoice_detail = Invoice.query.filter_by(id=invoice_no, is_deleted=0)
+        update_invoice_detail = Invoice.query.filter_by(id=invoice_no, is_deleted=0, is_pay=0)
 
         if update_invoice_detail:
 
