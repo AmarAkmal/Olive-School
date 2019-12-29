@@ -2,10 +2,10 @@
     'use strict';
 
 
-    angular.module('BlurAdmin.pages.account').controller('account_listCtrl', ['$scope', '$uibModal', '$http', 'toastr', '$rootScope','$uibModalStack', account_listCtrl]);
+    angular.module('BlurAdmin.pages.account').controller('account_listCtrl', ['$scope', '$uibModal', '$http', 'toastr', '$rootScope', '$uibModalStack', account_listCtrl]);
 
 
-    function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope,$uibModalStack) {
+    function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope, $uibModalStack) {
         $scope.formData = {};
 
 
@@ -64,7 +64,9 @@
                 }
 
                 if (response.count_result == 0) {
-                    $scope.goto.page = 0;
+                    $scope.goto.page = 1;
+                    $scope.pagenum = 1;
+
 
                 }
                 if ($scope.pagenum > 4) {
@@ -87,9 +89,8 @@
 
 
             }).catch(function (error) {
-                console.log(error, "ERROR")
-                // if (error.status === 401)
-                //     denied()
+                alert("Connection Error");
+                $uibModalStack.dismissAll();
             });
         }
 
@@ -183,27 +184,35 @@
                             return selection;
                         }
                     },
-                    controller: function ($scope, $uibModalInstance, list_del) {
+                    controller: function ($scope, $uibModalInstance, $uibModal, list_del) {
                         $scope.confirmDel = function () {
 
-                            // $scope.confirmDel = function () {
+                            loaderModal = $uibModal.open({
+                                animation: true,
+                                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                                size: 'sm',
+                                backdrop: 'static',
+                                keyboard: false,
+                            });
+
                             $http.delete(ip_server + 'account/deleted_account/' + JSON.stringify(list_del)).then(function (response) {
                                 if (response.data.status === "OK") {
                                     toastr.success('Data has been deleted !', 'Success');
-                                    $rootScope.$broadcast('load_list_account')
                                     $uibModalStack.dismissAll();
+                                    $rootScope.$broadcast('load_list_account');
+
                                 } else {
                                     toastr.error("Data hasn't been deleted.", 'Error!');
-                                    $rootScope.$broadcast('load_list_account')
+                                    loaderModal.close();
                                     $uibModalStack.dismissAll();
-                                }
-                                // toastr.success('Data has been deleted!');
+                                    $rootScope.$broadcast('load_list_account');
 
+                                }
 
                             }).catch(function (error) {
-                                console.log(error, "ERROR")
-                                // if (error.status === 401)
-                                //     denied()
+                                alert("Connection Error");
+                                loaderModal.close();
+
                             });
 
 
@@ -226,7 +235,7 @@
 
         $scope.add_invoice = function () {
             var modalInstance = $uibModal.open({
-                animation: false,
+                animation: true,
                 keyboard: false,
                 backdrop: 'static',
                 templateUrl: '../static/app' + gversion + '/pages/account/widgets/create_invoice.html',

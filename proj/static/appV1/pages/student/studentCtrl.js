@@ -16,10 +16,10 @@
         };
     });
 
-    angular.module('BlurAdmin.pages.student').controller('student_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', student_listCtrl]);
+    angular.module('BlurAdmin.pages.student').controller('student_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', "$uibModalStack", student_listCtrl]);
 
 
-    function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
+    function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
 
 
         $scope.formData = {};
@@ -66,8 +66,9 @@
                     $scope.pagenum = $scope.totalpagenum
                 }
 
-                if (response.count_result == 0) {
-                    $scope.goto.page = 0;
+                if (response.count_result == 0) {    /*Control last page no data */
+                    $scope.goto.page = 1;
+                    $scope.pagenum = 1;
 
                 }
                 if ($scope.pagenum > 4) {
@@ -87,12 +88,9 @@
                         }
                     }
                 }
-
-
             }).catch(function (error) {
-                console.log(error, "ERROR")
-                // if (error.status === 401)
-                //     denied()
+                alert("Connection Error");
+                $uibModalStack.dismissAll();
             });
         }
 
@@ -147,10 +145,11 @@
 
             loadData();
 
-        }
+        };
 
         // --------------------------------start modal ------------------------------------------
         $scope.delete = function () {
+
             var selection = [];
             angular.forEach($scope.selectedList, function (selected, bind) {
                 if (selected) {
@@ -185,8 +184,15 @@
                         },
 
                     },
-                    controller: function ($scope, $uibModalInstance, list_del) {
+                    controller: function ($scope, $uibModalInstance, $uibModal, list_del) {
                         $scope.confirmDel = function () {
+                            loaderModal = $uibModal.open({
+                                animation: true,
+                                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                                size: 'sm',
+                                backdrop: 'static',
+                                keyboard: false,
+                            });
 
                             var data = $.param({
                                 data: JSON.stringify({
@@ -201,9 +207,10 @@
                                 }
                             }).then(function (response) {
                                 if (response.data['status'] == "OK") {
-
                                     toastr.success('Data has been deleted.', 'Success!');
-                                    $rootScope.$broadcast('load_list_student')
+                                    loaderModal.close();
+                                    $uibModalStack.dismissAll();
+                                    $rootScope.$broadcast('load_list_student');
 
                                 } else {
                                     toastr.error("Data hasn't been updated.", 'Error!');
@@ -212,7 +219,8 @@
 
 
                             }).catch(function (error) {
-                                console.log(error, "ERROR")
+                                alert("Connection Error");
+                                loaderModal.close();
 
                             });
 
@@ -233,7 +241,7 @@
         };
         $scope.view = function (id) {
             var modalInstance = $uibModal.open({
-                animation: false,
+                animation: true,
 
                 templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
                 controller: 'studentViewCtrl',
@@ -256,7 +264,7 @@
         };
         $scope.add_student = function () {
             var modalInstance = $uibModal.open({
-                animation: false,
+                animation: true,
                 keyboard: false,
                 templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
                 controller: 'student_createCtrl',

@@ -11,6 +11,13 @@
         loadData();
 
         function loadData() {
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
             $http({
                 method: 'GET',
                 url: ip_server + 'account/get_invoice?invoice_id=' + invoice_id
@@ -26,10 +33,15 @@
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
-                // $scope.subtotal = result.subtotal;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
+                loaderModal.close()
                 calculate();
+            }).catch(function (error) {
+                alert("Connection Error");
+                loaderModal.close();
+                $uibModalStack.dismissAll();
             });
+
 
         }
 
@@ -43,7 +55,13 @@
 
         // $scope.student_name.selected = {'ic_no': items.student_ic, 'name': items.student_name}
         $scope.submit = function () {
-
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
             var fd = new FormData();
             var data = {
                 "user_id": user_id,
@@ -76,16 +94,19 @@
                 }
                 if (response.data.status === "OK") {
                     toastr.success('Data successfully saved.', 'Success');
-                    $rootScope.$broadcast('load_list_account');
+                    loaderModal.close();
                     $uibModalStack.dismissAll();
+                    $rootScope.$broadcast('load_list_account');
                 } else {
                     toastr.error("Data hasn't been save.", 'Error!');
                 }
             }).catch(function (error) {
-
-                console.log(error)
+                alert("Connection Error");
+                loaderModal.close();
+                $uibModalStack.dismissAll();
 
             });
+
         };
 
 

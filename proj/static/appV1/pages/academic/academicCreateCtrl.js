@@ -2,9 +2,9 @@
         'use strict';
 
         angular.module('BlurAdmin.pages.academic')
-            .controller('academicCreateCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", academicCreateCtrl]);
+            .controller('academicCreateCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", "$uibModal", academicCreateCtrl]);
 
-        function academicCreateCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
+        function academicCreateCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
             $scope.select_sem = {'selected': [], 'options': ['1', '2', '3']};
             $scope.items = [];
             $http({
@@ -16,7 +16,13 @@
 
 
             $scope.submit = function () {
-
+                loaderModal = $uibModal.open({
+                    animation: true,
+                    templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                    size: 'sm',
+                    backdrop: 'static',
+                    keyboard: false,
+                });
                 var fd = new FormData();
                 var data = {
                     "user_id": user_id,
@@ -42,15 +48,18 @@
                     }
                 ).then(function (response) {
                     if (response.data.status === "OK") {
-                        $rootScope.$broadcast('load_list_academic');
                         toastr.success('Data successfully saved.', 'Success');
+                        loaderModal.close();
                         $uibModalStack.dismissAll();
+                        $rootScope.$broadcast('load_list_academic');
 
                     } else {
                         toastr.error("Data hasn't been save.", 'Error!');
                     }
                 }).catch(function (error) {
-
+                    alert("Connection Error");
+                    loaderModal.close();
+                    $uibModalStack.dismissAll();
                 });
             };
 

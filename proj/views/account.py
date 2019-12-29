@@ -117,7 +117,7 @@ def add_invoice():
 
             receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f") + str(check_len + 1)
 
-            student_payment = Invoice(receipt_no=receipt_no, year=year, month=month, total_pay=total_pay)
+            student_payment = Invoice(receipt_no=receipt_no, year=year, month='%.2f' % month, total_pay=total_pay)
             student_payment.created_by = user_id
 
             if "desc" in data:
@@ -239,6 +239,7 @@ def update_invoice():
             user_id = data['user_id']
             year = data['year']
             month = data['month']
+            print(month)
             desc = data['desc']
             items = data['items']
             attachment_deleted = data['attachment_deleted']

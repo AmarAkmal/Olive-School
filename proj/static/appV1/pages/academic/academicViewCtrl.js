@@ -10,6 +10,13 @@
         loadData();
 
         function loadData() {
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
             $http({
                 method: 'GET',
                 url: ip_server + 'academic/get_academic?id=' + id
@@ -19,12 +26,25 @@
                 $scope.items = result.items;
                 $scope.desc = result.desc;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
-                $scope.select_sem.selected = result.sem
+                $scope.select_sem.selected = result.sem;
+                loaderModal.close();
+            }).catch(function (error) {
+                alert("Connection Error");
+                loaderModal.close();
+                $uibModalStack.dismissAll();
+
             });
 
         }
 
         $scope.submit = function () {
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
 
             var fd = new FormData();
             var data = {
@@ -37,7 +57,6 @@
                 "deleted_items": $scope.items_delete,
             };
 
-
             fd.append('data', JSON.stringify(data));
             $http.post(ip_server + 'academic/update?id=' + id, fd, {
                     transformRequest: angular.identity,
@@ -47,14 +66,16 @@
 
                 if (response.data.status === "OK") {
                     toastr.success('Data successfully saved.', 'Success');
-                    $rootScope.$broadcast('load_list_academic');
+                    loaderModal.close();
                     $uibModalStack.dismissAll();
+                    $rootScope.$broadcast('load_list_academic');
                 } else {
                     toastr.error("Data hasn't been save.", 'Error!');
                 }
             }).catch(function (error) {
-
-                console.log(error)
+                alert("Connection Error");
+                loaderModal.close();
+                $uibModalStack.dismissAll();
 
             });
         };

@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.account')
-        .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", account_createCtrl]);
+        .controller('account_createCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", "$uibModal", account_createCtrl]);
 
-    function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
+    function account_createCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
         $scope.ok_boleh = false
         $scope.items = [];
         $http({
@@ -14,9 +14,14 @@
             $scope.student_name = result.data
         });
 
-        // $scope.student_name= [{'id':123 ,'name':'Amar'},{'id':456 ,'name':'Samad'}]
         $scope.submit = function () {
-
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
             var fd = new FormData();
             var data = {
                 "user_id": user_id,
@@ -44,26 +49,28 @@
                 }
             ).then(function (response) {
                 if (response.data.status === "OK") {
-                    $rootScope.$broadcast('load_list_account');
                     toastr.success('Data successfully saved.', 'Success');
+                    loaderModal.close();
                     $uibModalStack.dismissAll();
+                    $rootScope.$broadcast('load_list_account');
+
 
                 } else {
                     toastr.error("Data hasn't been save.", 'Error!');
                 }
             }).catch(function (error) {
-
+                alert("Connection Error");
+                loaderModal.close()
             });
         };
 
-        calculate();
         $scope.calculate = calculate;
 
 
         function calculate() {
 
             $scope.calculate_sub = 0;
-            // $scope.$scope.total_price = 0;
+
             for (var x in $scope.items) {
                 if ($scope.items[x]["amount"]) {
                     $scope.calculate_sub = $scope.calculate_sub + parseFloat($scope.items[x]["amount"])

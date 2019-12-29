@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.student')
-        .controller('student_createCtrl', ['$http', '$scope', 'toastr', 'fileReader', '$filter', "$rootScope", student_createCtrl]);
+        .controller('student_createCtrl', ['$http', '$scope', 'toastr', 'fileReader', '$filter', "$rootScope", "$uibModalStack", '$uibModal', student_createCtrl]);
 
-    function student_createCtrl($http, $scope, toastr, fileReader, $filter, $rootScope) {
+    function student_createCtrl($http, $scope, toastr, fileReader, $filter, $rootScope, $uibModalStack, $uibModal) {
         $scope.submit_name = "Submit";
         //
         // $scope.student_name = "$scope.student_name";
@@ -42,6 +42,13 @@
         };
 
         $scope.submit = function () {
+            loaderModal = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false,
+            });
             var fd = new FormData();
             if (typeof $scope.file !== "undefined") {
                 if ($scope.file.type.indexOf('image') != -1) {
@@ -71,11 +78,17 @@
             }).then(function (response) {
                 if (response.data['status'] == "OK") {
                     toastr.success('Data successfully saved.', 'Success!');
-                    $rootScope.$broadcast('load_list_student')
+                    loaderModal.close();
+                    $uibModalStack.dismissAll();
+                    $rootScope.$broadcast('load_list_student');
 
                 } else {
                     toastr.error("Data hasn't been updated.", 'Error!');
+                    loaderModal.close()
                 }
+            }).catch(function (error) {
+                alert("Connection Error");
+                loaderModal.close()
             });
         }
 
