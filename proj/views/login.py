@@ -23,6 +23,12 @@ def auth():
                 return redirect(url_for('bp_main.index', id=user.id))
         else:
             flash('wrong email or password', 'error')
+    host = request.host_url
+
+    if "login" not in host:
+        host = host + "login"
+
+        return render_template('host/auth.html')
 
     return render_template('auth.html')
 
