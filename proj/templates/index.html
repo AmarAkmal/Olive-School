@@ -94,7 +94,7 @@
 <script type="text/javascript">
 
     if (window.location.hostname !== "localhost") {
-        var ip_server = window.location.protocol + "//" + window.location.hostname + "/";
+        var ip_server = window.location.protocol + "//" + window.location.hostname + "/management/";
 
     } else {
         var ip_server = 'http://localhost:5000/';   /*Logic*/
@@ -240,6 +240,11 @@
 <script src="../static/app{{config.VERSION}}/pages/student/studentCtrl.js"></script>
 <script src="../static/app{{config.VERSION}}/pages/student/studentcreate.js"></script>
 <script src="../static/app{{config.VERSION}}/pages/student/studentViewCtrl.js"></script>
+
+<script src="../static/app{{config.VERSION}}/pages/event/studentEvent.module.js"></script>
+<script src="../static/app{{config.VERSION}}/pages/event/studentEventCtrl.js"></script>
+<script src="../static/app{{config.VERSION}}/pages/event/studentEventViewCtrl.js"></script>
+<script src="../static/app{{config.VERSION}}/pages/event/studentEventCreateCtrl.js"></script>
 
 <script src="../static/app{{config.VERSION}}/pages/academic/academic.module.js"></script>
 <script src="../static/app{{config.VERSION}}/pages/academic/academicCtrl.js"></script>
