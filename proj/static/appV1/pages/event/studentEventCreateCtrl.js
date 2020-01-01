@@ -99,10 +99,6 @@
 
 
         $scope.submit = function () {
-            console.log($scope.student_name.selected)
-            console.log($scope.date_event)
-            console.log($scope.desc)
-            console.log($scope.attachment)
             loaderModal = $uibModal.open({
                 animation: true,
                 templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
