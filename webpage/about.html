@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Business Casual - Start Bootstrap Theme</title>
+  <!-- <title>Business Casual - Start Bootstrap Theme</title> -->
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,42 +25,7 @@
 </head>
 
 <body>
-
-  <h1 class="site-heading text-center text-white d-none d-lg-block">
-    <span class="site-heading-upper text-primary mb-3">EMPOWER KNOWLEDGE GROW CONFIDENT</span>
-    <span class="site-heading-lower">THE OLIVE TRESS SCHOOL</span>
-  </h1>
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="#">TOTS</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="index.html">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item active px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="about.html">About</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="products.html">Products</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="store.html">Contact</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="management/login" target="_blank">Login</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div id="hearderContent"></div>
 
   <section class="page-section about-heading">
     <div class="container">
@@ -105,33 +70,19 @@
     </div>
   </section>
 
-  <footer class="footer text-faded text-center py-5">
-      <div class="container">
-          <ul class="list-inline mb-5">
-              <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white mr-3" href="#">
-                  <i class="icon-social-facebook"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white mr-3" href="#">
-                  <i class="icon-social-twitter"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white" href="#">
-                  <i class="icon-social-instagram"></i>
-                </a>
-              </li>
-            </ul>
-          <p class="m-0 small">Copyright &copy; The Olive Trees School</p>
-      </div>
-    </footer>
+  <div id='footerContent'></div>
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script> 
+      $(function(){
+        $("#hearderContent").load("hearder.html");
+        $("#footerContent").load("footer.html");
+      });
+  
+   
+  </script>
 </body>
 
 </html>

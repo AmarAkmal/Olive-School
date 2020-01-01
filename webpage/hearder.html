@@ -1,0 +1,59 @@
+<head>
+ <title>Business Casual - Start Bootstrap Theme</title> 
+</head>
+  <h1 class="site-heading text-center text-white d-none d-lg-block">
+    <span class="site-heading-upper text-primary mb-3">EMPOWER KNOWLEDGE GROW CONFIDENT</span>
+    <span class="site-heading-lower">THE OLIVE TREES SCHOOL</span>
+  </h1>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="#">TOTS</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav mx-auto">
+          <li id="index" class="nav-item px-lg-4">
+            <a  class="nav-link text-uppercase text-expanded" href="index.html">Home
+            </a>
+          </li>
+          <li id="about" class="nav-item px-lg-4">
+            <a  class="nav-link text-uppercase text-expanded" href="about.html">About</a>
+            
+          </li>
+          <li id="event" class="nav-item px-lg-4">
+            <a  class="nav-link text-uppercase text-expanded" href="event.html">Events</a>
+          </li>
+          <li id="contact" class="nav-item px-lg-4">
+            <a  class="nav-link text-uppercase text-expanded" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="system/examples/login.html">Login</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script>
+      $(function() {
+          let path = window.location.pathname;
+        
+          if(path.search("index.html") != -1 ){
+            $('#index').addClass('active');
+          }
+          else if(path.search("about.html") != -1){
+            $('#about').addClass('active');
+          }
+          else if(path.search("event.html") != -1){
+            $('#event').addClass('active');
+          }
+          else if(path.search("contact.html") != -1){
+            $('#contact').addClass('active');
+          }
+      });
+    //   console.log(window.location.pathname);
+  </script>
