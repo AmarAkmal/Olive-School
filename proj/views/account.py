@@ -340,3 +340,104 @@ def deleted_account(data):
         response = {"status": "Failed"}
 
     return jsonify(response)
+
+
+############################# mobile area ##############################################
+
+# Inter mobile
+@bp_account.route('/mobile_get_invoice', methods=['GET'])
+def mobile_get_invoice():
+    invoice_id = request.args.get("invoice_id")
+    if not invoice_id:
+        return "invoice does not exist"
+
+    get_detail = Invoice.query.filter_by(receipt_no=invoice_id).first()
+    dictV = dict()
+    if get_detail:
+
+        dictV["invoice_no"] = get_detail.receipt_no
+        dictV["student_id"] = get_detail.id
+        dictV["student_ic"] = get_detail.student.ic_no
+        dictV["student_name"] = get_detail.student.name
+        dictV["year"] = get_detail.year
+        dictV["month"] = get_detail.month
+        dictV["desc"] = get_detail.desc
+        dictV["is_pay"] = float(get_detail.is_pay)
+        get_att = PaymentAttachment.query.filter_by(student_id=get_detail.id, is_deleted=0).all()
+        dictV['attachment'] = []
+        if get_att:
+            for k in get_att:
+                list_1 = dict()
+                list_1['id'] = k.id
+                list_1['name'] = k.name
+                dictV['attachment'].append(list_1)
+
+        dictV['total'] = "%.2f" % float(get_detail.total_pay)
+        get_detail_items = InvoiceDetail.query.filter_by(payment_id=invoice_id, is_deleted=0).all()
+        dictV['invoice_detail'] = []
+
+        if get_detail_items:
+
+            for j in get_detail_items:
+                list_1 = dict()
+
+                list_1['id'] = j.id
+                list_1['desc'] = j.desc
+                list_1['check'] = "old"
+                list_1['amount'] = float(j.price)
+                list_1['old'] = True
+                # calculation = calculation + float(j.price)
+                dictV['invoice_detail'].append(list_1)
+    # dictV["invoice_no"] = get_detail.receipt_no
+
+    return jsonify(dictV)
+
+
+#
+#
+@bp_account.route('/receive_payment', methods=['GET'])
+def receive_payment():
+    # invoice_id = request.args.get("invoice_id")
+    # if not invoice_id:
+    #     return "invoice does not exist"
+    #
+    # get_detail = Invoice.query.filter_by(receipt_no=invoice_id).first()
+    dictV = dict()
+    # if get_detail:
+    #
+    #     dictV["invoice_no"] = get_detail.receipt_no
+    #     dictV["student_id"] = get_detail.id
+    #     dictV["student_ic"] = get_detail.student.ic_no
+    #     dictV["student_name"] = get_detail.student.name
+    #     dictV["year"] = get_detail.year
+    #     dictV["month"] = get_detail.month
+    #     dictV["desc"] = get_detail.desc
+    #     dictV["is_pay"] = float(get_detail.is_pay)
+    #     get_att = PaymentAttachment.query.filter_by(student_id=get_detail.id, is_deleted=0).all()
+    #     dictV['attachment'] = []
+    #     if get_att:
+    #         for k in get_att:
+    #             list_1 = dict()
+    #             list_1['id'] = k.id
+    #             list_1['name'] = k.name
+    #             dictV['attachment'].append(list_1)
+    #
+    #     dictV['total'] = "%.2f" % float(get_detail.total_pay)
+    #     get_detail_items = InvoiceDetail.query.filter_by(payment_id=invoice_id, is_deleted=0).all()
+    #     dictV['invoice_detail'] = []
+    #
+    #     if get_detail_items:
+    #
+    #         for j in get_detail_items:
+    #             list_1 = dict()
+    #
+    #             list_1['id'] = j.id
+    #             list_1['desc'] = j.desc
+    #             list_1['check'] = "old"
+    #             list_1['amount'] = float(j.price)
+    #             list_1['old'] = True
+    #             # calculation = calculation + float(j.price)
+    #             dictV['invoice_detail'].append(list_1)
+    # # dictV["invoice_no"] = get_detail.receipt_no
+
+    return jsonify(dictV)

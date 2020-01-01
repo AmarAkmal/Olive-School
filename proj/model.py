@@ -16,6 +16,8 @@ class User(db.Model):
     update_by = db.relationship("Invoice", backref="user2", foreign_keys="[Invoice.update_by]",
                                 cascade="all, delete-orphan")
 
+    # role_id = db.Column(db.ForeignKey('role.id', ondelete="CASCADE", onupdate="CASCADE"))
+
     def __init__(self, name, email, role, password):
         self.id = uuid.uuid4().hex
         self.name = name
@@ -36,6 +38,8 @@ class Student(db.Model):
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academic_detail = db.relationship("Academic", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
+    event = db.relationship("StudentEvent", backref="student",
+                            cascade="all, delete-orphan")
 
     is_deleted = db.Column(db.Boolean, default=0)
 
@@ -154,3 +158,29 @@ class AcademicDetail(db.Model):
         self.code = code
         self.subject = subject
         self.score = score
+
+
+class StudentEvent(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    remark = db.Column(db.TEXT)
+    date = db.Column(db.DateTime)
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+    attachment = db.relationship("StudentEventAttachment", backref="student_event_attachment",
+                                 cascade="all, delete-orphan")
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def __init__(self, remark, date):
+        self.id = uuid.uuid4().hex
+        self.remark = remark
+        self.date = date
+
+
+class StudentEventAttachment(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    name = db.Column(db.String(300))
+    event_id = db.Column(db.ForeignKey('student_event.id', ondelete="CASCADE", onupdate="CASCADE"))
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def __init__(self, name):
+        self.id = uuid.uuid4().hex
+        self.name = name

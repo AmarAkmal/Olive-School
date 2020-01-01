@@ -1,0 +1,96 @@
+<style>
+    .hr_ {
+        margin-top: 0px;
+    }
+
+</style>
+<div class="col-md-12  panel panel-blur">
+    <div class="panel-body">
+        <div class="row">
+            <div class=" col-sm-12" style="padding-top: 10px;">
+                <label>Add Event</label>
+                <hr class="hr_">
+            </div>
+            <div class="col-sm-12" style="padding-top: 10px;">
+                <label>Student</label>
+                <input class="form-control" data-ng-model="student_name" readonly/>
+            </div>
+            <div>
+                <div class="col-sm-12" style="padding-top: 30px;">
+                    <label>Date</label>
+                </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <input readonly placeholder="Choose Date"
+
+                           class="form-control"
+                           type="text" id="date_event"
+                           name="date_event"
+                           data-ng-model="date_event" onkeydown="getfilter()" ng-enter="getfilter()"
+                           dateeventselected/>
+                    <!--                    <span ng-show="!date_event"> <font color="red">Required!</font></span>-->
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <!--                    <label>Remark {{items.lengtn}}</label>-->
+                    <label>Remark</label>
+                    <textarea style="max-width: 100%;min-width: 100%;resize: none;"
+                              class="form-control"
+                              required
+                              ng-model="desc"></textarea>
+                </div>
+
+
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <label>Upload File</label>
+                    <!--                    <div class="col-sm-10">-->
+                    <input type="file" ng-file-model-create="attachment" multiple/>
+                    <div ng-repeat="x in attachment" style="padding-top: 5px;">
+                        <i class="file-icon ion-document"></i>
+                        <span class="file-name"></span>&nbsp;{{$index + 1}} - {{x.name}}
+                        <span>| <a
+                                ng-click="removeAttNew($index)">Delete</a></span>
+                        <!--                        </div>-->
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <hr>
+                </div>
+
+                <div class="col-sm-10">
+                    <label class="col-sm-1 control-label">Attachment</label>
+                    <div class="col-sm-11">
+                        <ul ng-show="attachment_lama_event.length > 0">
+
+
+                            <li ng-repeat="x in  attachment_lama_event">
+                                <i class="file-icon ion-document"></i>
+                                <span class="file-name"></span>&nbsp;{{$index + 1}} - {{ x.name }} - <a download
+                                                                                                        href="{{ x.path }}" style="color: aqua">Download</a>
+                                <span>| <a target="_blank"
+                                           href="{{ x.path }}" style="color: chartreuse">View</a></span>
+
+                                <span  class="file-name">| <a
+                                        ng-click="removeAtt($index)" style="color: red;cursor: pointer">Delete</a></span>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-top: 10px;">
+                <div style="float: right">
+                    <button ng-click="submit()" style="width: 120px ;" type="submit"
+                            class="btn btn-success ion-android-cloud">
+                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
+                    <button style="width: 120px ;" type="button"
+                            class="btn btn-danger ion-android-close"
+                            ng-click="$close()">
+                        &nbsp;&nbsp;&nbsp;Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

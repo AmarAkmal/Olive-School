@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 import proj.config
@@ -29,10 +29,6 @@ from proj.views.login import bp_login
 
 app.register_blueprint(bp_login, url_prefix='/login')
 
-from proj.views.login import bp_login
-
-app.register_blueprint(bp_login, url_prefix='')
-
 from proj.views.main import bp_main
 
 app.register_blueprint(bp_main, url_prefix='/main')
@@ -52,4 +48,22 @@ app.register_blueprint(bp_academic, url_prefix='/academic')
 from proj.views.Insertdata import bp_insertdata
 
 app.register_blueprint(bp_insertdata, url_prefix='/insert')
+
+
 # ---
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # print(e)
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(401)
+def unauthorized(e):
+    # print(e)
+    return render_template('error.html'), 401
+
+
+@app.route('/error.html')
+def error():
+    return render_template('error.html')

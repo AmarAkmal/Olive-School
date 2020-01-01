@@ -1,0 +1,135 @@
+<style>
+    .hr_ {
+        margin-top: 0px;
+    }
+
+</style>
+<div class="col-md-12  panel panel-blur">
+    <div class="panel-body">
+        <div class="row">
+            <div class=" col-sm-12" style="padding-top: 10px;">
+                <label>Add Event</label>
+                <hr class="hr_">
+            </div>
+            <div class="col-sm-12" style="padding-top: 10px;">
+                <label>Student</label>
+                <ui-select ng-model="student_name.selected"
+                           class="btn-group bootstrap-select form-control"
+                           append-to-body="false"
+                           search-enabled="true"
+                           ng-change="studnet_selected">
+                    <ui-select-match placeholder="Please Choose">
+                        <span> {{$select.selected.name }}  ({{$select.selected.ic_no }} )</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="x in student_name | filter: $select.search"
+                                       ng-hide="!$select.open">
+                        <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div ng-hide="!student_name.selected">
+                <div class="col-sm-12" style="padding-top: 30px;">
+                    <label>Date</label>
+                </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <input readonly placeholder="Choose Date"
+
+                           class="form-control"
+                           type="text" id="date_event"
+                           name="date_event"
+                           data-ng-model="date_event" onkeydown="getfilter()" ng-enter="getfilter()"
+                           dateeventselected/>
+                    <!--                    <span ng-show="!date_event"> <font color="red">Required!</font></span>-->
+                </div>
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <!--                    <label>Remark {{items.lengtn}}</label>-->
+                    <label>Remark</label>
+                    <textarea ng-disabled="!student_name.selected" style="max-width: 100%;min-width: 100%;resize: none;"
+                              class="form-control"
+                              required
+                              ng-model="desc"></textarea>
+                </div>
+
+
+                <div class="col-sm-12" style="padding-top: 10px;">
+                    <label>Upload File</label>
+                    <!--                    <div class="col-sm-10">-->
+                    <input ng-disabled="!student_name.selected" type="file" ng-file-model-create="attachment" multiple/>
+                    <div ng-repeat="x in attachment" style="padding-top: 5px;">
+                        <i class="file-icon ion-document"></i>
+                        <span class="file-name"></span>&nbsp;{{$index + 1}} - {{x.name}}
+                        <span>| <a
+                                    ng-click="removeAttNew($index)">Delete</a></span>
+                        <!--                        </div>-->
+                    </div>
+                </div>
+
+                <!--                <div ng-show="attachment.length" class="col-sm-12 " style="padding-top: 10px;">-->
+
+                <!--                    <div class="col-sm-12">-->
+                <!--                        <label>Attachments</label>-->
+                <!--                        <hr>-->
+                <!--                    </div>-->
+
+                <!--                    <div ng-repeat="x in work_attachment" class="col-sm-6">-->
+                <!--                        <div uib-tooltip="{{x.filename}}" class="col-sm-12" style="text-align: left">-->
+                <!--                            <div class="row">-->
+                <!--                                <div class="userpic col-sm-3" style="width: 100px;height: 100px;padding-left: 0px;">-->
+                <!--                                    <div class="userpic-wrapper " style="width: 98px;height: 98px;">-->
+                <!--                                        &lt;!&ndash;                                <img ng-show="x.type == 'image'" style="width: 60px"&ndash;&gt;-->
+                <!--                                        <img ng-show="x.type == 'image'" style=""-->
+                <!--                                             ng-src="{{ip_server_file}}{{x.id}}/2"-->
+                <!--                                             onerror="this.src='../static/assets/img/no-image.jpg'">-->
+
+                <!--                                        <img ng-show="x.type == 'excel'" ng-src='../static/assets/img/excel.gif'-->
+                <!--                                             style=""-->
+                <!--                                             onerror="this.src='../static/assets/img/excel.gif'">-->
+
+
+                <!--                                        <img ng-show="x.type == 'vid'" ng-src='../static/assets/img/video.jpg'-->
+                <!--                                             style=""-->
+                <!--                                             onerror="this.src='../static/assets/img/video.jpg'">-->
+                <!--                                    </div>-->
+
+                <!--                                </div>-->
+                <!--                                <div class="col-sm-7">-->
+                <!--                                    <span ng-show="attachment.length"></span>-->
+                <!--                                    <span>-->
+                <!--                                                <div style="overflow-wrap: break-word;"><b-->
+                <!--                                                        style="color:#ffffff;">Name: </b>{{x.filename}}</div>-->
+                <!--                                             </span>-->
+                <!--                                    <a class="btn btn-primary btn-xs " target="_blank"-->
+                <!--                                       href="{{ip_server_file}}{{x.id}}/2">View</a>&nbsp;|-->
+                <!--                                    <a class="btn btn-primary btn-xs " href="{{ip_server_file_download}}{{x.id}}/2"-->
+                <!--                                    >Download</a>&nbsp;-->
+                <!--                                </div>-->
+
+                <!--                            </div>-->
+                <!--                            <p></p>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-sm-12">-->
+                <!--                        <hr>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+            </div>
+            <div class="col-md-12" style="padding-top: 10px;">
+                <div style="float: right">
+                    <button ng-disabled="!student_name.selected  "
+                            ng-click="submit()" style="width: 120px ;" type="submit"
+                            class="btn btn-success ion-android-cloud">
+                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
+                    <button style="width: 120px ;" type="button"
+                            class="btn btn-danger ion-android-close"
+                            ng-click="$close()">
+                        &nbsp;&nbsp;&nbsp;Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

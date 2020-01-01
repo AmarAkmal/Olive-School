@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from proj.model import *
 from sqlalchemy import or_
 import time
+
 bp_academic = Blueprint('bp_academic', __name__)
 
 
@@ -234,3 +235,39 @@ def delete():
         response = {"status": "Failed"}
 
     return jsonify(response)
+
+
+############################# mobile area #####################################
+
+@bp_academic.route('/mobile_student_academic', methods=['GET'])  # mobile get academic detail
+def mobile_student_academic():
+    ic = json.loads(request.args.get("ic"))
+    sem = json.loads(request.args.get("sem"))
+    if not ic or not sem:
+        return "no data"
+
+    data = []
+    get_student = Student.query.filter_by(ic_no=ic).first()
+
+    if get_student:
+        print(get_student)
+        #
+        get_academic = Academic.query.filter_by(student_id=get_student.id, is_deleted=0, sem=sem).first()
+        # for x in get_academic:
+        if get_academic:
+            dictV = dict()
+            dictV["student_ic"] = get_academic.student.ic_no
+            dictV["student_name"] = get_academic.student.name
+            dictV["sem"] = get_academic.year + "/" + get_academic.sem
+            dictV["items"] = []
+            get_academic_detail = AcademicDetail.query.filter_by(academic_id=get_academic.id, is_deleted=0).all()
+            for x in get_academic_detail:
+                dictV1 = dict()
+                dictV1["code"] = x.code
+                dictV1["subject"] = x.subject
+                dictV1["score"] = x.score
+                dictV["items"].append(dictV1)
+            dictV["remark"] = get_academic.desc
+            data.append(dictV)
+
+    return jsonify(data)

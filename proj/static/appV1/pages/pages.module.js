@@ -3,9 +3,11 @@
 
     angular.module('BlurAdmin.pages', [
         'ui.router',
-        'BlurAdmin.pages.account',
         'BlurAdmin.pages.student',
+        'BlurAdmin.pages.account',
         'BlurAdmin.pages.academic',
+        'BlurAdmin.pages.event',
+
     ]).config(routeConfig);
 
 
