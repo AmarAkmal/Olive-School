@@ -9,10 +9,11 @@ class BaseConfig(object):
     # CELERY_BROKER_URL = 'redis://:madi0122146026@192.168.5.30:6379'
     # CELERY_BACKEND = 'redis://:madi0122146026@192.168.5.30:6379'
     VERSION = 'V1'
+    HOSTNAME = 'http://192.168.0.192:5000/'
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/testdb'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/olive'
     DEBUG = True
 
 
@@ -32,5 +33,5 @@ config_setting = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,
     "production": ProductionConfig,
-    "default": ProductionConfig
+    "default": DevelopmentConfig
 }

@@ -508,7 +508,7 @@ def delete_event(data):
 @bp_student.route('/mobile_get_student_detail', methods=['GET'])
 def mobile_get_student_detail():
     id = request.args.get("id")
-    x = Student.query.filter_by(is_deleted=0, ic_no=id).first()
+    x = Student.query.filter_by(is_deleted=0, id=id).first()
     if x:
         dictV = dict()
         dictV["id"] = x.id
@@ -529,9 +529,10 @@ def mobile_get_student_detail():
             dictV['mother_email'] = get_mother.email
             dictV['mother_phone'] = get_mother.phone
         if x.picture:
-            dictV["picture"] = "../static/uploads/" + x.id + "/" + x.picture
+            dictV["picture"] = app.config['HOSTNAME'] + "static/uploads/" + x.id + "/" + x.picture
         else:
-            dictV["picture"] = "../static/assets/img/theme/student.png"
+            dictV["picture"] = app.config['HOSTNAME'] + "static/assets/img/theme/student.png"
+        dictV["status"] = 'success'
         # data.append(dictV)
         return jsonify(dictV)
-    return "no data"
+    return jsonify({'status': 'Failed'})
