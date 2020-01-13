@@ -50,8 +50,13 @@ def mobile_login():
         user = Student.query.filter_by(ic_no=ic_no).first()
         if user:
             if user.ic_no == ic_no:
-                return jsonify({"status": "success","id": user.id, "ic_no": user.ic_no})
+                return jsonify({"status": "success", "id": user.id, "ic_no": user.ic_no})
         else:
             return jsonify({"status": "Identification No not match"})
 
     return jsonify({"status": "Failed"})
+
+
+@bp_login.route('/payment_made_olive')
+def payment_made():
+    return render_template('payment.html')

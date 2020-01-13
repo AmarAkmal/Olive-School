@@ -69,7 +69,5 @@ def unauthorized(e):
 def error():
     return render_template('error.html')
 
-@app.route('/payment_made_olive')
-def payment_made():
-    return render_template('payment.html')
+
 
