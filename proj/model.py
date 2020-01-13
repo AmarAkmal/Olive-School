@@ -87,6 +87,9 @@ class Invoice(db.Model):
     update_by = db.Column(db.ForeignKey('user.id', ondelete="CASCADE", onupdate="CASCADE"))
 
     total_pay = db.Column(db.String(32))
+    billcode_toyyib = db.Column(db.String(100))
+    orderid_toyyib = db.Column(db.String(100))
+    transactionid_toyyib = db.Column(db.String(100))
     date_pay = db.Column(db.DateTime)
 
     is_pay = db.Column(db.Boolean, default=0)

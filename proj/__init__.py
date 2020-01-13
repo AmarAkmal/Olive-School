@@ -1,8 +1,9 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 import proj.config
 from flask_cors import CORS
+
 
 # from celery import Celery
 
@@ -22,7 +23,7 @@ from flask_cors import CORS
 # create tables
 db = SQLAlchemy(app)
 from proj import model
-
+# db.drop_all()
 db.create_all()
 # ---
 from proj.views.login import bp_login
@@ -67,3 +68,8 @@ def unauthorized(e):
 @app.route('/error.html')
 def error():
     return render_template('error.html')
+
+@app.route('/payment_made_olive')
+def payment_made():
+    return render_template('payment.html')
+
