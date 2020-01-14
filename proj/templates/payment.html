@@ -72,7 +72,8 @@
         }
         
         function updatePayment(statusId,billCode,orderId){
-            $.get('https://theolivetrees.edu.my/account/update_payment?statusId='+statusId +'&billCode=' + billCode + "&orderId=" + orderId, function (data, textStatus, jqXHR) {
+            $.get('http://localhost:5000/account/update_payment?statusId='+statusId +'&billCode=' + billCode + "&orderId=" + orderId, function (data, textStatus, jqXHR) {
+            {#$.get('https://theolivetrees.edu.my/management/account/update_payment?statusId='+statusId +'&billCode=' + billCode + "&orderId=" + orderId, function (data, textStatus, jqXHR) {#}
                     console.log(data);
             });
         }

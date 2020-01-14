@@ -168,8 +168,7 @@ def add_invoice():
                     t.student_id = student_payment.id
                     db.session.add(t)
 
-            description = "Yuran yang dikenekan atas pelajar " + student_id + " BerJumlah : RM " + total_pay + "pada :" + datetime.now().strftime(
-                "%b %d %Y %H:%M:%S")
+            description = "Yuran yang dikenekan atas pelajar " + get_student.ic_no + " BerJumlah : RM " + total_pay
 
             inv = Invoice.query.filter_by(receipt_no=receipt_no).first()
             parent = Parent.query.filter_by(student_id=get_student.id, type='father').first()
@@ -461,9 +460,14 @@ def mobile_get_amount():
         return "invoice does not exist"
 
     get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0).first()
-    return jsonify({'total': "%.2f" % float(get_detail.total_pay),
+    if get_detail :
+        return jsonify({'total': "%.2f" % float(get_detail.total_pay),
                     'invoice_no': get_detail.receipt_no,
                     'status': 'success'})
+    else:
+        return jsonify({'total': "0.00",
+                    'invoice_no': 'No invoice available.',
+                    'status': 'no-pending'})
 
 
 #
@@ -516,10 +520,34 @@ def receive_payment():
     return jsonify(dictV)
 
 
-@app.route('/update_payment')
+@bp_account.route('/update_payment')
 def update_payment():
     inv = Invoice.query.filter_by(billcode_toyyib=request.args.get("billCode")).first()
     inv.is_pay = request.args.get("statusId")
     inv.orderid_toyyib = request.args.get("orderId")
+    inv.date_pay = datetime.now()
     db.session.commit()
     return "OK"
+
+
+@bp_account.route('/mobile_history_payment')
+def mobile_history_payment():
+    student_id = request.args.get("student_id")
+    student = Student.query.filter_by(id=student_id).first()
+    if not student:
+        return "invoice does not exist"
+
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=1).order_by(Invoice.date_pay.desc()).all()
+    list = dict()
+    list['data'] = []
+    if get_detail:
+        for x in get_detail:
+            dict1 = dict()
+            dict1['id'] = x.id
+            dict1['inv_no'] = x.receipt_no
+            dict1['date_pay'] = x.date_pay.strftime("%d/%m/%Y")
+            dict1['paid'] = x.total_pay
+            list['data'].append(dict1)
+        return jsonify({'data': list['data']})
+    else:
+        return jsonify({'data': list['data']})
