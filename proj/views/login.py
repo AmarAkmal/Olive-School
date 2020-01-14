@@ -52,7 +52,7 @@ def mobile_login():
             if user.ic_no == ic_no:
                 return jsonify({"status": "success", "id": user.id, "ic_no": user.ic_no})
         else:
-            return jsonify({"status": "Identification No not match"})
+            return jsonify({"status": "Identification ID not match"})
 
     return jsonify({"status": "Failed"})
 
