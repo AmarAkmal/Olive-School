@@ -9,7 +9,7 @@ class BaseConfig(object):
     # CELERY_BROKER_URL = 'redis://:madi0122146026@192.168.5.30:6379'
     # CELERY_BACKEND = 'redis://:madi0122146026@192.168.5.30:6379'
     VERSION = 'V1'
-    HOSTNAME = 'https://theolivetrees.edu.my/'
+    HOSTNAME = 'https://theolivetrees.edu.my/management/'
 
 
 class DevelopmentConfig(BaseConfig):
@@ -33,5 +33,5 @@ config_setting = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,
     "production": ProductionConfig,
-    "default": DevelopmentConfig
+    "default": ProductionConfig
 }
