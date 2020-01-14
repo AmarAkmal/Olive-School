@@ -523,7 +523,11 @@ def receive_payment():
 @bp_account.route('/update_payment')
 def update_payment():
     inv = Invoice.query.filter_by(billcode_toyyib=request.args.get("billCode")).first()
-    inv.is_pay = request.args.get("statusId")
+    if request.args.get("statusId") == '1':
+        inv.is_pay = True
+    else:
+        inv.is_pay = False
+     # request.args.get("statusId")
     inv.orderid_toyyib = request.args.get("orderId")
     inv.date_pay = datetime.now()
     db.session.commit()
