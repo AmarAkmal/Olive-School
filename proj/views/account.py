@@ -72,7 +72,13 @@ def list_student(pagenum):
             dict1['student_name'] = x.student.name
             dict1['invoice_no'] = x.receipt_no
             dict1['code'] = x.year + "-" + x.month
-            if (x.is_pay == 1):
+
+            if x.billcode_toyyib:
+                dict1['bill_code'] = x.billcode_toyyib
+            else:
+                dict1['bill_code'] = "None"
+
+            if x.is_pay == 1:
                 dict1['status'] = "Done"
             else:
                 dict1['status'] = "Pending"
@@ -212,6 +218,12 @@ def get_invoice():
     dictV["month"] = get_detail.month
     dictV["desc"] = get_detail.desc
     dictV["is_pay"] = float(get_detail.is_pay)
+
+    if get_detail.billcode_toyyib:
+        dictV['bill_code'] = get_detail.billcode_toyyib
+    else:
+        dictV['bill_code'] = "None"
+
     get_att = PaymentAttachment.query.filter_by(student_id=get_detail.id, is_deleted=0).all()
     dictV['attachment'] = []
     if get_att:

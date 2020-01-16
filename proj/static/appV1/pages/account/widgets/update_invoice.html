@@ -8,7 +8,7 @@
     <div class="panel-body">
         <div class="row">
             <div class=" col-sm-12" style="padding-top: 10px;">
-                <label>Update Invoice</label>
+                <label>View Invoice</label>
                 <hr class="hr_">
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
@@ -16,17 +16,27 @@
                 <input class="form-control" data-ng-model="student_name" readonly/>
 
             </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
-                <label>Invoice No.</label>
-                <input readonly type="text"
-                       style="max-width: 100%;min-width: 100%;resize: none;"
-                       class="form-control"
-                       ng-model="invoice_no">
+            <div class="col-sm-12" style="padding: 0px;">
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <label>Invoice No.</label>
+                    <input readonly type="text"
+                           style="max-width: 100%;min-width: 100%;resize: none;"
+                           class="form-control"
+                           ng-model="invoice_no">
+                </div>
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <label>Bill Code</label>
+                    <input readonly type="text"
+                           style="max-width: 100%;min-width: 100%;resize: none;"
+                           class="form-control"
+                           ng-model="bill_code">
+                </div>
             </div>
-            <div class="col-sm-12" style="padding-top: 30px;">
-                <label>CODE</label>
+
+            <div class="col-sm-12" style="padding-top: 10px;">
+                <label>Code</label>
             </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
+            <div class="col-sm-6">
                 <input ng-disabled="is_pay == 1" placeholder="Year example (2020)"
                        class="form-control"
                        type="number"
@@ -35,7 +45,7 @@
                        data-ng-model="year" ng-enter="getfilter()"/>
                 <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
             </div>
-            <div class="col-sm-6" style="padding-top: 10px;">
+            <div class="col-sm-6">
 
                 <input ng-disabled="is_pay == 1" type="number"
                        style="max-width: 100%;min-width: 100%;resize: none;"
@@ -58,41 +68,17 @@
                           required
                           ng-model="desc"></textarea>
             </div>
-            <div class="col-sm-12" style="padding-top: 10px;">
-                <label class="col-sm-2 control-label">Upload attachment</label>
-                <div class="col-sm-10">
 
-                    <input ng-disabled="is_pay == 1" type="file" ng-file-model="attachment" multiple/>
-                    <ul>
-                        <li ng-repeat="x in attachment" style="padding-top: 5px;">
-                            <i class="file-icon ion-document"></i>
-                            <span class="file-name"></span>&nbsp;{{$index + 1}} - {{x.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <!--                        <label>Uploaded</label>-->
-                <hr>
-            </div>
 
-            <div class="col-sm-10">
-                <label class="col-sm-2 control-label">Uploaded</label>
+            <div class="col-sm-12" style="padding-top: 10px;padding-left: 0px;">
+                <label class="col-sm-1 control-label">Attachment</label>
                 <div class="col-sm-10">
                     <ul ng-show="attachment_lama.length > 0">
-
-
                         <li ng-repeat="x in  attachment_lama">
                             <i class="file-icon ion-document"></i>
-                            <span class="file-name"></span>{{ x.name }} - <a download
-                                                                             href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">Download</a>
-
-                            <span ng-hide="is_pay == 1">| <a
-                                    ng-click="removeAtt($index)">Delete</a></span>
-                            <!--<span ng-show="!vCtrl.disableEdit">| <a-->
-                            <!--<span ng-show="!vCtrl.disableEdit">| <a-->
-                            <!--ng-click="projectView.removeAtt(x)">Delete</a></span>-->
-                            <!--ng-click="vCtrl.removeAtt(x)">Delete</a></span>-->
+                            <span class="file-name"></span>{{ x.name }} -
+                            <a style="color: white;" download href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">
+                                <u>Download</u></a>
                         </li>
                     </ul>
                 </div>

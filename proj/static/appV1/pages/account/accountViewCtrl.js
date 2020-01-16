@@ -34,6 +34,7 @@
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
+                $scope.bill_code = result.bill_code;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
                 loaderModal.close()
                 calculate();
