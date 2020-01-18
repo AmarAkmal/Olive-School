@@ -219,7 +219,7 @@
 		} else {
 			var indentCssProperty = getIndentCss( element, dir ),
 				currentOffset = parseInt( element.getStyle( indentCssProperty ), 10 ),
-				indentOffset = editor.config.indentOffset || 40;
+				indentOffset = editor.config.indentOffset || 5;
 
 			if ( isNaN( currentOffset ) )
 				currentOffset = 0;
