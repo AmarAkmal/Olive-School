@@ -37,10 +37,10 @@
         <thead>
         <tr class="sortable ">
             <th style="width: 3%;"></th>
-            <th st-sort="student_ic" style="width: 25%;">IC. No.</th>
-            <th st-sort="student_name" style="width: 42%;">Name</th>
+            <th st-sort="student_ic" style="width: 30%;">IC. No.</th>
+            <th st-sort="student_name" style="width: 52%;">Name</th>
             <th st-sort="student_intake" style="width: 15%;">Year</th>
-            <th st-sort="student_intake" style="width: 15%;">Intake</th>
+            <!--            <th st-sort="student_intake" style="width: 15%;">Intake</th>-->
 
 
         </tr>
@@ -64,33 +64,16 @@
                        type="search"/>
             </th>
             <!--            <th>-->
-            <th>
 
-                <input ng-enter="getfilter()" ng-model="formData.year" placeholder="Search Year"
-                       class="input-sm form-control search-input"
-                       type="search"/>
-
-
-            </th>
             <th>
                 <div class="col-sm-7" style=" padding-left: initial;">
                     <!--                    <input ng-enter="getfilter()" ng-model="formData.status" placeholder="Search Status"-->
                     <!--                           class="input-sm form-control search-input"-->
                     <!--                           type="search"/>-->
 
-                    <ui-select ng-model="formData.select_sem.selected"
-                               class="btn-group bootstrap-select form-control"
-                               append-to-body="true"
-                               search-enabled="false"
-                               ng-change="getfilter()">
-                        <ui-select-match placeholder="Please Choose">
-                            <span> {{$select.selected }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="x in formData.select_sem.options | filter: $select.search"
-                                           ng-hide="!$select.open">
-                            <span ng-bind-html="x"></span>
-                        </ui-select-choices>
-                    </ui-select>
+                    <input ng-enter="getfilter()" ng-model="formData.year" placeholder="Search Year"
+                           class="input-sm form-control search-input"
+                           type="search"/>
 
                 </div>
                 <div class="col-sm-1">
@@ -123,7 +106,7 @@
             <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.ic_no }}</td>
             <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.student_name }}</td>
             <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.year }}</td>
-            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.sem }}</td>
+            <!--            <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.sem }}</td>-->
 
         </tr>
         </tbody>

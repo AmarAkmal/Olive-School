@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BlurAdmin.pages.academic', ['ui.select', 'summernote'])
+    angular.module('BlurAdmin.pages.academic', ['ui.select', 'summernote', 'ckeditor'])
         .config(routeConfig);
 
     function routeConfig($stateProvider, $urlRouterProvider) {

@@ -2,10 +2,10 @@
     'use strict';
 
 
-    angular.module('BlurAdmin.pages.academic').controller('academic_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', academic_listCtrl]);
+    angular.module('BlurAdmin.pages.academic').controller('academic_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', '$uibModalStack', academic_listCtrl]);
 
 
-    function academic_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
+    function academic_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
         $scope.formData = {};
         $scope.formData.select_sem = {'selected': [], 'options': ['All', '1', '2', '3']};
         $scope.formData.select_sem.selected = "All";
@@ -24,7 +24,9 @@
         $scope.selection = [];
 
         $scope.$on('load_list_academic', function () {
+
             loadData();
+            $uibModalStack.dismissAll();
         });
         loadData();
 
