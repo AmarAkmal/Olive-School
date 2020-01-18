@@ -3,6 +3,8 @@
         margin-top: 0px;
     }
 
+
+
 </style>
 <div class="col-md-12  panel panel-blur">
     <div class="panel-body">
@@ -28,10 +30,7 @@
                 </ui-select>
             </div>
             <div ng-hide="!student_name.selected">
-                <div class="col-sm-12" style="padding-top: 30px;">
-                    <label>Sem</label>
-                </div>
-                <div class="col-sm-6" style="padding-top: 10px;">
+                <div class="col-sm-6" style="padding-top: 30px;">
                     <input ng-disabled="!student_name.selected" placeholder="Year example (2020)"
                            class="form-control"
                            type="number"
@@ -40,41 +39,18 @@
                            data-ng-model="year" ng-enter="getfilter()"/>
                     <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
                 </div>
-                <div class="col-sm-6" style="padding-top: 10px;">
-
-                    <ui-select ng-model="select_sem.selected"
-                               class="btn-group bootstrap-select form-control"
-                               append-to-body="false"
-                               search-enabled="false">
-                        <ui-select-match placeholder="Please Choose">
-                            <span> {{$select.selected }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="x in select_sem.options | filter: $select.search"
-                                           ng-hide="!$select.open">
-                            <span ng-bind-html="x"></span>
-                        </ui-select-choices>
-                    </ui-select>
-                    <span ng-show="select_sem.selected.length == 0"> <font
-                            color="red">Required! </font></span>
-                </div>
-                <div class="col-md-12" style="padding-top: 40px;">
-                    <label>Items</label>
-                    <div include-with-scope="../static/app/pages/academic/widgets/addItemTable.html"></div>
-                </div>
                 <div class="col-sm-12" style="padding-top: 10px;">
-                    <!--                    <label>Remark {{items.lengtn}}</label>-->
                     <label>Remark</label>
-                    <textarea ng-disabled="!student_name.selected" style="max-width: 100%;min-width: 100%;resize: none;"
-                              class="form-control"
-                              required
-                              ng-model="desc"></textarea>
+                    <div class="col-sm-12" style="padding-top: 10px;">
+                        <div ckeditor="config" id="summernote" ng-model="desc"
+                             vready="onReady()"></div>
+                    </div>
                 </div>
-
-
             </div>
+
             <div class="col-md-12" style="padding-top: 10px;">
                 <div style="float: right">
-                    <button ng-disabled="!student_name.selected.length == 0 || !year || select_sem.selected.length == 0 || !items[0].code "
+                    <button ng-disabled="!desc || !year "
                             ng-click="submit()" style="width: 120px ;" type="submit"
                             class="btn btn-success ion-android-cloud">
                         &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;

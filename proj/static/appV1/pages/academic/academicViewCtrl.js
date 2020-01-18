@@ -5,9 +5,33 @@
         .controller('academicViewCtrl', ['$scope', '$uibModal', '$http', 'id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', academicViewCtrl]);
 
     function academicViewCtrl($scope, $uibModal, $http, id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
+        $scope.config = {}
+        $scope.config = {
+            "height": 1000,
+            "language": 'en',
+            "allowedContent": true,
+            "entities": false,
+        };
+        $scope.config.toolbarGroups = [
+            {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+            {name: 'clipboard', groups: ['clipboard', 'undo']},
+            {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+            {name: 'forms', groups: ['forms']},
+            {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+            {name: 'links', groups: ['links']},
+            {name: 'insert', groups: ['insert']},
+            {name: 'styles', groups: ['styles']},
+            {name: 'colors', groups: ['colors']},
+            {name: 'document', groups: ['mode', 'document', 'doctools']},
+            {name: 'tools', groups: ['tools']},
+            {name: 'others', groups: ['others']},
+            // {name: 'about', groups: ['about']}
+        ];
+        $scope.config.extraPlugins = 'lineheight';
+
         $scope.select_sem = {selected: [], options: ['1', '2', '3']};
         $scope.items = [];
-        $scope.desc = "";
+        // $scope.desc = "";
         loadData();
 
         function loadData() {
@@ -20,14 +44,14 @@
             });
             $http({
                 method: 'GET',
-                url: ip_server + 'academic/get_academic?id=' + id
+                url: ip_server + 'academic/get_academic_iep?id=' + id
             }).then(function (result) {
                 result = result.data;
                 $scope.year = Number(result.year,);
-                $scope.items = result.items;
+                // $scope.items = result.items;
                 $scope.desc = result.desc;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
-                $scope.select_sem.selected = result.sem;
+                // $scope.select_sem.selected = result.sem;
                 loaderModal.close();
             }).catch(function (error) {
                 alert("Connection Error");
@@ -51,11 +75,7 @@
             var data = {
                 "user_id": user_id,
                 "student_id": $scope.student_id,
-                "year": $scope.year,
-                "sem": $scope.select_sem.selected,
-                "items": $scope.items,
                 "desc": $scope.desc,
-                "deleted_items": $scope.items_delete,
             };
 
             fd.append('data', JSON.stringify(data));

@@ -1,6 +1,7 @@
 from proj import app, db
 from sqlalchemy.ext import mutable
 import uuid
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 
 class User(db.Model):
@@ -17,8 +18,6 @@ class User(db.Model):
                                 cascade="all, delete-orphan")
 
     created_result = db.relationship("ResultAcademic", backref="result_academic", cascade="all, delete-orphan")
-
-    # role_id = db.Column(db.ForeignKey('role.id', ondelete="CASCADE", onupdate="CASCADE"))
 
     def __init__(self, name, email, role, password):
         self.id = uuid.uuid4().hex
@@ -38,9 +37,8 @@ class Student(db.Model):
     picture = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
-    academic_detail = db.relationship("Academic", backref="student", cascade="all, delete-orphan")
+    academic_iep = db.relationship("AcademicIep", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
-    payment_detail = db.relationship("ResultAcademic", backref="student", cascade="all, delete-orphan")
     event = db.relationship("StudentEvent", backref="student",
                             cascade="all, delete-orphan")
 
@@ -71,7 +69,6 @@ class Parent(db.Model):
         self.name = name
         self.phone = phone
         self.email = email
-        # self.email = phone
 
 
 class Invoice(db.Model):
@@ -133,37 +130,18 @@ class PaymentAttachment(db.Model):
         self.name = name
 
 
-class Academic(db.Model):
+class AcademicIep(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    desc = db.Column(db.TEXT)
     year = db.Column(db.String(32))
-    sem = db.Column(db.String(32))
+    desc = db.Column(MEDIUMTEXT)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    is_deleted = db.Column(db.Boolean, default=0)
     student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
-    academic_detail = db.relationship("AcademicDetail", backref="academic", cascade="all, delete-orphan")
-    is_deleted = db.Column(db.Boolean, default=0)
 
-    def __init__(self, desc, year, sem):
+    def __init__(self, desc, year):
         self.id = uuid.uuid4().hex
-        self.desc = desc
         self.year = year
-        self.sem = sem
-
-
-class AcademicDetail(db.Model):
-    id = db.Column(db.String(32), primary_key=True)
-    code = db.Column(db.String(32))
-    subject = db.Column(db.String(200))
-    score = db.Column(db.String(32))
-    academic_id = db.Column(db.ForeignKey('academic.id', ondelete="CASCADE", onupdate="CASCADE"))
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    is_deleted = db.Column(db.Boolean, default=0)
-
-    def __init__(self, code, subject, score):
-        self.id = uuid.uuid4().hex
-        self.code = code
-        self.subject = subject
-        self.score = score
+        self.desc = desc
 
 
 class StudentEvent(db.Model):
