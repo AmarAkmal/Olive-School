@@ -215,8 +215,11 @@ class ResultDetail(db.Model):
 class Subject(db.Model):
     id = db.Column(db.String(32), primary_key=True)
     name = db.Column(db.String(100))
-    skill_id = db.relationship("Skill", backref="skill",
+    skill_id = db.relationship("Skill", backref="subject",
                                cascade="all, delete-orphan")
+    payment_detail = db.relationship("Band", backref="subject", cascade="all, delete-orphan")
+    # band_id = db.relationship("Band", backref="band",
+    #                           cascade="all, delete-orphan")
 
     def __init__(self, name):
         self.id = uuid.uuid4().hex
@@ -229,7 +232,19 @@ class Skill(db.Model):
     sort = db.Column(db.Integer)
     subject_id = db.Column(db.ForeignKey('subject.id', ondelete="CASCADE", onupdate="CASCADE"))
 
-    def __init__(self, name,sort):
+    def __init__(self, name, sort):
         self.id = uuid.uuid4().hex
         self.name = name
         self.sort = sort
+
+
+class Band(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    comment = db.Column(db.String(500))
+    band = db.Column(db.Integer)
+    subj_id = db.Column(db.ForeignKey('subject.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+    def __init__(self, comment, band):
+        self.id = uuid.uuid4().hex
+        self.comment = comment
+        self.band = band
