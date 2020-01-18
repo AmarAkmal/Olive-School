@@ -2,34 +2,10 @@
         'use strict';
 
         angular.module('BlurAdmin.pages.academic')
-            .controller('aideedCreateCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", "$uibModal", aideedCreateCtrl]);
+            .controller('aideedSubjectCtrl', ['$http', '$scope', 'toastr', '$rootScope', "editableOptions", "editableThemes", "$uibModalStack", "$uibModal", aideedSubjectCtrl]);
 
-        function aideedCreateCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
-            $scope.select_sem = {'selected': [], 'options': ['1', '2', '3']};
-            $scope.desc = "";
-            $scope.items = [];
-            $http({
-                method: 'GET',
-                url: ip_server + 'student/get_student_list'
-            }).then(function (result) {
-                $scope.student_name = result.data
-            });
+        function aideedSubjectCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $uibModal) {
 
-            $scope.add_item = function () {
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    keyboard: false,
-                    backdrop: 'static',
-                    templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/subject.html',
-                    controller: 'aideedSubjectCtrl',
-                    size: 'md',
-
-                });
-
-                modalInstance.result.finally(function () {
-                    // loadDatauser();
-                });
-            }
             // $scope.submit = function () {
             //     loaderModal = $uibModal.open({
             //         animation: true,
