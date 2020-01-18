@@ -16,6 +16,8 @@ class User(db.Model):
     update_by = db.relationship("Invoice", backref="user2", foreign_keys="[Invoice.update_by]",
                                 cascade="all, delete-orphan")
 
+    created_result = db.relationship("ResultAcademic", backref="result_academic", cascade="all, delete-orphan")
+
     # role_id = db.Column(db.ForeignKey('role.id', ondelete="CASCADE", onupdate="CASCADE"))
 
     def __init__(self, name, email, role, password):
@@ -38,6 +40,7 @@ class Student(db.Model):
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academic_detail = db.relationship("Academic", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
+    payment_detail = db.relationship("ResultAcademic", backref="student", cascade="all, delete-orphan")
     event = db.relationship("StudentEvent", backref="student",
                             cascade="all, delete-orphan")
 
@@ -187,3 +190,46 @@ class StudentEventAttachment(db.Model):
     def __init__(self, name):
         self.id = uuid.uuid4().hex
         self.name = name
+
+
+class ResultAcademic(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    subject = db.Column(db.String(100))
+    band = db.Column(db.String(100))
+    comment = db.Column(db.String(100))
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    created_by = db.Column(db.ForeignKey('user.id', ondelete="CASCADE", onupdate="CASCADE"))
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+    result_detail_id = db.relationship("ResultDetail", backref="result_detail",
+                                       cascade="all, delete-orphan")
+
+
+class ResultDetail(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    skill = db.Column(db.String(100))
+    band = db.Column(db.String(100))
+    comment = db.Column(db.String(100))
+    academic_id = db.Column(db.ForeignKey('result_academic.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+
+class Subject(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    name = db.Column(db.String(100))
+    skill_id = db.relationship("Skill", backref="skill",
+                               cascade="all, delete-orphan")
+
+    def __init__(self, name):
+        self.id = uuid.uuid4().hex
+        self.name = name
+
+
+class Skill(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    name = db.Column(db.String(100))
+    sort = db.Column(db.Integer)
+    subject_id = db.Column(db.ForeignKey('subject.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+    def __init__(self, name,sort):
+        self.id = uuid.uuid4().hex
+        self.name = name
+        self.sort = sort

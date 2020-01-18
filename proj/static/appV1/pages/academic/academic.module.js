@@ -6,19 +6,37 @@
 
     function routeConfig($stateProvider, $urlRouterProvider) {
         $stateProvider
-
-
-            .state('academic-list', {
-                url: '/academic-list',
+            .state('academic', {
+                url: '/academic',
+                template: '<ui-view autoscroll="true" autoscroll-body-top></ui-view>',
+                abstract: true,
+                title: 'Academic',
+                sidebarMeta: {
+                    icon: 'ion-compose',
+                    order: 1
+                }
+            })
+            .state('academic.aideed', {
+                url: '/aideed',
+                templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/list.html',
+                controller: 'aideed_listCtrl',
+                title: 'Aideed',
+                sidebarMeta: {
+                    icon: 'ion-compose',
+                    order: 20
+                }
+            })
+            .state('academic.amar', {
+                url: '/amar',
                 templateUrl: '../static/app' + gversion + '/pages/academic/academic.html',
                 controller: 'academic_listCtrl',
-                title: 'Academic',
+                title: 'Amar',
                 sidebarMeta: {
                     icon: 'ion-compose',
                     order: 20
                 }
             });
-        // $urlRouterProvider.when('/report', '/report');
+        $urlRouterProvider.when('/academic', '/academic/aideed');
     }
 
 })();
