@@ -1,11 +1,7 @@
-import os, shutil
-from datetime import timedelta, datetime
 import math
-from flask import Blueprint, render_template, request, jsonify, json, abort
-from werkzeug.utils import secure_filename
+from flask import Blueprint, request, jsonify, json
 from proj.model import *
-from sqlalchemy import or_
-import time
+
 
 bp_academic = Blueprint('bp_academic', __name__)
 
@@ -31,8 +27,6 @@ def list(pagenum):
     if year:
         codeSql = codeSql.filter(AcademicIep.year.like('%' + year + '%'))
 
-    # if sem != "All":
-    #     codeSql = codeSql.filter(AcademicIep.sem.like('%' + sem + '%'))
 
     count_result = codeSql.order_by(AcademicIep.date_created.desc()).count()
     if count_result:
@@ -50,9 +44,6 @@ def list(pagenum):
             pagenum = 1
         report = codeSql.order_by(AcademicIep.date_created.desc()).paginate(int(pagenum), 10)
 
-    # report = codeSql.order_by(Academic.date_created.desc()).paginate(int(pagenum), 10)
-    # count_result = codeSql.order_by(Academic.date_created.desc()).count()
-
     if not report:
         return "Report does not exist"
     else:
@@ -64,24 +55,9 @@ def list(pagenum):
             dict1['ic_no'] = x.student.ic_no
             dict1['student_name'] = x.student.name
             dict1['desc'] = x.desc
-
             dict1['year'] = x.year
-            # dict1['sem'] = x.sem
-            # get_detail = AcademicDetail.query.filter_by(academic_id=x.id, is_deleted=0).all()
-            # dict1['academic_detail'] = []
-
-            # if get_detail:
-            #
-            #     for j in get_detail:
-            #         list_1 = dict()
-            #         list_1['code'] = j.code
-            #         list_1['subject'] = j.subject
-            #         list_1['score'] = j.score
-            #         list_1['old'] = True
-            #         dict1['academic_detail'].append(list_1)
 
             list['data'].append(dict1)
-        # totalpagenum = math.ceil(count_result / 10)
         list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
@@ -96,21 +72,8 @@ def add():
             student_id = data["student_id"]
             year = data["year"]
             desc = data["desc"]
-            # sem = data["sem"]
-
-            # if "desc" in data:
-            #     desc = data["desc"]
-            # else:
-            #     desc = ""
-            # items = data["items"]
-
             get_student = Student.query.filter_by(id=student_id).first()
             if student_id:
-                #
-                # student_academic = Academic(year=year)
-                # student_academic.student_id = get_student.id
-                # db.session.add(student_academic)
-
                 student_desc = AcademicIep(desc=desc, year=year)
                 student_desc.student_id = get_student.id
                 db.session.add(student_desc)
@@ -129,7 +92,6 @@ def add():
 @bp_academic.route('/get_academic_iep', methods=['GET'])
 def get_academic_iep():
     id = request.args.get("id")
-    print(id)
     if not id:
         return "invoice does not exist"
     #
@@ -139,7 +101,6 @@ def get_academic_iep():
     dictV["student_ic"] = get_detail.student.ic_no
     dictV["year"] = get_detail.year
     dictV["desc"] = get_detail.desc
-
 
     return jsonify(dictV)
 
@@ -176,7 +137,6 @@ def update():
 def delete():
     data = json.loads(request.form["data"])
     data = data["item_id"]
-    print(data)
 
     get_list = AcademicIep.query.filter(AcademicIep.id.in_(data))
     for x in get_list:
@@ -204,8 +164,7 @@ def mobile_student_academic():
     get_student = Student.query.filter_by(ic_no=ic).first()
 
     if get_student:
-        print(get_student)
-        #
+         #
         get_academic = Academic.query.filter_by(student_id=get_student.id, is_deleted=0, sem=sem).first()
         # for x in get_academic:
         if get_academic:
