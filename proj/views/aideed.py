@@ -138,7 +138,7 @@ def list_mobile():
         dict1['class'] = x.classB
         dict1['code'] = x.code
         dataList.append(dict1)
-    return jsonify({'data': dataList})
+    return jsonify(dataList)
 
 
 @bp_aideed.route('/delete', methods=['POST'])
