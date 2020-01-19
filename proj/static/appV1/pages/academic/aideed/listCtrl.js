@@ -2,10 +2,10 @@
     'use strict';
 
 
-    angular.module('BlurAdmin.pages.academic').controller('aideed_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', aideed_listCtrl]);
+    angular.module('BlurAdmin.pages.academic').controller('aideed_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope','$uibModalStack', aideed_listCtrl]);
 
 
-    function aideed_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
+    function aideed_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope,$uibModalStack) {
         $scope.formData = {};
 
         $scope.formData.student_name = "";
@@ -129,7 +129,7 @@
             $scope.selection = [];
             $scope.formData.isAllSelected = false;
 
-            $scope.formData.select_sem.selected = "All";
+            // $scope.formData.select_sem.selected = "All";
             $scope.formData.student_name = "";
             $scope.formData.ic_no = "";
             $scope.formData.year = "";
