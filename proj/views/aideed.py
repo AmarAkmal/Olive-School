@@ -131,15 +131,14 @@ def list_mobile():
     student_id = request.args.get("student_id")
     student = Student.query.filter_by(id=student_id).first()
     ai = Aideed.query.filter_by(student_id=student.id).order_by(Aideed.date_created.desc()).all()
-    list = dict()
-    list['data'] = []
+    dataList = []
     for x in ai:
         dict1 = dict()
         dict1['id'] = x.id
         dict1['class'] = x.classB
         dict1['code'] = x.code
-        list['data'].append(dict1)
-    return jsonify({'data': list['data']})
+        dataList.append(dict1)
+    return jsonify({'data': dataList})
 
 
 @bp_aideed.route('/delete', methods=['POST'])
@@ -158,3 +157,4 @@ def delete():
         response = {"status": "Failed"}
 
     return jsonify(response)
+
