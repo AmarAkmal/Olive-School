@@ -27,6 +27,7 @@ class User(db.Model):
     name = db.Column(db.String(250))
     phone = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(100), unique=True)
+    role = db.Column(db.String(100))
     password = db.Column(db.String(100))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_deleted = db.Column(db.Boolean, default=0)

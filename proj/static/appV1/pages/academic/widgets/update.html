@@ -8,7 +8,7 @@
     <div class="panel-body">
         <div class="row">
             <div class=" col-sm-12" style="padding-top: 10px;">
-                <label>Add Academic</label>
+                <label>View Detail</label>
                 <hr class="hr_">
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
@@ -30,6 +30,7 @@
             </div>
             <div>
                 <div class="col-sm-6" style="padding-top: 30px;">
+                    <label>Year</label>
                     <input readonly placeholder="Year example (2020)"
                            class="form-control"
                            type="number"
@@ -39,21 +40,20 @@
                     <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
                 </div>
                 <div class="col-sm-12" style="padding-top: 10px;">
-                    <label>Remark</label>
+                    <!--                    <label>Remark</label>-->
                     <div class="col-sm-12" style="padding-top: 10px;">
-                        <div ckeditor="config" id="summernote" ng-model="desc"
-                             vready="onReady()"></div>
+                        <textarea readonly ckeditor="config" id="summernote" ng-model="desc"
+                                  vready="onReady()"></textarea>
+                        <!--                        <label class="col-sm-9 label-form">-->
+                        <!--                            <div style="margin-top: 9px;margin-left: -12px"-->
+                        <!--                                 ng-bind-html="trustedcontent(desc)" class="message-body"></div>-->
+                        <!--                        </label>-->
                     </div>
                 </div>
             </div>
 
             <div class="col-md-12" style="padding-top: 10px;">
                 <div style="float: right">
-                    <button ng-disabled="!desc "
-                            ng-click="submit()" style="width: 120px ;" type="submit"
-                            class="btn btn-success ion-android-cloud">
-                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
-                    </button>&nbsp;&nbsp;
                     <button style="width: 120px ;" type="button"
                             class="btn btn-danger ion-android-close"
                             ng-click="$close()">

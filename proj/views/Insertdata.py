@@ -18,9 +18,9 @@ def index():
          User(name='BETTY INTAN SAHURA', email='bettyintan79@gmail.com', role="Teacher", password=111111),
          User(name='SYUHADA BINTI MOHD RABI', email='syuhadamohdrabi@gmail.com', role="Teacher", password=111111),
          User(name='tOts Teachers', email='theolivetrees2016@gmasil.com', role="Teacher", password=111111),
-         User(name='tOts Account', email='receipt.theolivetrees@gmail.com', role="Teacher", password=111111),
-         # User(name='Principle', email='principle1@mail.com', role="Principle", password=111111),
-         # User(name='Account', email='account@mail.com', role="Account", password=111111)
+         User(name='tOts Account', email='receipt.theolivetrees@gmail.com', role="Account", password=111111),
+         User(name='Principle', email='principle1@mail.com', role="Principle", password=111111),
+         User(name='Account', email='account@mail.com', role="Account", password=111111)
          ))
     for i in arr1:
         check = User.query.filter_by(name=i.name).first()
@@ -85,11 +85,20 @@ def index():
 
     arr4 = [
         {'comment': 'Mengetahui asas mendengar-bertutur, membaca dan menulis', 'subject': 'Bahasa Melayu', 'sort': 1},
-        {'comment': 'Mengetahui dan memahami perkara yang didengar-ditutur, dibaca dan ditulis dengan bantuan.', 'subject': 'Bahasa Melayu', 'sort': 2},
-        {'comment': 'Mengetahui, memahami dan memberikan respons terhadap perkara yang didengar-ditutur, dibaca dan ditulis tanpa bantuan.', 'subject': 'Bahasa Melayu', 'sort': 3},
-        {'comment': 'Mengetahui, memahami dan memberikan respons terhadap maklumat yang didengar-ditutur, dibaca dan ditulis dalam pelbagai situasi dengan betul', 'subject': 'Bahasa Melayu', 'sort': 4},
-        {'comment': 'Memahami, menaakul dan memberikan respons/menyampaikan sesuatu perkara yang didengar- ditutur, dibaca dan ditulis dalam pelbagai situasi dengan betul dan tepat.', 'subject': 'Bahasa Melayu', 'sort': 5},
-        {'comment': 'Memahami, menaakul dan menilai tentang sesuatu perkara daripada pelbagai sumber yang didengar-ditutur, dibaca dan ditulis dengan bertatasusila', 'subject': 'Bahasa Melayu', 'sort': 6},
+        {'comment': 'Mengetahui dan memahami perkara yang didengar-ditutur, dibaca dan ditulis dengan bantuan.',
+         'subject': 'Bahasa Melayu', 'sort': 2},
+        {
+            'comment': 'Mengetahui, memahami dan memberikan respons terhadap perkara yang didengar-ditutur, dibaca dan ditulis tanpa bantuan.',
+            'subject': 'Bahasa Melayu', 'sort': 3},
+        {
+            'comment': 'Mengetahui, memahami dan memberikan respons terhadap maklumat yang didengar-ditutur, dibaca dan ditulis dalam pelbagai situasi dengan betul',
+            'subject': 'Bahasa Melayu', 'sort': 4},
+        {
+            'comment': 'Memahami, menaakul dan memberikan respons/menyampaikan sesuatu perkara yang didengar- ditutur, dibaca dan ditulis dalam pelbagai situasi dengan betul dan tepat.',
+            'subject': 'Bahasa Melayu', 'sort': 5},
+        {
+            'comment': 'Memahami, menaakul dan menilai tentang sesuatu perkara daripada pelbagai sumber yang didengar-ditutur, dibaca dan ditulis dengan bertatasusila',
+            'subject': 'Bahasa Melayu', 'sort': 6},
 
         {'comment': 'Know basic skills in listening, speaking, reading and writing.', 'subject': 'English', 'sort': 1},
         {'comment': 'Know and understand words, phrases and sentences heard,spoken, read and written.',

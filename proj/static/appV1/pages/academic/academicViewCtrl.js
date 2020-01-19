@@ -2,32 +2,28 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.academic')
-        .controller('academicViewCtrl', ['$scope', '$uibModal', '$http', 'id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', academicViewCtrl]);
+        .controller('academicViewCtrl', ['$scope', '$uibModal', '$http', 'id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', '$sce', academicViewCtrl]);
 
-    function academicViewCtrl($scope, $uibModal, $http, id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
+    function academicViewCtrl($scope, $uibModal, $http, id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $sce) {
         $scope.config = {}
         $scope.config = {
             "height": 1000,
             "language": 'en',
             "allowedContent": true,
             "entities": false,
+            "readOnly": true,
         };
-        $scope.config.toolbarGroups = [
-            {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-            {name: 'clipboard', groups: ['clipboard', 'undo']},
-            {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
-            {name: 'forms', groups: ['forms']},
-            {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
-            {name: 'links', groups: ['links']},
-            {name: 'insert', groups: ['insert']},
-            {name: 'styles', groups: ['styles']},
-            {name: 'colors', groups: ['colors']},
-            {name: 'document', groups: ['mode', 'document', 'doctools']},
-            {name: 'tools', groups: ['tools']},
-            {name: 'others', groups: ['others']},
-            // {name: 'about', groups: ['about']}
-        ];
-        $scope.config.extraPlugins = 'lineheight';
+        $scope.config.toolbarGroups =  [
+
+                {name: 'tools', groups: ['tools']},
+
+            ];
+
+        $scope.config.readOnly = true;
+        $scope.config.extraPlugins = 'maximize';
+        // $scope.trustedcontent = function (text) {
+        //     return $sce.trustAsHtml(text)
+        // };
 
         $scope.select_sem = {selected: [], options: ['1', '2', '3']};
         $scope.items = [];
