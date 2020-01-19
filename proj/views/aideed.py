@@ -86,7 +86,7 @@ def list_aideed(pagenum):
 
     if student_ic:
         codeSql = codeSql.filter(Student.ic_no.like('%' + student_ic + '%')).join(Student,
-                                                                                   Aideed.student_id == Student.id)
+                                                                                  Aideed.student_id == Student.id)
 
     count_result = codeSql.order_by(Aideed.date_created.desc()).count()
     if count_result:
@@ -124,3 +124,21 @@ def list_aideed(pagenum):
         list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
+
+
+@bp_aideed.route('/delete', methods=['POST'])
+def delete():
+    data = json.loads(request.form["data"])
+    data = data["item_id"]
+
+    get_list = Aideed.query.filter(Aideed.id.in_(data))
+    for x in get_list:
+        x.is_deleted = 1
+    try:
+        db.session.commit()
+        response = {"status": "OK"}
+    except Exception as e:
+        print(e)
+        response = {"status": "Failed"}
+
+    return jsonify(response)
