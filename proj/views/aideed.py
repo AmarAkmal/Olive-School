@@ -140,3 +140,21 @@ def list_mobile():
         dict1['code'] = x.code
         list['data'].append(dict1)
     return jsonify({'data': list['data']})
+
+
+@bp_aideed.route('/delete', methods=['POST'])
+def delete():
+    data = json.loads(request.form["data"])
+    data = data["item_id"]
+
+    get_list = Aideed.query.filter(Aideed.id.in_(data))
+    for x in get_list:
+        x.is_deleted = 1
+    try:
+        db.session.commit()
+        response = {"status": "OK"}
+    except Exception as e:
+        print(e)
+        response = {"status": "Failed"}
+
+    return jsonify(response)
