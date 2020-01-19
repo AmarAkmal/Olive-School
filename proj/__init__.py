@@ -46,6 +46,10 @@ from proj.views.academic import bp_academic
 
 app.register_blueprint(bp_academic, url_prefix='/academic')
 
+from proj.views.aideed import bp_aideed
+
+app.register_blueprint(bp_aideed, url_prefix='/aideed')
+
 from proj.views.Insertdata import bp_insertdata
 
 app.register_blueprint(bp_insertdata, url_prefix='/insert')

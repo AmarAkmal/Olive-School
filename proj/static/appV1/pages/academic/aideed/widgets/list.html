@@ -16,6 +16,7 @@
 
 </style>
 
+
 <div class="row mail-client-container transparent">
     <div class="col-md-12">
         <div ba-panel ba-panel-class="with-scroll">
@@ -25,7 +26,7 @@
                 <div class="table table-striped" style="padding-top: 10px;padding-left: 30px;">
                     <button style="width: 130px" type="button" class="btn btn-success ion-person-add"
                             data-toggle="modal"
-                            ng-click="add()">
+                            ui-sref="academic.add({})">
                         &nbsp;&nbsp;&nbsp;Add
                     </button>
 
@@ -43,10 +44,10 @@
                     <thead>
                     <tr class="sortable ">
                         <th style="width: 3%;"></th>
-                        <th st-sort="student_ic" style="width: 25%;">IC. No.</th>
-                        <th st-sort="student_name" style="width: 42%;">Name</th>
-                        <th st-sort="student_intake" style="width: 15%;">Year</th>
-                        <th st-sort="student_intake" style="width: 15%;">Intake</th>
+                        <th st-sort="class" style="width: 25%;">Class</th>
+                        <th st-sort="student_name" style="width: 30%;">Student Name</th>
+                        <th st-sort="student_ic" style="width: 27%;">Student IC</th>
+                        <th st-sort="code" style="width: 15%;">Code</th>
 
 
                     </tr>
@@ -60,7 +61,7 @@
                             </div>
                         </th>
                         <th>
-                            <input ng-enter="getfilter()" ng-model="formData.ic_no" placeholder="Search IC. No."
+                            <input ng-enter="getfilter()" ng-model="formData.class" placeholder="Search Class"
                                    class="input-sm form-control search-input"
                                    type="search"/>
                         </th>
@@ -73,7 +74,7 @@
                         <!--            <th>-->
                         <th>
 
-                            <input ng-enter="getfilter()" ng-model="formData.year" placeholder="Search Year"
+                            <input ng-enter="getfilter()" ng-model="formData.student_ic" placeholder="Search IC"
                                    class="input-sm form-control search-input"
                                    type="search"/>
 
@@ -81,25 +82,9 @@
                         </th>
                         <th>
                             <div class="col-sm-7" style=" padding-left: initial;">
-                                <!--                    <input ng-enter="getfilter()" ng-model="formData.status" placeholder="Search Status"-->
-                                <!--                           class="input-sm form-control search-input"-->
-                                <!--                           type="search"/>-->
-
-                                <ui-select ng-model="formData.select_sem.selected"
-                                           class="btn-group bootstrap-select form-control"
-                                           append-to-body="true"
-                                           search-enabled="false"
-                                           ng-change="getfilter()">
-                                    <ui-select-match placeholder="Please Choose">
-                                        <span> {{$select.selected }}</span>
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            repeat="x in formData.select_sem.options | filter: $select.search"
-                                            ng-hide="!$select.open">
-                                        <span ng-bind-html="x"></span>
-                                    </ui-select-choices>
-                                </ui-select>
-
+                                <input ng-enter="getfilter()" ng-model="formData.code" placeholder="Search Code"
+                                   class="input-sm form-control search-input"
+                                   type="search"/>
                             </div>
                             <div class="col-sm-1">
                                 <button uib-tooltip="Clear" class="btn btn-sm btn-default"
@@ -109,7 +94,6 @@
                             </div>
 
                         </th>
-                        <!--            </th>-->
 
                     </tr>
                     </thead>
@@ -128,11 +112,11 @@
                                 </label>
                             </div>
                         </td>
-                        <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.ic_no }}</td>
-                        <td class="elipsis" ng-click="view(item.id)"
+                        <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.class }}</td>
+                        <td class="elipsis" ng-click="view(item)"
                             style="cursor: pointer;">{{ item.student_name }}</td>
-                        <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.year }}</td>
-                        <td class="elipsis" ng-click="view(item.id)" style="cursor: pointer;">{{ item.sem }}</td>
+                        <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.student_ic }}</td>
+                        <td class="elipsis" ng-click="view(item)" style="cursor: pointer;">{{ item.code }}</td>
 
                     </tr>
                     </tbody>

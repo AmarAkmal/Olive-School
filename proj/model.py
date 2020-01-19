@@ -1,7 +1,25 @@
 from proj import app, db
 from sqlalchemy.ext import mutable
+from flask import json
 import uuid
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
+
+
+class JsonEncodedDict(db.TypeDecorator):
+    """Enables JSON storage by encoding and decoding on the fly."""
+    impl = db.Text
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return '{}'
+        else:
+            return json.dumps(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return {}
+        else:
+            return json.loads(value)
 
 
 class User(db.Model):
@@ -38,6 +56,7 @@ class Student(db.Model):
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academic_iep = db.relationship("AcademicIep", backref="student", cascade="all, delete-orphan")
+    aideed_id = db.relationship("Aideed", backref="student", cascade="all, delete-orphan")
     payment_detail = db.relationship("Invoice", backref="student", cascade="all, delete-orphan")
     event = db.relationship("StudentEvent", backref="student",
                             cascade="all, delete-orphan")
@@ -196,6 +215,7 @@ class Subject(db.Model):
     skill_id = db.relationship("Skill", backref="subject",
                                cascade="all, delete-orphan")
     payment_detail = db.relationship("Band", backref="subject", cascade="all, delete-orphan")
+
     # band_id = db.relationship("Band", backref="band",
     #                           cascade="all, delete-orphan")
 
@@ -226,3 +246,18 @@ class Band(db.Model):
         self.id = uuid.uuid4().hex
         self.comment = comment
         self.band = band
+
+
+class Aideed(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    classB = db.Column(db.String(200))
+    code = db.Column(db.String(100))
+    body = db.Column(JsonEncodedDict)
+    is_deleted = db.Column(db.Boolean, default=0)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    student_id = db.Column(db.ForeignKey('student.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+    def __init__(self, classB, code):
+        self.id = uuid.uuid4().hex
+        self.classB = classB
+        self.code = code

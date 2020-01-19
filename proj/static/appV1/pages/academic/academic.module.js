@@ -26,6 +26,12 @@
                     order: 20
                 }
             })
+            .state('academic.add', {
+                url: '/add',
+                templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/add.html',
+                controller: 'aideedCreateCtrl',
+                title: 'Create Report',
+            })
             .state('academic.amar', {
                 url: '/amar',
                 templateUrl: '../static/app' + gversion + '/pages/academic/academic.html',

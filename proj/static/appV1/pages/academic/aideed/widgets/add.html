@@ -1,101 +1,112 @@
-<div class="panel panel-blur">
-    <div class="panel-heading">
-        <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
-            <em class="ion-ios-close-empty sn-link-close"></em>
-        </button>
-        <h3 class="panel-title">Create Report Academic</h3>
-    </div>
-    <div class="panel-body">
-        <form name="assetForm" ng-submit="$close();" class="form-horizontal">
+<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Create Report" ba-panel-class="with-scroll">
+            <div class="horizontal-scroll">
+                <form class="form-horizontal">
 
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-2">Student</label>
-                    <div class="col-sm-10">
-                        <ui-select ng-model="student_name.selected"
-                                   class="btn-group bootstrap-select form-control col-sm-10"
-                                   append-to-body="false"
-                                   search-enabled="true"
-                                   ng-change="studnet_selected">
-                            <ui-select-match placeholder="Please Choose">
-                                <span> {{$select.selected.name }}  ({{$select.selected.ic_no }})</span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="x in student_name | filter: $select.search"
-                                               ng-hide="!$select.open">
-                                <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label style="text-align: left" class="col-sm-2 control-label">
-                        Class Name
-                    </label>
-                    <div class="col-sm-10">
-                        <input ng-model="formData.className"
-                               placeholder="Type Here"
-                               class="form-control"
-                               type="text"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label style="text-align: left" class="col-sm-10 control-label">
-                        Choice Subject
-                    </label>
-                    <div class="col-sm-2">
-                        <div style=" float: right;" class="add-row-editable-table">
-                            <!--    <button class="btn btn-primary" ng-click="addUser()"></button>-->
-                            <button style="border-radius: 25px;" ng-click="add_item()"
-                                    class="btn btn-primary ion-android-add"></button>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-2">Student</label>
+                            <div class="col-sm-10">
+                                <ui-select ng-model="student_name.selected"
+                                           class="btn-group bootstrap-select form-control col-sm-10"
+                                           append-to-body="false"
+                                           search-enabled="true"
+                                           ng-change="studnet_selected">
+                                    <ui-select-match placeholder="Please Choose">
+                                        <span> {{$select.selected.name }}  ({{$select.selected.ic_no }})</span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="x in student_name | filter: $select.search"
+                                                       ng-hide="!$select.open">
+                                        <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div style="border: solid 1px;margin-bottom: 10px;">
-                    <div class="form-group">
-                        <div style="text-align: left" class="col-sm-12">
-                            <table class="table table-bordered table-hover table-condensed">
-                                <tr>
-                                    <td width="25%">Subject</td>
-                                    <td width="15%">Overall Band</td>
-                                    <td width="60%">Comments</td>
-                                </tr>
-                                <tr>
-                                    <td>Bahasa Melayu</td>
-                                    <td>2</td>
-                                    <td><p>Murid boleh mengetahui dan memahami
-                                        perkara yang didengar-ditutur, dibaca
-                                        dan ditulis dengan bantuan.</p>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="form-group">
+                            <label style="text-align: left" class="col-sm-2 control-label">
+                                Class Name
+                            </label>
+                            <div class="col-sm-4">
+                                <input ng-model="formData.className"
+                                       placeholder="Type Here"
+                                       class="form-control"
+                                       type="text" required/>
+                            </div>
+                            <label style="text-align: left" class="col-sm-2 control-label">
+                                Code
+                            </label>
+                            <div class="col-sm-4">
+                                <input ng-model="formData.code"
+                                       placeholder="Type Here"
+                                       class="form-control"
+                                       type="text" required/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div style="text-align: left" class="col-sm-12">
-                            <table class="table table-bordered table-hover table-condensed">
-                                <tr>
-                                    <td width="25%">Sill</td>
-                                    <td width="15%">Band</td>
-                                    <td width="60%">Comments</td>
-                                </tr>
-                                <tr>
-                                    <td>Mendengar</td>
-                                    <td>2</td>
-                                    <td>Mendengar penyataan ayat dengan baik</td>
-                                </tr>
-                            </table>
+                        <div class="form-group">
+                            <label style="text-align: left" class="col-sm-10 control-label">
+                                Choice Subject
+                            </label>
+                            <div class="col-sm-2">
+                                <div style=" float: right;" class="add-row-editable-table">
+                                    <!--    <button class="btn btn-primary" ng-click="addUser()"></button>-->
+                                    <button style="border-radius: 25px;" ng-click="add_item()"
+                                            class="btn btn-primary ion-android-add"></button>
+                                </div>
+                            </div>
                         </div>
+                        <div ng-repeat="data in items" style="margin-bottom: 10px;">
+                            <div class="col-sm-12" style="padding: 0px;">
+                                <!--                        <label>Uploaded</label>-->
+                                <hr style="    margin: 10px;">
+                            </div>
+                            <div class="form-group">
+                                <div style="text-align: left" class="col-sm-12">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <tr>
+                                            <td width="25%">Subject</td>
+                                            <td width="15%">Overall Band</td>
+                                            <td width="60%">Comments</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ data.subject.subject }}</td>
+                                            <td>{{ data.subject.overall_band }}</td>
+                                            <td>{{ data.subject.comments }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="text-align: left" class="col-sm-12">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <tr>
+                                            <td width="25%">Skill</td>
+                                            <td width="15%">Band</td>
+                                            <td width="60%">Comments</td>
+                                        </tr>
+                                        <tr ng-repeat="data2 in data.skill">
+                                            <td>{{ data2.skill }}</td>
+                                            <td>{{ data2.band }}</td>
+                                            <td>{{ data2.comment }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" ng-click="submit();" class="btn btn-primary ion-android-upload"
+                                style="width: 150px;">&nbsp;&nbsp;&nbsp;Submit
+                        </button>
+                        <button type="button" class="btn btn-danger ion-android-close" ui-sref="academic.aideed({})" style="width: 150px;"
+                        >&nbsp;&nbsp;&nbsp;Cancel
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="submit" ng-click="$dismiss()" class="btn btn-primary ion-android-upload"
-                        style="width: 150px;">&nbsp;&nbsp;&nbsp;Submit
-                </button>
-                <button type="button" class="btn btn-danger ion-android-close" style="width: 150px;"
-                        ng-click="$dismiss()">&nbsp;&nbsp;&nbsp;Cancel
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+

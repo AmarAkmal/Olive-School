@@ -7,13 +7,11 @@
 
     function aideed_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope) {
         $scope.formData = {};
-        $scope.formData.select_sem = {'selected': [], 'options': ['All', '1', '2', '3']};
-        $scope.formData.select_sem.selected = "All";
-
 
         $scope.formData.student_name = "";
-        $scope.formData.ic_no = "";
-        $scope.formData.year = "";
+        $scope.formData.student_ic = "";
+        $scope.formData.class = "";
+        $scope.formData.code = "";
         //#### Page Number #####//
         $scope.goto = {};
         $scope.goto.page = 1;
@@ -30,12 +28,12 @@
 
         function loadData() {
             $scope.formData.isAllSelected = false;
-            $http.get(ip_server + 'academic/list/' + $scope.pagenum, {
+            $http.get(ip_server + 'aideed/list/' + $scope.pagenum, {
                 params: {
                     student_name: $scope.formData.student_name,
-                    student_ic: $scope.formData.ic_no,
-                    year: $scope.formData.year,
-                    sem: $scope.formData.select_sem.selected
+                    student_ic: $scope.formData.student_ic,
+                    code: $scope.formData.code,
+                    class: $scope.formData.class
                 },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
@@ -80,7 +78,7 @@
 
             }).catch(function (error) {
                 alert("Connection Error");
-                $uibModalStack.dismissAll();
+                // $uibModalStack.dismissAll();
             });
         }
 
@@ -139,140 +137,121 @@
         };
 
         // --------------------------------start modal ------------------------------------------
-        $scope.delete = function () {
-            var selection = [];
-            angular.forEach($scope.selectedList, function (selected, bind) {
-                if (selected) {
-                    selection.push(bind);
-                }
-            });
-
-            if (selection.length == 0) {
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: '../static/app' + gversion + '/pages/asset/widgets/alert.html',
-                    size: "sm",
-                    backdrop: 'static',
-                    keyboard: false,
-                    resolve: {
-                        items: function () {
-                            return selection;
-                        }
-                    }
-                });
-            } else {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: '../static/app' + gversion + '/pages/asset/widgets/delete.html',
-                    size: "sm",
-                    backdrop: 'static',
-                    keyboard: false,
-                    resolve: {
-                        list_del: function () {
-                            return selection;
-                        },
-
-                    },
-                    controller: function ($scope, $uibModalInstance, $uibModal, list_del) {
-                        $scope.confirmDel = function () {
-                            loaderModal = $uibModal.open({
-                                animation: true,
-                                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
-                                size: 'sm',
-                                backdrop: 'static',
-                                keyboard: false,
-                            });
-
-                            var data = $.param({
-                                data: JSON.stringify({
-                                    "item_id": list_del
-                                })
-                            });
-
-
-                            $http.post(ip_server + 'academic/delete', data, {
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
-                                }
-                            }).then(function (response) {
-                                if (response.data['status'] == "OK") {
-                                    toastr.success('Data has been deleted.', 'Success!');
-                                    loaderModal.close();
-                                    $uibModalStack.dismissAll();
-                                    $rootScope.$broadcast('load_list_academic');
-
-                                } else {
-                                    toastr.error("Data hasn't been updated.", 'Error!');
-                                }
-
-
-                            }).catch(function (error) {
-                                alert("Connection Error");
-                                loaderModal.close()
-
-                            });
-
-
-                        }; //function end
-                    }, //controller end
-
-
-                });
-
-
-                modalInstance.result.finally(function () {
-                    $scope.selectedList = {};
-                    $scope.selection = [];
-                    $scope.formData.isAllSelected = false;
-                });
-            }
-        };
+        // $scope.delete = function () {
+        //     var selection = [];
+        //     angular.forEach($scope.selectedList, function (selected, bind) {
+        //         if (selected) {
+        //             selection.push(bind);
+        //         }
+        //     });
+        //
+        //     if (selection.length == 0) {
+        //         var modalInstance = $uibModal.open({
+        //             animation: true,
+        //             templateUrl: '../static/app' + gversion + '/pages/asset/widgets/alert.html',
+        //             size: "sm",
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             resolve: {
+        //                 items: function () {
+        //                     return selection;
+        //                 }
+        //             }
+        //         });
+        //     } else {
+        //
+        //         var modalInstance = $uibModal.open({
+        //             animation: true,
+        //             templateUrl: '../static/app' + gversion + '/pages/asset/widgets/delete.html',
+        //             size: "sm",
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             resolve: {
+        //                 list_del: function () {
+        //                     return selection;
+        //                 },
+        //
+        //             },
+        //             controller: function ($scope, $uibModalInstance, $uibModal, list_del) {
+        //                 $scope.confirmDel = function () {
+        //                     loaderModal = $uibModal.open({
+        //                         animation: true,
+        //                         templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+        //                         size: 'sm',
+        //                         backdrop: 'static',
+        //                         keyboard: false,
+        //                     });
+        //
+        //                     var data = $.param({
+        //                         data: JSON.stringify({
+        //                             "item_id": list_del
+        //                         })
+        //                     });
+        //
+        //
+        //                     $http.post(ip_server + 'academic/delete', data, {
+        //                         headers: {
+        //                             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+        //                         }
+        //                     }).then(function (response) {
+        //                         if (response.data['status'] == "OK") {
+        //                             toastr.success('Data has been deleted.', 'Success!');
+        //                             loaderModal.close();
+        //                             $uibModalStack.dismissAll();
+        //                             $rootScope.$broadcast('load_list_academic');
+        //
+        //                         } else {
+        //                             toastr.error("Data hasn't been updated.", 'Error!');
+        //                         }
+        //
+        //
+        //                     }).catch(function (error) {
+        //                         alert("Connection Error");
+        //                         loaderModal.close()
+        //
+        //                     });
+        //
+        //
+        //                 }; //function end
+        //             }, //controller end
+        //
+        //
+        //         });
+        //
+        //
+        //         modalInstance.result.finally(function () {
+        //             $scope.selectedList = {};
+        //             $scope.selection = [];
+        //             $scope.formData.isAllSelected = false;
+        //         });
+        //     }
+        // };
         $scope.view = function (id) {
             var modalInstance = $uibModal.open({
                 animation: true,
 
-                templateUrl: '../static/app' + gversion + '/pages/academic/widgets/update.html',
-                controller: 'academicViewCtrl',
+                templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/view.html',
+                controller: 'aideedViewCtrl',
                 size: 'lg',
                 keyboard: false,
                 backdrop: 'static',
                 resolve: {
-                    id: function () {
+                    items: function () {
                         return id;
                     }
                 }
             });
 
-            modalInstance.result.then(function () {
-                loadData();
-            }, function () {
-                // $log.info('Modal dismissed at: ' + new Date());
-            });
+            // modalInstance.result.then(function () {
+            //     loadData();
+            // }, function () {
+            //     // $log.info('Modal dismissed at: ' + new Date());
+            // });
 
         };
 
 
         // --------------------------------end modal ------------------------------------------
-
-
-        $scope.add = function () {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                keyboard: false,
-                backdrop: 'static',
-                templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/add.html',
-                controller: 'aideedCreateCtrl',
-                size: 'lg',
-
-            });
-
-            modalInstance.result.finally(function () {
-                // loadDatauser();
-            });
-
-        };
-
 
     }
 

@@ -6,7 +6,7 @@
         <h3 class="panel-title">Add Subject</h3>
     </div>
     <div class="panel-body">
-        <form name="assetForm" ng-submit="$close();" class="form-horizontal">
+        <form name="assetForm" ng-submit="submit();" class="form-horizontal">
 
             <div class="modal-body">
                 <div class="form-group">
@@ -14,17 +14,17 @@
                         Subject
                     </label>
                     <div class="col-sm-4">
-                       <ui-select ng-model="student_name.selected"
+                       <ui-select ng-model="subject_name.selected"
                                    class="btn-group bootstrap-select form-control col-sm-10"
                                    append-to-body="false"
                                    search-enabled="true"
-                                   ng-change="studnet_selected">
+                                    ng-change="myChange()">
                             <ui-select-match placeholder="Please Choose">
-                                <span> {{$select.selected.name }}  ({{$select.selected.ic_no }})</span>
+                                <span> {{$select.selected.name}}</span>
                             </ui-select-match>
-                            <ui-select-choices repeat="x in student_name | filter: $select.search"
+                            <ui-select-choices repeat="x in subject_name | filter: $select.search"
                                                ng-hide="!$select.open">
-                                <span ng-bind-html="x.name +'('+ x.ic_no +')'"></span>
+                                <span ng-bind-html="x.name"></span>
                             </ui-select-choices>
                         </ui-select>
 
@@ -33,7 +33,7 @@
                         Overall Band
                     </label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" >
+                        <input type="text" class="form-control" ng-model="formData.overall" required >
                     </div>
                 </div>
                 <div class="form-group">
@@ -42,7 +42,7 @@
                     </label>
                     <div class="col-sm-10">
                         <textarea placeholder="Write Here..." style="height: 90px;"
-                                  class="form-control" ng-model="cCtrl.description" required></textarea>
+                                  class="form-control" ng-model="formData.comments" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -53,10 +53,27 @@
                                 <td width="15%">Band</td>
                                 <td width="60%">Comments</td>
                             </tr>
+                            <tr ng-repeat="item in skill_name">
+                                <td style="padding: 10px;">{{ item.name }}</td>
+                                <td style="padding: 10px;"><input type="text" name="{{ item.id }}" ng-model="skill[item.id]" class="form-control"></td>
+                                <td style="padding: 10px;">
+                                    <input type="text" name="{{ item.name }}" ng-model="comment[item.name]" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div style="text-align: left" class="col-sm-12">
+                        <table class="table table-bordered table-hover table-condensed">
                             <tr>
-                                <td>Mendengar</td>
-                                <td><input type="text" class="form-control"></td>
-                                <td><input type="text" class="form-control"></td>
+                                <td width="20%">Band</td>
+                                <td width="80%">Comments</td>
+                            </tr>
+                            <tr ng-repeat="item in band_name">
+                                <td>{{ item.band }}</td>
+                                <td>{{ item.comment }}</td>
                             </tr>
                         </table>
                     </div>
@@ -64,7 +81,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" ng-click="$dismiss()" class="btn btn-primary ion-android-upload"
+                <button type="submit" class="btn btn-primary ion-android-upload"
                         style="width: 150px;">&nbsp;&nbsp;&nbsp;Add
                 </button>
                 <button type="button" class="btn btn-danger ion-android-close" style="width: 150px;"
