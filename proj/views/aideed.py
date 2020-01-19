@@ -124,3 +124,19 @@ def list_aideed(pagenum):
         list['totalpagenum'] = int(totalpagenum)
         list['count_result'] = str(count_result)
         return jsonify(list)
+
+
+@bp_aideed.route('/list_mobile', methods=['GET'])
+def list_mobile():
+    student_id = request.args.get("student_id")
+    student = Student.query.filter_by(id=student_id).first()
+    ai = Aideed.query.filter_by(student_id=student.id).order_by(Aideed.date_created.desc()).all()
+    list = dict()
+    list['data'] = []
+    for x in ai:
+        dict1 = dict()
+        dict1['id'] = x.id
+        dict1['class'] = x.classB
+        dict1['code'] = x.code
+        list['data'].append(dict1)
+    return jsonify({'data': list['data']})
