@@ -9,6 +9,7 @@ class User(db.Model):
     name = db.Column(db.String(250))
     phone = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(100), unique=True)
+    role = db.Column(db.String(100))
     password = db.Column(db.String(100))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_deleted = db.Column(db.Boolean, default=0)
@@ -196,6 +197,7 @@ class Subject(db.Model):
     skill_id = db.relationship("Skill", backref="subject",
                                cascade="all, delete-orphan")
     payment_detail = db.relationship("Band", backref="subject", cascade="all, delete-orphan")
+
     # band_id = db.relationship("Band", backref="band",
     #                           cascade="all, delete-orphan")
 
