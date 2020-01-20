@@ -7,7 +7,7 @@
         function aideedViewCtrl($http, $scope, toastr, $rootScope, editableOptions, editableThemes, items, $uibModal) {
             $scope.form = {};
             $scope.form = items;
-            console.log(items);
+
         }
     }
 

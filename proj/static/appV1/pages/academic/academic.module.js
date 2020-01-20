@@ -17,10 +17,10 @@
                 }
             })
             .state('academic.aideed', {
-                url: '/aideed',
+                url: '/report_card',
                 templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/list.html',
                 controller: 'aideed_listCtrl',
-                title: 'Aideed',
+                title: 'Report Card',
                 sidebarMeta: {
                     icon: 'ion-compose',
                     order: 20
@@ -33,16 +33,16 @@
                 title: 'Create Report',
             })
             .state('academic.amar', {
-                url: '/amar',
+                url: '/iep',
                 templateUrl: '../static/app' + gversion + '/pages/academic/academic.html',
                 controller: 'academic_listCtrl',
-                title: 'Amar',
+                title: 'IEP',
                 sidebarMeta: {
                     icon: 'ion-compose',
                     order: 20
                 }
             });
-        $urlRouterProvider.when('/academic', '/academic/aideed');
+        // $urlRouterProvider.when('/academic', '/report_card');
     }
 
 })();

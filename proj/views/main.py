@@ -18,6 +18,6 @@ def before_request():
 def index():
     user = User.query.filter_by(id=request.args.get('id')).first()
     if user:
-        return render_template('index.html', id=user.id)
+        return render_template('index.html', id=user.id, user_name=user.name, role=user.role)
     else:
         return render_template('error.html')

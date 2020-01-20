@@ -6,6 +6,7 @@
 
 
     function aideed_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
+        $scope.role = role;
         $scope.formData = {};
 
         $scope.formData.student_name = "";

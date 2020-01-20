@@ -5,10 +5,8 @@
         .controller('accountViewCtrl', ['$scope', '$uibModal', '$http', 'invoice_id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', accountViewCtrl]);
 
     function accountViewCtrl($scope, $uibModal, $http, invoice_id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
-        // console.log(items)
         $scope.items = [];
         $scope.desc = "";
-        // $scope.is_pay = 1;
         loadData();
 
         function loadData() {

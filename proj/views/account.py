@@ -59,7 +59,6 @@ def list_student(pagenum):
     # report = codeSql.order_by(Invoice.date_created.desc()).paginate(int(pagenum), 10)
     # count_result = codeSql.order_by(Invoice.date_created.desc()).count()
     # call_bank_toyyib()
-    # print(create_invoice_toyyib('',))
     if not report:
         return "Report does not exist"
     else:
@@ -378,14 +377,11 @@ def deleted_account(data):
 #########################3# TOYYIB PAY #################################################
 def call_bank_toyyib():
     response = requests.get('https://toyyibpay.com/index.php/api/getBank')
-    print(response.json())
     data = response.json()
-    print(data[0]['bank'])
     return "OK"
 
 
 def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, billIC, billPhone):
-    # print(billAmount)
     data = {
         'userSecretKey': '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
         'categoryCode': 'amt3vw1j',

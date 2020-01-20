@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BlurAdmin.pages.account', ['ui.select', 'ngMask', 'angularjs-datetime-picker'])
+    angular.module('BlurAdmin.pages.account', ['ui.select', 'angularjs-datetime-picker'])
         .config(routeConfig);
 
     function routeConfig($stateProvider, $urlRouterProvider) {

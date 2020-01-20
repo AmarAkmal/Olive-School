@@ -34,8 +34,8 @@
         //     });
         // }
         $scope.profileImg = '../static/assets/img/theme/no-photo.png';
-        $scope.getGlobalId = "user_id";
-
+        // $scope.getGlobalId = "user_id";
+        $scope.profileName = user_name
 
     }
 

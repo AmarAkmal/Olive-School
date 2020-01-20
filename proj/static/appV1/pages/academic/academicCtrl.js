@@ -6,6 +6,7 @@
 
 
     function academic_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
+        $scope.role = role;
         $scope.formData = {};
         $scope.formData.select_sem = {'selected': [], 'options': ['All', '1', '2', '3']};
         $scope.formData.select_sem.selected = "All";
