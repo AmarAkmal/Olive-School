@@ -403,9 +403,8 @@
                 ' \n' +
                 ' <p style="margin-left:5px">&nbsp;</p>\n' +
                 ' ';
-            // console.log($scope.desc)
             $scope.submit = function () {
-                // console.log($scope.desc)
+
                 loaderModal = $uibModal.open({
                     animation: true,
                     templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',

@@ -48,9 +48,10 @@
 <body>
 
 <main class="auth-main">
+
     <div class="auth-block" style="text-align: center;">
-        <img src="../static/assets/img/tots.png">
-        <h1>The Olive Trees</h1>
+        <img src="../static/assets/img/tots1.png">
+        <h1 ><a style="color: white" >The</a> <a style="color: white" >Olive </a> <a style="color: white" >Trees</a></h1>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -97,12 +98,17 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" style="float: right;width: 100px" class="btn btn-default btn-auth">Sign in
+                    <button type="submit" style="float: right;width: 100px" class="btn btn-success btn-auth">Sign in
+                    </button>
+                    <button type="button"
+                            onclick="window.location.href =  window.location.protocol + '//' + window.location.hostname;"
+                            style="float: left;width: 100px" class="btn btn-warning">Go Website
                     </button>
                 </div>
+
             </div>
         </form>
-    <div class="auth-sep"><span><span>Welcome to Student Profile</span></span></div>
+        <div class="auth-sep"><span><span>Welcome to Student Management</span></span></div>
 
         <!--<div class="auth-sep"><span><span> -&#45;&#45; </span></span></div>-->
 

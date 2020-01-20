@@ -29,13 +29,10 @@
 
                 modalInstance.result.then(function (selectedItem) {
                     $scope.items.push(selectedItem);
-                    // console.log(selectedItem);
                 });
             };
             $scope.submit = function () {
-                // console.log($scope.student_name.selected);
-                // console.log($scope.formData.className);
-                // console.log($scope.items);
+
                 var data = {
                     "class": $scope.formData.className,
                     "code": $scope.formData.code,

@@ -2,7 +2,6 @@ import math
 from flask import Blueprint, request, jsonify, json
 from proj.model import *
 
-
 bp_academic = Blueprint('bp_academic', __name__)
 
 
@@ -26,7 +25,6 @@ def list(pagenum):
 
     if year:
         codeSql = codeSql.filter(AcademicIep.year.like('%' + year + '%'))
-
 
     count_result = codeSql.order_by(AcademicIep.date_created.desc()).count()
     if count_result:
@@ -164,7 +162,7 @@ def mobile_student_academic():
     get_student = Student.query.filter_by(ic_no=ic).first()
 
     if get_student:
-         #
+        #
         get_academic = Academic.query.filter_by(student_id=get_student.id, is_deleted=0, sem=sem).first()
         # for x in get_academic:
         if get_academic:
@@ -184,3 +182,32 @@ def mobile_student_academic():
             data.append(dictV)
 
     return jsonify(data)
+
+
+@bp_academic.route('/get_iep', methods=['GET'])
+def get_iep():
+    id = request.args.get("id")
+    get_desc = AcademicIep.query.filter_by(id=id).first()
+    if not get_desc:
+        return "iep does not exist"
+
+    return get_desc.desc
+
+
+@bp_academic.route('/get_list_iep_mobile', methods=['GET'])
+def get_list_iep_mobile():
+    student_id = request.args.get("student_id")
+    get_detail = AcademicIep.query.filter_by(student_id=student_id).all()
+    if not get_detail:
+        return "iep does not exist"
+    list = dict()
+    list['data'] = []
+    for x in get_detail:
+        dict1 = dict()
+        dict1['id'] = x.id
+        dict1['year'] = x.year
+        dict1['date_created'] = x.date_created
+
+        list['data'].append(dict1)
+
+    return jsonify(list)

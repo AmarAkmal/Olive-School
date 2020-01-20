@@ -56,8 +56,6 @@ def add():
 
     ai.body = data
     db.session.commit()
-    # print(data)
-    # print(second)
     return jsonify({'status': 'OK'})
 
 

@@ -6,6 +6,7 @@
 
 
     function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope, $uibModalStack) {
+        $scope.role = role;
         $scope.formData = {};
 
 

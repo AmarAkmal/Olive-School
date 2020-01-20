@@ -37,6 +37,7 @@ var rootScope;
 
 
     function studentEventListCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
+        $scope.role = role;
         rootScope = $rootScope;
 
         $scope.formData = {};
@@ -215,7 +216,7 @@ var rootScope;
                             });
 
 
-                            $http.delete(ip_server + 'student/delete_event/' +JSON.stringify( list_del), {
+                            $http.delete(ip_server + 'student/delete_event/' + JSON.stringify(list_del), {
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                                 }

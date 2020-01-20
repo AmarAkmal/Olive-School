@@ -12,12 +12,13 @@ def index():
          User(name='MOHAMMAD NURZAKUAN', email='mohammadnurzakuan.olivetrees@gmail.com', role="Principle",
               password=111111),
          User(name='AZHAR BIN MOHAMED NOR', email='azharmohamednor@gmail.com', role="Principle", password=111111),
-         User(name='NUR ZAHIDAH BINTI ABD TALIB', email='nurzahidahtalib@gmail.com', role="Principle", password=111111),
-         User(name='NAZIRA ALIS', email='nazira_alis@yahoo.com', role="Teacher", password=111111),
+         User(name='NUR ZAHIDAH BINTI ABD TALIB', email='nurzahidahtalib@gmail.com', role="Special Teacher 1",
+              password=111111),
+         User(name='NAZIRA ALIS', email='nazira_alis@yahoo.com', role="Special Teacher 2", password=111111),
          User(name='SITI NORAINI BINTI SALLEH ZAABAR', email='ainie9111@yahoo.com', role="Teacher", password=111111),
          User(name='BETTY INTAN SAHURA', email='bettyintan79@gmail.com', role="Teacher", password=111111),
          User(name='SYUHADA BINTI MOHD RABI', email='syuhadamohdrabi@gmail.com', role="Teacher", password=111111),
-         User(name='tOts Teachers', email='theolivetrees2016@gmasil.com', role="Teacher", password=111111),
+         User(name='tOts Teachers', email='theolivetrees2016@gmasil.com', role="tOts Teacher", password=111111),
          User(name='tOts Account', email='receipt.theolivetrees@gmail.com', role="Account", password=111111),
          User(name='Principle', email='principle1@mail.com', role="Principle", password=111111),
          User(name='Account', email='account@mail.com', role="Account", password=111111)
@@ -72,7 +73,7 @@ def index():
             {'skill': 'Bola Monyet', 'subject': 'Pendidikan Jasmani', 'sort': 2},
             ]
     for i in arr3:
-        # print(i['subject'])
+
         check = Subject.query.filter_by(name=i['subject']).first()
         if check:
             da = Skill.query.filter_by(name=i['skill']).first()
@@ -209,7 +210,6 @@ def index():
             'subject': 'Pendidikan Jasmani', 'sort': 6},
     ]
     for i in arr4:
-        # print(i['subject'])
         check = Subject.query.filter_by(name=i['subject']).first()
         if check:
             da = Band.query.filter_by(comment=i['comment']).first()
