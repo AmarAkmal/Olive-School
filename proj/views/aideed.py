@@ -158,3 +158,26 @@ def delete():
 
     return jsonify(response)
 
+
+@bp_aideed.route('/getAideedDetail', methods=['GET'])
+def getAideedDetail():
+    aideedId = request.args.get("id")
+    # print(aideedId)
+    ai = Aideed.query.filter_by(id=aideedId).first()
+    # print(ai)
+    dataList = []
+    if ai:
+        dict1 = dict()
+        dict1['id'] = ai.id
+        dict1['body'] = ai.body
+        dict1['class'] = ai.classB
+        dict1['code'] = ai.code
+        dict1['code'] = ai.code
+
+        student = Student.query.get(ai.student_id)
+        dict1['student_name'] = student.name
+        dict1['student_ic'] = student.ic_no
+
+        dataList.append(dict1)
+    return jsonify(dataList)
+
