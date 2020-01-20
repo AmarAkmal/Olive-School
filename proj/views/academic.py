@@ -206,7 +206,6 @@ def get_list_iep_mobile():
         dict1 = dict()
         dict1['id'] = x.id
         dict1['year'] = x.year
-        dict1['desc'] = x.desc
         dict1['date_created'] = x.date_created
 
         list['data'].append(dict1)
