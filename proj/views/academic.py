@@ -194,8 +194,8 @@ def get_iep():
     return get_desc.desc
 
 
-@bp_academic.route('/get_list_mobile', methods=['GET'])
-def get_list_mobile():
+@bp_academic.route('/get_list_iep_mobile', methods=['GET'])
+def get_list_iep_mobile():
     student_id = request.args.get("student_id")
     get_detail = AcademicIep.query.filter_by(student_id=student_id).all()
     if not get_detail:
