@@ -186,10 +186,29 @@ def mobile_student_academic():
 
 @bp_academic.route('/get_iep', methods=['GET'])
 def get_iep():
-    print("q111111111")
     id = request.args.get("id")
     get_desc = AcademicIep.query.filter_by(id=id).first()
     if not get_desc:
         return "iep does not exist"
 
     return get_desc.desc
+
+
+@bp_academic.route('/get_list_mobile', methods=['GET'])
+def get_list_mobile():
+    student_id = request.args.get("student_id")
+    get_detail = AcademicIep.query.filter_by(student_id=student_id).all()
+    if not get_detail:
+        return "iep does not exist"
+    list = dict()
+    list['data'] = []
+    for x in get_detail:
+        dict1 = dict()
+        dict1['id'] = x.id
+        dict1['year'] = x.year
+        dict1['desc'] = x.desc
+        dict1['date_created'] = x.date_created
+
+        list['data'].append(dict1)
+
+    return jsonify(list)
