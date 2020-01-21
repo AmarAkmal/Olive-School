@@ -27,7 +27,7 @@
             'BlurAdmin.pages.student',
             'BlurAdmin.pages.account',
             'BlurAdmin.pages.academic',
-            'BlurAdmin.pages.event',
+            // 'BlurAdmin.pages.event',
 
         ]).config(routeConfig);
 
@@ -39,7 +39,7 @@
         angular.module('BlurAdmin.pages', [
             'ui.router',
             'BlurAdmin.pages.student',
-            'BlurAdmin.pages.event',
+            // 'BlurAdmin.pages.event',
 
 
         ]).config(routeConfig);
@@ -54,7 +54,7 @@
             'ui.router',
             'BlurAdmin.pages.student',
             'BlurAdmin.pages.academic',
-            'BlurAdmin.pages.event',
+            // 'BlurAdmin.pages.event',
 
         ]).config(routeConfig);
 
@@ -67,7 +67,7 @@
             'ui.router',
             'BlurAdmin.pages.student',
             'BlurAdmin.pages.academic',
-            'BlurAdmin.pages.event',
+            // 'BlurAdmin.pages.event',
 
         ]).config(routeConfig);
 
@@ -92,7 +92,7 @@
         angular.module('BlurAdmin.pages', [
             'ui.router',
             'BlurAdmin.pages.academic',
-            'BlurAdmin.pages.event',
+            // 'BlurAdmin.pages.event',
 
         ]).config(routeConfig);
 

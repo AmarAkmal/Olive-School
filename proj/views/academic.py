@@ -201,13 +201,13 @@ def get_list_iep_mobile():
     if not get_detail:
         return "iep does not exist"
     list = dict()
-    list['data'] = []
+    data = []
     for x in get_detail:
         dict1 = dict()
         dict1['id'] = x.id
         dict1['year'] = x.year
         dict1['date_created'] = x.date_created
 
-        list['data'].append(dict1)
+        data.append(dict1)
 
-    return jsonify(list)
+    return jsonify(data)
