@@ -4,7 +4,6 @@
     }
 
 
-
 </style>
 <div class="col-md-12  panel panel-blur">
     <div class="panel-body">
@@ -32,13 +31,12 @@
             <div ng-hide="!student_name.selected">
                 <div class="col-sm-6" style="padding-top: 30px;">
 
-                    <input ng-disabled="!student_name.selected" placeholder="Year example (2020)"
+                    <input ng-disabled="!student_name.selected" placeholder="Year example (2020/Jan)"
                            class="form-control"
                            type="number"
                            name="year" required
-                           pattern="^[0-9]{4}$"
                            data-ng-model="year" ng-enter="getfilter()"/>
-                    <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
+                    <span ng-show="!year"> <font color="red">Please insert</font></span>
                 </div>
                 <div class="col-sm-12" style="padding-top: 10px;">
                     <label>Remark</label>

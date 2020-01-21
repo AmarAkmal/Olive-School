@@ -22,7 +22,7 @@
                 method: 'GET',
                 url: ip_server + 'student/get_student_detail?id=' + items
             }).then(function (result) {
-                result = result.data
+                result = result.data;
                 $scope.id = result.id;
                 $scope.student_name = result.student_name;
                 $scope.student_ic = result.student_ic;
