@@ -473,18 +473,18 @@ def mobile_get_amount():
         return "invoice does not exist"
 
     get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).first()
-    data = {
-        'billCode': get_detail.billcode_toyyib}
-    req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
-    if "No data found!" in req.text:
-        pass
-    else:
-        bill_paid = req.json()[0]["billpaymentStatus"]
-        if bill_paid == 1:
-            get_detail.is_pay = True
-            db.session.commit()
 
     if get_detail:
+        data = {
+            'billCode': get_detail.billcode_toyyib}
+        req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
+        if "No data found!" in req.text:
+            pass
+        else:
+            bill_paid = req.json()[0]["billpaymentStatus"]
+            if bill_paid == 1:
+                get_detail.is_pay = True
+                db.session.commit()
         return jsonify({'total': "%.2f" % float(get_detail.total_pay),
                         'invoice_no': get_detail.receipt_no,
                         'status': 'success'})
