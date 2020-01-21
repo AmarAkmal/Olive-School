@@ -31,11 +31,10 @@
             <div>
                 <div class="col-sm-6" style="padding-top: 30px;">
                     <label>Year</label>
-                    <input readonly placeholder="Year example (2020)"
+                    <input ng-disabled="!student_name.selected" placeholder="Year example (2020/Jan)"
                            class="form-control"
-                           type="number"
+                           type="text"
                            name="year" required
-                           pattern="^[0-9]{4}$"
                            data-ng-model="year" ng-enter="getfilter()"/>
                     <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
                 </div>

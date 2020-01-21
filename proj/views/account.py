@@ -78,7 +78,7 @@ def list_student(pagenum):
                 dict1['bill_code'] = "None"
 
             if x.is_pay == 1:
-                dict1['status'] = "Done"
+                dict1['status'] = "Paid"
             else:
                 dict1['status'] = "Pending"
 
@@ -119,10 +119,15 @@ def add_invoice():
     get_student = Student.query.filter_by(id=student_id).first()
     try:
         if student_id:
-            receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f")
-            check_len = Invoice.query.filter_by(receipt_no=receipt_no).count()
+            if "invoice_no" in data:
+                receipt_no = data["invoice_no"]
+            else:
+                return "no receipt no"
 
-            receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f") + str(check_len + 1)
+            # receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f")
+            # check_len = Invoice.query.filter_by(receipt_no=receipt_no).count()
+
+            # receipt_no = datetime.now().strftime("%Y-%d%m%H%M-%f") + str(check_len + 1)
 
             student_payment = Invoice(receipt_no=receipt_no, year=year, month='%.2f' % month, total_pay=total_pay)
             student_payment.created_by = user_id
@@ -467,16 +472,26 @@ def mobile_get_amount():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0,is_deleted=0).first()
-    if get_detail :
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).first()
+    data = {
+        'billCode': get_detail.billcode_toyyib}
+    req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
+    if "No data found!" in req.text:
+        pass
+    else:
+        bill_paid = req.json()[0]["billpaymentStatus"]
+        if bill_paid == 1:
+            get_detail.is_pay = True
+            db.session.commit()
+
+    if get_detail:
         return jsonify({'total': "%.2f" % float(get_detail.total_pay),
-                    'invoice_no': get_detail.receipt_no,
-                    'status': 'success'})
+                        'invoice_no': get_detail.receipt_no,
+                        'status': 'success'})
     else:
         return jsonify({'total': "0.00",
-                    'invoice_no': 'No invoice available.',
-                    'status': 'no-pending'})
-
+                        'invoice_no': 'No invoice available.',
+                        'status': 'no-pending'})
 
 
 @bp_account.route('/update_payment')
@@ -486,7 +501,7 @@ def update_payment():
         inv.is_pay = True
     else:
         inv.is_pay = False
-     # request.args.get("statusId")
+    # request.args.get("statusId")
     inv.orderid_toyyib = request.args.get("orderId")
     inv.date_pay = datetime.now()
     db.session.commit()
@@ -500,7 +515,8 @@ def mobile_history_payment():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=1,is_deleted=0).order_by(Invoice.date_pay.desc()).all()
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=1, is_deleted=0).order_by(
+        Invoice.date_pay.desc()).all()
     list = dict()
     list['data'] = []
     if get_detail:

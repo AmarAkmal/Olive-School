@@ -28,7 +28,7 @@
 
         $scope.formData.status = {
             'selected': {id: 'All', name: 'All'},
-            'options': [{id: 'All', name: 'All'}, {id: 0, name: 'Pending'}, {id: 1, name: 'Done'}]
+            'options': [{id: 'All', name: 'All'}, {id: 0, name: 'Pending'}, {id: 1, name: 'Paid'}]
         };
         $scope.formData.status.selected = {id: 'All', name: 'All'};
         $scope.$on('load_list_account', function () {

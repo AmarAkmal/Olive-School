@@ -29,6 +29,7 @@
                 "student_id": $scope.student_name.selected.id,
                 "year": $scope.year,
                 "month": $scope.month,
+                "invoice_no": $scope.invoice_no,
                 "items": $scope.items,
                 "desc": $scope.desc,
                 "total_pay": $scope.total,

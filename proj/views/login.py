@@ -22,6 +22,8 @@ def auth():
             if user.password == password:
                 session['logged_in'] = True
                 return redirect(url_for('bp_main.index', id=user.id, session=uuid.uuid4().hex + '/' + uuid.uuid4().hex))
+            else:
+                flash('wrong email or password', 'error')
         else:
             flash('wrong email or password', 'error')
     # host = request.host_url

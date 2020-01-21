@@ -27,6 +27,22 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
+            <div class="col-sm-12" style="padding: 0px;">
+                <div class="col-sm-6" style="padding-top: 10px;">
+                    <label>Invoice No.</label>
+                    <input  type="text"
+                           style="max-width: 100%;min-width: 100%;resize: none;"
+                           class="form-control"
+                           ng-model="invoice_no">
+                </div>
+<!--                <div class="col-sm-6" style="padding-top: 10px;">-->
+<!--                    <label>Bill Code</label>-->
+<!--                    <input readonly type="text"-->
+<!--                           style="max-width: 100%;min-width: 100%;resize: none;"-->
+<!--                           class="form-control"-->
+<!--                           ng-model="bill_code">-->
+<!--                </div>-->
+            </div>
             <div ng-hide="!student_name.selected">
                 <div class="col-sm-12" style="padding-top: 30px;">
                     <label>CODE</label>
@@ -58,7 +74,7 @@
                     <div include-with-scope="../static/app/pages/account/widgets/addItemTable.html"></div>
                 </div>
                 <div class="col-sm-12" style="padding-top: 10px;">
-<!--                    <label>Remark {{items.lengtn}}</label>-->
+                    <!--                    <label>Remark {{items.lengtn}}</label>-->
                     <label>Remark</label>
                     <textarea ng-disabled="!student_name.selected" style="max-width: 100%;min-width: 100%;resize: none;"
                               class="form-control"
@@ -80,7 +96,7 @@
             </div>
             <div class="col-md-12" style="padding-top: 10px;">
                 <div style="float: right">
-                    <button ng-disabled="!student_name.selected || !month || !year || !items[0].desc "
+                    <button ng-disabled="!student_name.selected || !month || !year || !items[0].desc || !invoice_no"
                             ng-click="submit()" style="width: 120px ;" type="submit"
                             class="btn btn-success ion-android-cloud">
                         &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
