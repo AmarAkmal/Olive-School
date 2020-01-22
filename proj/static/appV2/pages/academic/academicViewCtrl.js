@@ -13,11 +13,11 @@
             "entities": false,
             "readOnly": true,
         };
-        $scope.config.toolbarGroups =  [
+        $scope.config.toolbarGroups = [
 
-                {name: 'tools', groups: ['tools']},
+            {name: 'tools', groups: ['tools']},
 
-            ];
+        ];
 
         $scope.config.readOnly = true;
         $scope.config.extraPlugins = 'maximize';
@@ -43,7 +43,7 @@
                 url: ip_server + 'academic/get_academic_iep?id=' + id
             }).then(function (result) {
                 result = result.data;
-                $scope.year = Number(result.year,);
+                $scope.year = result.year;
                 // $scope.items = result.items;
                 $scope.desc = result.desc;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
