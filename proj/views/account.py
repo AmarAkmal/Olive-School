@@ -403,7 +403,7 @@ def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, 
         'billPhone': billPhone,
         'billSplitPayment': 0,
         'billSplitPaymentArgs': '',
-        'billPaymentChannel': 2,
+        'billPaymentChannel': 0,
     }
     response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
     result = response.json()
