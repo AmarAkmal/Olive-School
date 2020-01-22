@@ -39,6 +39,7 @@
         angular.module('BlurAdmin.pages', [
             'ui.router',
             'BlurAdmin.pages.student',
+            'BlurAdmin.pages.academic',
             // 'BlurAdmin.pages.event',
 
 
@@ -62,7 +63,7 @@
             $urlRouterProvider.otherwise('/student-list');
         }
 
-    }else if (role == "Special Teacher 2") {
+    } else if (role == "Special Teacher 2") {
         angular.module('BlurAdmin.pages', [
             'ui.router',
             'BlurAdmin.pages.student',
@@ -75,8 +76,7 @@
             $urlRouterProvider.otherwise('/student-list');
         }
 
-    }
-    else if (role == 'Account') {
+    } else if (role == 'Account') {
         angular.module('BlurAdmin.pages', [
             'ui.router',
             'BlurAdmin.pages.account',
