@@ -16,11 +16,11 @@
         $scope.config.toolbarGroups = [
 
             {name: 'tools', groups: ['tools']},
-
+            {name: 'document', groups: [ 'document']},
         ];
 
         $scope.config.readOnly = true;
-        $scope.config.extraPlugins = 'maximize';
+        $scope.config.extraPlugins = 'print';
         // $scope.trustedcontent = function (text) {
         //     return $sce.trustAsHtml(text)
         // };
