@@ -35,46 +35,53 @@
                                type="text" readonly/>
                     </div>
                 </div>
-                <div ng-repeat="data in form.body" style="margin-bottom: 10px;">
-                    <div class="col-sm-12" style="padding: 0px;">
-                        <!--                        <label>Uploaded</label>-->
-                        <hr style="    margin: 10px;">
-                    </div>
-                    <div class="form-group">
-                        <div style="text-align: left" class="col-sm-12">
-                            <table class="table table-bordered table-hover table-condensed">
-                                <tr>
-                                    <td width="25%">Subject</td>
-                                    <td width="15%">Overall Band</td>
-                                    <td width="60%">Comments</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ data.subject.subject }}</td>
-                                    <td>{{ data.subject.overall_band }}</td>
-                                    <td>{{ data.subject.comments }}</td>
-                                </tr>
-                            </table>
+                <div id="DivIdToPrint">
+                    <div ng-repeat="data in form.body" style="margin-bottom: 10px;">
+                        <div class="col-sm-12" style="padding: 0px;">
+                            <!--                        <label>Uploaded</label>-->
+                            <hr style="    margin: 10px;">
+                        </div>
+
+                        <div class="form-group">
+                            <div style="text-align: left" class="col-sm-12">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <tr>
+                                        <td width="25%">Subject</td>
+                                        <td width="15%">Overall Band</td>
+                                        <td width="60%">Comments</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ data.subject.subject }}</td>
+                                        <td>{{ data.subject.overall_band }}</td>
+                                        <td>{{ data.subject.comments }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div style="text-align: left" class="col-sm-12">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <tr>
+                                        <td width="25%">Sill</td>
+                                        <td width="15%">Band</td>
+                                        <td width="60%">Comments</td>
+                                    </tr>
+                                    <tr ng-repeat="data2 in data.skill">
+                                        <td>{{ data2.skill }}</td>
+                                        <td>{{ data2.band }}</td>
+                                        <td>{{ data2.comment }}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div style="text-align: left" class="col-sm-12">
-                            <table class="table table-bordered table-hover table-condensed">
-                                <tr>
-                                    <td width="25%">Sill</td>
-                                    <td width="15%">Band</td>
-                                    <td width="60%">Comments</td>
-                                </tr>
-                                <tr ng-repeat="data2 in data.skill">
-                                    <td>{{ data2.skill }}</td>
-                                    <td>{{ data2.band }}</td>
-                                    <td>{{ data2.comment }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info ion-android-print" id="print"
+                        ng-click="printDiv()" style="width: 150px;">&nbsp;&nbsp;&nbsp;&nbsp;Print
+                </button>
                 <button type="button" class="btn btn-danger ion-android-close" style="width: 150px;"
                         ng-click="$dismiss()">&nbsp;&nbsp;&nbsp;Cancel
                 </button>
@@ -82,3 +89,4 @@
         </form>
     </div>
 </div>
+<!--<div id=print_div_attend" ></div>-->
