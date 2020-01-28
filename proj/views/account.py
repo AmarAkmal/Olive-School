@@ -192,6 +192,8 @@ def add_invoice():
             else:
                 phone = '01156568441'
 
+            if '/' in receipt_no:
+                receipt_no = receipt_no.replace('/', '-')
             response = create_invoice_toyyib(receipt_no, description, str(total_pay).replace('.', ''), inv.id, email,
                                              parent.name, phone)
             inv.billcode_toyyib = response
