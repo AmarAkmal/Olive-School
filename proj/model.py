@@ -53,7 +53,7 @@ class Student(db.Model):
     intake = db.Column(db.String(32))
     password = db.Column(db.String(100))
     address = db.Column(db.TEXT)
-    picture = db.Column(db.String(300))
+    picture = db.Column(db.TEXT)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     parent_detail = db.relationship("Parent", backref="student", cascade="all, delete-orphan")
     academic_iep = db.relationship("AcademicIep", backref="student", cascade="all, delete-orphan")
