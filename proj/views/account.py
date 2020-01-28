@@ -390,8 +390,8 @@ def call_bank_toyyib():
 
 def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, billIC, billPhone):
     data = {
-        'userSecretKey': '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
-        'categoryCode': 'amt3vw1j',
+        'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
+        'categoryCode': '2w4vgxc0',
         'billName': billName,
         'billDescription': billDesc,
         'billPriceSetting': 0,
