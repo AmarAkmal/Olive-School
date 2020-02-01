@@ -144,7 +144,7 @@ def list_aideed(pagenum):
 def list_mobile():
     student_id = request.args.get("student_id")
     student = Student.query.filter_by(id=student_id).first()
-    ai = Aideed.query.filter_by(student_id=student.id).order_by(Aideed.date_created.desc()).all()
+    ai = Aideed.query.filter_by(student_id=student.id, is_deleted=0).order_by(Aideed.date_created.desc()).all()
     dataList = []
     for x in ai:
         dict1 = dict()
@@ -177,7 +177,7 @@ def delete():
 def getAideedDetail():
     aideedId = request.args.get("id")
     # print(aideedId)
-    ai = Aideed.query.filter_by(id=aideedId).first()
+    ai = Aideed.query.filter_by(id=aideedId, is_deleted=0).first()
     # print(ai)
     dataList = []
     if ai:
