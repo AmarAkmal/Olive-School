@@ -187,7 +187,7 @@ def mobile_student_academic():
 @bp_academic.route('/get_iep', methods=['GET'])
 def get_iep():
     id = request.args.get("id")
-    get_desc = AcademicIep.query.filter_by(id=id).first()
+    get_desc = AcademicIep.query.filter_by(id=id, is_deleted=0).first()
     if not get_desc:
         return "iep does not exist"
 
@@ -197,7 +197,7 @@ def get_iep():
 @bp_academic.route('/get_list_iep_mobile', methods=['GET'])
 def get_list_iep_mobile():
     student_id = request.args.get("student_id")
-    get_detail = AcademicIep.query.filter_by(student_id=student_id).all()
+    get_detail = AcademicIep.query.filter_by(student_id=student_id, is_deleted=0).all()
     if not get_detail:
         return "iep does not exist"
     list = dict()
