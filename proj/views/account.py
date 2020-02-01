@@ -534,8 +534,8 @@ def mobile_history_payment():
         return jsonify({'data': list['data']})
 
 
-@bp_account.route('/mobile_history_payment')
-def mobile_history_payment():
+@bp_account.route('/add_toyyib_acc_with_id')
+def add_toyyib_acc_with_id():
     inv_no = request.args.get("inv_id")
     inv = Invoice.query.filter_by(id=inv_no).first()
 
