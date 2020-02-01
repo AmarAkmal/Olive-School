@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Payment Made Olive School</title>
 
     <link rel="icon" type="image/png" sizes="16x16" href="../static/assets/img/olive.png">
@@ -10,31 +11,53 @@
 
     <link rel="stylesheet" href="../static/lib/bootstrap.min.css">
     <style>
-        body, html, #wrapper { width: 100%; height: 100% }
-    #wrapper { display: table;
-    padding: 40px;}
-    #main {
-        display: table-cell;
+    {#    body, html, #wrapper { width: 100%; height: 100% }#}
+    {##wrapper { display: table;#}
+    {#padding: 40px;}#}
+    {##main {#}
+    {#    display: table-cell;#}
         {#vertical-align: middle;#}
-        text-align:center }
+    {#    text-align:center }#}
+        .center {
+          margin: auto;
+        }
     </style>
 </head>
 <body>
-<div id="wrapper">
+{#<div id="wrapper">#}
+{##}
+{#    <div class="card border-dark mb-3" style="max-width: 20rem;" id="main">#}
+{#      <div class="card-body">#}
+{#          <img src="../static/assets/img/olive.png"><br><br><br>#}
+{#            <h5 class="card-title">Payment status :#}
+{#                <span id="status"><strong>Success</strong></span>#}
+{#            </h5>#}
+{#            <h5 class="card-title">BillCode : <span id="billCode"></span></h5>#}
+{#            <h5 class="card-title">Order Id :  <span id="orderId"></span></h5>#}
+{#            <h5 class="card-title">Transaction Id :  <span id="transactionId"></span></h5>#}
+{#            <p>*** Wait until this window close.</p>#}
+{#      </div>#}
+{#    </div>#}
+{#</div>#}
 
-    <div class="card border-dark mb-3" style="max-width: 20rem;" id="main">
-      <div class="card-body">
-          <img src="../static/assets/img/olive.png"><br><br><br>
-            <h5 class="card-title">Payment status :
-                <span id="status"><strong>Success</strong></span>
-            </h5>
-            <h5 class="card-title">BillCode : <span id="billCode"></span></h5>
-            <h5 class="card-title">Order Id :  <span id="orderId"></span></h5>
-            <h5 class="card-title">Transaction Id :  <span id="transactionId"></span></h5>
-            <p>*** Wait until this window close.</p>
-      </div>
-    </div>
-</div>
+<!-- Page Content -->
+  <div class="container" style="padding-top: 10%;">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4 center" style="text-align: center">
+        <img src="../static/assets/img/samad.png"><br><br><br>
+        <h5 class="card-title">Payment status :
+            <span id="status"><strong>Success</strong></span>
+        </h5>
+        <h5 class="card-title">BillCode : <span id="billCode"></span></h5>
+        <h5 class="card-title">Order Id : <span id="orderId"></span></h5>
+        <h5 class="card-title">Transaction Id : <span id="transactionId"></span></h5>
+        <p>*** Wait until this window close.</p>
+    </header>
+{#      <div>#}
+{#          <h1>Samad</h1>#}
+{#      </div>#}
+  </div>
 </body>
     <script src="../static/bower_components/jquery/dist/jquery.js"></script>
     <script>
@@ -69,7 +92,7 @@
             }
             return vars;
         }
-        
+
         function updatePayment(statusId,billCode,orderId){
             {#$.get('http://localhost:5000/account/update_payment?statusId='+statusId +'&billCode=' + billCode + "&orderId=" + orderId, function (data, textStatus, jqXHR) {#}
             $.get('https://theolivetrees.edu.my/management/account/update_payment?statusId='+statusId +'&billCode=' + billCode + "&orderId=" + orderId, function (data, textStatus, jqXHR) {
