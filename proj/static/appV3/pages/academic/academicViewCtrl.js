@@ -5,25 +5,49 @@
         .controller('academicViewCtrl', ['$scope', '$uibModal', '$http', 'id', 'toastr', '$rootScope', 'editableOptions', 'editableThemes', '$uibModalStack', '$sce', academicViewCtrl]);
 
     function academicViewCtrl($scope, $uibModal, $http, id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack, $sce) {
-        $scope.config = {}
-        $scope.config = {
-            "height": 1000,
-            "language": 'en',
-            "allowedContent": true,
-            "entities": false,
-            "readOnly": true,
-        };
-        $scope.config.toolbarGroups = [
+        $scope.formData = {};
+        $scope.config = {};
+        $scope.role = role;
+        if (role == 'Principle') {
+            $scope.config = {
+                "height": 1000,
+                "language": 'en',
+                "allowedContent": true,
+                "entities": false,
+            };
+            $scope.config.toolbarGroups = [
+                {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+                {name: 'clipboard', groups: ['clipboard', 'undo']},
+                {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+                {name: 'forms', groups: ['forms']},
+                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+                {name: 'links', groups: ['links']},
+                {name: 'insert', groups: ['insert']},
+                {name: 'styles', groups: ['styles']},
+                {name: 'colors', groups: ['colors']},
+                {name: 'document', groups: ['mode', 'document', 'doctools']},
+                {name: 'tools', groups: ['tools']},
+                {name: 'others', groups: ['others']},
+                // {name: 'about', groups: ['about']}
+            ];
+        } else {
+            $scope.config = {
+                "height": 1000,
+                "language": 'en',
+                "allowedContent": true,
+                "entities": false,
+                "readOnly": true,
+            };
+            $scope.config.toolbarGroups = [
 
-            {name: 'tools', groups: ['tools']},
-            {name: 'document', groups: [ 'document']},
-        ];
+                {name: 'tools', groups: ['tools']},
+                {name: 'document', groups: ['document']},
+            ];
 
-        $scope.config.readOnly = true;
-        $scope.config.extraPlugins = 'print';
-        // $scope.trustedcontent = function (text) {
-        //     return $sce.trustAsHtml(text)
-        // };
+            $scope.config.readOnly = true;
+            $scope.config.extraPlugins = 'print';
+        }
+
 
         $scope.select_sem = {selected: [], options: ['1', '2', '3']};
         $scope.items = [];
@@ -43,11 +67,10 @@
                 url: ip_server + 'academic/get_academic_iep?id=' + id
             }).then(function (result) {
                 result = result.data;
-                $scope.year = result.year;
+                $scope.formData.year = result.year;
                 // $scope.items = result.items;
-                $scope.desc = result.desc;
-                $scope.student_name = result.student_name + '(' + result.student_ic + ')';
-                // $scope.select_sem.selected = result.sem;
+                $scope.formData.desc = result.desc;
+                $scope.formData.student_name = result.student_name + '(' + result.student_ic + ')';
                 loaderModal.close();
             }).catch(function (error) {
                 alert("Connection Error");
@@ -70,8 +93,8 @@
             var fd = new FormData();
             var data = {
                 "user_id": user_id,
-                "student_id": $scope.student_id,
-                "desc": $scope.desc,
+                "student_id": $scope.formData.student_id,
+                "desc": $scope.formData.desc,
             };
 
             fd.append('data', JSON.stringify(data));

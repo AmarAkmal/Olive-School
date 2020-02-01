@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
                 <label>Student</label>
-                <input class="form-control" data-ng-model="student_name" readonly/>
+                <input class="form-control" data-ng-model="formData.student_name" readonly/>
                 <!--                <ui-select ng-model="student_name.selected"-->
                 <!--                           class="btn-group bootstrap-select form-control"-->
                 <!--                           append-to-body="false"-->
@@ -31,17 +31,26 @@
             <div>
                 <div class="col-sm-6" style="padding-top: 30px;">
                     <label>Year</label>
-                      <input ng-disabled="!student_name.selected" placeholder="Year example (2020/Jan)"
+                    <input ng-disabled="!formData.student_name.selected" placeholder="Year example (2020/Jan)"
                            class="form-control"
                            type="text"
-                           name="year" required
-                           data-ng-model="year" ng-enter="getfilter()"/>
-<!--                    <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>-->
+                           name="formData.year" required
+                           data-ng-model="formData.year" ng-enter="getfilter()"/>
+                    <!--                    <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>-->
                 </div>
                 <div class="col-sm-12" style="padding-top: 10px;">
                     <!--                    <label>Remark</label>-->
-                    <div class="col-sm-12" style="padding-top: 10px;">
-                        <textarea readonly ckeditor="config" id="summernote" ng-model="desc"
+                    <div ng-if="role != 'Principle'" class="col-sm-12" style="padding-top: 10px;">
+                        <textarea readonly ckeditor="config" ng-model="formData.desc"
+                                  vready="onReady()"></textarea>
+                        <!--                        <label class="col-sm-9 label-form">-->
+                        <!--                            <div style="margin-top: 9px;margin-left: -12px"-->
+                        <!--                                 ng-bind-html="trustedcontent(formData.desc)" class="message-body"></div>-->
+                        <!--                        </label>-->
+                    </div>
+
+                    <div ng-if="role == 'Principle'" class="col-sm-12" style="padding-top: 10px;">
+                        <textarea ckeditor="config" ng-model="formData.desc"
                                   vready="onReady()"></textarea>
                         <!--                        <label class="col-sm-9 label-form">-->
                         <!--                            <div style="margin-top: 9px;margin-left: -12px"-->
@@ -53,6 +62,11 @@
 
             <div class="col-md-12" style="padding-top: 10px;">
                 <div style="float: right">
+                    <button ng-disabled="!formData.desc || !formData.year "
+                            ng-click="submit()" style="width: 120px ;" type="submit"
+                            class="btn btn-success ion-android-cloud">
+                        &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
                     <button style="width: 120px ;" type="button"
                             class="btn btn-danger ion-android-close"
                             ng-click="$close()">
