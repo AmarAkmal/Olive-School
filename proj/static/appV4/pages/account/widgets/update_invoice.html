@@ -63,7 +63,7 @@
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
                 <label>Remark</label>
-                <textarea ng-disabled="is_pay == 1" style="max-width: 100%;min-width: 100%;resize: none;"
+                <textarea style="max-width: 100%;min-width: 100%;resize: none;"
                           class="form-control"
                           required
                           ng-model="desc"></textarea>
@@ -86,11 +86,11 @@
         </div>
         <div class="col-md-12" style="padding-top: 10px;">
             <div style="float: right">
-                <button ng-disabled="is_pay == 1 || !month || !year || !items.length" ng-hide="is_pay == 1"
-                        ng-click="submit()" style="width: 120px ;" type="submit"
-                        class="btn btn-success ion-android-cloud">
-                    &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;
-                </button>&nbsp;&nbsp;
+{#                <button ng-disabled="is_pay == 1 || !month || !year || !items.length" ng-hide="is_pay == 1"#}
+{#                        ng-click="submit()" style="width: 120px ;" type="submit"#}
+{#                        class="btn btn-success ion-android-cloud">#}
+{#                    &nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;#}
+{#                </button>&nbsp;&nbsp;#}
                 <button style="width: 120px ;" type="button"
                         class="btn btn-danger ion-android-close"
                         ng-click="$close()">

@@ -534,34 +534,34 @@ def mobile_history_payment():
         return jsonify({'data': list['data']})
 
 
-@bp_account.route('/add_toyyib_acc_with_id')
-def add_toyyib_acc_with_id():
-    inv_no = request.args.get("inv_id")
-    inv = Invoice.query.filter_by(id=inv_no).first()
-
-    if inv:
-        student_ic = Student.query.get(inv.student_id)
-        parent = Parent.query.filter_by(student_id=student_ic.id, type='father').first()
-        if parent.email:
-            email = parent.email
-        else:
-            email = 'theolivetreesit@gmail.com'
-
-        if parent.phone:
-            phone = parent.phone
-        else:
-            phone = '01156568441'
-
-        description = "Yuran yang dikenakan atas pelajar " + student_ic.ic_no + " BerJumlah : RM " + inv.total_pay
-
-        if '/' in inv.receipt_no:
-            receipt_no = inv.receipt_no.replace('/', '-')
-        else:
-            receipt_no = inv.receipt_no
-
-        response = create_invoice_toyyib(receipt_no, description, str(inv.total_pay).replace('.', ''), inv.id, email,
-                                         parent.name, phone)
-
-        inv.billcode_toyyib = response
-
-    return "OK"
+# @bp_account.route('/add_toyyib_acc_with_id')
+# def add_toyyib_acc_with_id():
+#     inv_no = request.args.get("inv_id")
+#     inv = Invoice.query.filter_by(id=inv_no).first()
+#
+#     if inv:
+#         student_ic = Student.query.get(inv.student_id)
+#         parent = Parent.query.filter_by(student_id=student_ic.id, type='father').first()
+#         if parent.email:
+#             email = parent.email
+#         else:
+#             email = 'theolivetreesit@gmail.com'
+#
+#         if parent.phone:
+#             phone = parent.phone
+#         else:
+#             phone = '01156568441'
+#
+#         description = "Yuran yang dikenakan atas pelajar " + student_ic.ic_no + " BerJumlah : RM " + inv.total_pay
+#
+#         if '/' in inv.receipt_no:
+#             receipt_no = inv.receipt_no.replace('/', '-')
+#         else:
+#             receipt_no = inv.receipt_no
+#
+#         response = create_invoice_toyyib(receipt_no, description, str(inv.total_pay).replace('.', ''), inv.id, email,
+#                                          parent.name, phone)
+#
+#         inv.billcode_toyyib = response
+#
+#         return jsonify({'status':response})
