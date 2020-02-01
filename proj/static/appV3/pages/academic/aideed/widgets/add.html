@@ -12,7 +12,7 @@
                                            class="btn-group bootstrap-select form-control col-sm-10"
                                            append-to-body="false"
                                            search-enabled="true"
-                                           ng-change="studnet_selected">
+                                           ng-change="student_selected">
                                     <ui-select-match placeholder="Please Choose">
                                         <span> {{$select.selected.name }}  ({{$select.selected.ic_no }})</span>
                                     </ui-select-match>
@@ -50,10 +50,13 @@
                             <div class="col-sm-2">
                                 <div style=" float: right;" class="add-row-editable-table">
                                     <!--    <button class="btn btn-primary" ng-click="addUser()"></button>-->
+
+
                                     <button style="border-radius: 25px;" ng-click="add_item()"
                                             class="btn btn-primary ion-android-add"></button>
                                 </div>
                             </div>
+
                         </div>
                         <div ng-repeat="data in items" style="margin-bottom: 10px;">
                             <div class="col-sm-12" style="padding: 0px;">
@@ -66,7 +69,14 @@
                                         <tr>
                                             <td width="25%">Subject</td>
                                             <td width="15%">Overall Band</td>
-                                            <td width="60%">Comments</td>
+                                            <td width="60%">Comments
+                                                <button style="border-radius: 25px;"
+                                                        ng-click="edit_report(data)"
+                                                        class="btn btn-warning ion-edit"></button>
+                                                <button style="border-radius: 25px;"
+                                                        ng-click="delete_report(data)"
+                                                        class="btn btn-danger ion-android-delete"></button>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>{{ data.subject.subject }}</td>
@@ -97,10 +107,14 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" ng-click="submit();" class="btn btn-primary ion-android-upload"
+                        <button type="submit"
+                                ng-disabled="!items.length || !student_name || !formData.className || !formData.code"
+                                ng-click="submit();"
+                                class="btn btn-primary ion-android-upload"
                                 style="width: 150px;">&nbsp;&nbsp;&nbsp;Submit
                         </button>
-                        <button type="button" class="btn btn-danger ion-android-close" ui-sref="academic.aideed({})" style="width: 150px;"
+                        <button type="button" class="btn btn-danger ion-android-close" ui-sref="academic.aideed({})"
+                                style="width: 150px;"
                         >&nbsp;&nbsp;&nbsp;Cancel
                         </button>
                     </div>
