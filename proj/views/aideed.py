@@ -59,6 +59,22 @@ def add():
     return jsonify({'status': 'OK'})
 
 
+@bp_aideed.route('update', methods=['POST'])
+def update():
+    data = json.loads(request.form["data"])
+
+    second = json.loads(request.form["second"])
+
+    get_report_card = Aideed.query.get(second['id'])
+
+    get_report_card.classB = second['class']
+    get_report_card.code = second['code']
+    get_report_card.body = data
+
+    db.session.commit()
+    return jsonify({'status': 'OK'})
+
+
 @bp_aideed.route('/list/<pagenum>', methods=['GET'])
 def list_aideed(pagenum):
     code = request.args["code"]
@@ -84,7 +100,7 @@ def list_aideed(pagenum):
 
     if student_ic:
         codeSql = codeSql.filter(Student.ic_no.like('%' + student_ic + '%')).join(Student,
-                                                                                   Aideed.student_id == Student.id)
+                                                                                  Aideed.student_id == Student.id)
 
     count_result = codeSql.order_by(Aideed.date_created.desc()).count()
     if count_result:
@@ -178,4 +194,3 @@ def getAideedDetail():
 
         dataList.append(dict1)
     return jsonify(dataList)
-

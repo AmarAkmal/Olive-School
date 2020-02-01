@@ -110,7 +110,7 @@ def update():
     id = request.args.get("id")
 
     if not id:
-        return "need invoice no."
+        return "need  no."
 
     check = AcademicIep.query.filter_by(id=id, is_deleted=0).first()
     if check:
