@@ -78,7 +78,7 @@
                 }
 
             })
-        }
+        };
         $scope.edit_report = function (data) {
             var modalInstance = $uibModal.open({
                 animation: true,
