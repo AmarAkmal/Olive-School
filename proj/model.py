@@ -93,7 +93,7 @@ class Parent(db.Model):
 
 class Invoice(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    receipt_no = db.Column(db.String(32))
+    receipt_no = db.Column(db.String(150))
     year = db.Column(db.String(32))
     month = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
