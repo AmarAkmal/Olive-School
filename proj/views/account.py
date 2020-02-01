@@ -370,6 +370,7 @@ def deleted_account(data):
     data = json.loads(data)
     get_list = Invoice.query.filter(Invoice.id.in_(data))
     for x in get_list:
+        x.receipt_no = x.receipt_no + '@@@' + x.id
         x.is_deleted = 1
     try:
         db.session.commit()
