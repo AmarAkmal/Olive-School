@@ -178,7 +178,7 @@ def add_invoice():
                     t.student_id = student_payment.id
                     db.session.add(t)
 
-            description = "Yuran yang dikenekan atas pelajar " + get_student.ic_no + " BerJumlah : RM " + total_pay
+            description = "Yuran yang dikenakan atas pelajar " + get_student.ic_no + " BerJumlah : RM " + total_pay
 
             inv = Invoice.query.filter_by(receipt_no=receipt_no).first()
             parent = Parent.query.filter_by(student_id=get_student.id, type='father').first()
