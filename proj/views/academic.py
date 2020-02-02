@@ -199,7 +199,7 @@ def get_list_iep_mobile():
     student_id = request.args.get("student_id")
     get_detail = AcademicIep.query.filter_by(student_id=student_id, is_deleted=0).all()
     if not get_detail:
-        return "iep does not exist"
+        return jsonify([])
     list = dict()
     data = []
     for x in get_detail:
