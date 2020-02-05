@@ -25,7 +25,7 @@
                            ng-model="invoice_no">
                 </div>
                 <div class="col-sm-6" style="padding-top: 10px;">
-                    <label>Bill Code</label>
+                    <label>Bill Code Toyyib</label>
                     <input readonly type="text"
                            style="max-width: 100%;min-width: 100%;resize: none;"
                            class="form-control"
@@ -33,40 +33,34 @@
                 </div>
             </div>
 
-            <div class="col-sm-12" style="padding-top: 10px;">
-                <label>Code</label>
+            <div class="col-sm-12" style="padding: 10px 0px 0px 0px;">
+                <div class="col-sm-6">
+                    <label>Code Invoice</label>
+                    <input readonly
+                           class="form-control"
+                           type="text"
+                           name="year" ng-model="year"/>
+                </div>
+                <div class="col-sm-6">
+                    <label>Status Payment - Date Payment</label>
+                    <input readonly
+                           class="form-control"
+                           type="text"
+                           name="year" ng-model="is_pay_status"/>
+                </div>
             </div>
-            <div class="col-sm-6">
-                <input ng-disabled="is_pay == 1" placeholder="Year example (2020)"
-                       class="form-control"
-                       type="number"
-                       name="year" required
-                       pattern="^[0-9]{4}$"
-                       data-ng-model="year" ng-enter="getfilter()"/>
-                <span ng-show="!year"> <font color="red">Please insert 4 digit,Required!</font></span>
-            </div>
-            <div class="col-sm-6">
-
-                <input ng-disabled="is_pay == 1" type="number"
-                       style="max-width: 100%;min-width: 100%;resize: none;"
-                       class="form-control"
-                       placeholder="Month example (2)"
-                       min="1"
-                       max="12"
-                       required
-                       ng-model="month">
-                <span ng-show="!month"> <font color="red">Please insert Min 1,Max 12,Required! </font></span>
-            </div>
-
-            <div class="col-md-12" style="padding-top: 40px;">
+            <div class="col-md-12" style="padding-top: 20px;">
                 <div include-with-scope="../static/app/pages/account/widgets/updateItemTable.html"></div>
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
                 <label>Remark</label>
-                <textarea style="max-width: 100%;min-width: 100%;resize: none;"
+                <input readonly
+                           class="form-control"
+                           type="text" ng-model="desc"/>
+                <!--<textarea style="max-width: 100%;min-width: 100%;resize: none;"
                           class="form-control"
                           required
-                          ng-model="desc"></textarea>
+                          ng-model="desc"></textarea>-->
             </div>
 
 
@@ -80,6 +74,9 @@
                             <a style="color: white;" download href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">
                                 <u>Download</u></a>
                         </li>
+                    </ul>
+                    <ul ng-hide="attachment_lama.length">
+                        <p>No Attachment Available</p>
                     </ul>
                 </div>
             </div>

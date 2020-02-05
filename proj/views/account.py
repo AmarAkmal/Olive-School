@@ -223,7 +223,16 @@ def get_invoice():
     dictV["year"] = get_detail.year
     dictV["month"] = get_detail.month
     dictV["desc"] = get_detail.desc
+    if get_detail.date_pay:
+        valueDate = get_detail.date_pay.strftime("%d/%m/%Y %H:%M")
+    else:
+        valueDate = "No Date Available"
     dictV["is_pay"] = float(get_detail.is_pay)
+
+    if float(get_detail.is_pay) == 1:
+        dictV["is_pay_status"] = 'Paid - ' + valueDate
+    else:
+        dictV["is_pay_status"] = 'Pending - ' + valueDate
 
     if get_detail.billcode_toyyib:
         dictV['bill_code'] = get_detail.billcode_toyyib

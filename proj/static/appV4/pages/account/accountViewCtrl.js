@@ -24,10 +24,13 @@
                 result = result.data;
                 $scope.student_id = result.student_id;
                 $scope.student_id = result.student_id;
-                $scope.year = parseFloat(result.year);
-                $scope.month = parseFloat(result.month);
+
+                $scope.year = result.year.toString() + result.month.toString();
+
                 $scope.desc = result.desc;
+                console.log(result.is_pay);
                 $scope.is_pay = result.is_pay;
+                $scope.is_pay_status = result.is_pay_status;
                 $scope.attachment_lama = result.attachment;
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
