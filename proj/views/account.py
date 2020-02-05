@@ -436,7 +436,7 @@ def mobile_get_invoice():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0).first()
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).first().order_by(Invoice.created_by.asc())
     dictV = dict()
     if get_detail:
 
@@ -484,7 +484,7 @@ def mobile_get_amount():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).first()
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).first().order_by(Invoice.created_by.asc())
 
     if get_detail:
         data = {
