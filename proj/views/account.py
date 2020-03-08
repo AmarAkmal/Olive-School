@@ -236,6 +236,7 @@ def get_invoice():
 
     if get_detail.billcode_toyyib:
         dictV['bill_code'] = get_detail.billcode_toyyib
+        dictV['bill_detail'] = get_collection_payment(get_detail.billcode_toyyib)
     else:
         dictV['bill_code'] = "None"
 
@@ -391,6 +392,22 @@ def deleted_account(data):
     return jsonify(response)
 
 
+# @bp_account.route('/get_collection_payment/<data>')
+def get_collection_payment(data):
+    dataV = {
+        'billCode': data,
+        'billpaymentStatus': 1
+    }
+    req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', dataV)
+    if "No data found!" in req.text:
+        bill_paid = []
+        pass
+    else:
+        bill_paid = req.json()
+        # print(bill_paid)
+
+    return bill_paid
+
 #########################3# TOYYIB PAY #################################################
 def call_bank_toyyib():
     response = requests.get('https://toyyibpay.com/index.php/api/getBank')
@@ -399,25 +416,49 @@ def call_bank_toyyib():
 
 
 def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, billIC, billPhone):
+    # data = {
+    #     'userSecretKey': '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
+    #     'categoryCode': 'amt3vw1j',
+    #     'billName': billName,
+    #     'billDescription': billDesc,
+    #     'billPriceSetting': 0,  ###For fixed amount bill, set it to 0. For dynamic bill (user can key in the amount paid), set it to 1
+    #     'billPayorInfo': 0,     ### If you want to create open bill without require payer information, set it to 0. If you need payer information, set it to 1
+    #     'billAmount': int(billAmount),  # 100 = RM 1
+    #     'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
+    #     'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
+    #     'billExternalReferenceNo': billExtId,
+    #     'billTo': billIC,
+    #     'billEmail': billEmail,
+    #     'billPhone': billPhone,
+    #     'billSplitPayment': 0,
+    #     'billSplitPaymentArgs': '',
+    #     'billPaymentChannel': 2,
+    # }
+
+
     data = {
-        'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
-        'categoryCode': '2w4vgxc0',
-        'billName': billName,
-        'billDescription': billDesc,
-        'billPriceSetting': 0,
-        'billPayorInfo': 0,
-        'billAmount': int(billAmount),  # 100 = RM 1
-        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
-        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
-        'billExternalReferenceNo': billExtId,
-        'billTo': billIC,
-        'billEmail': billEmail,
-        'billPhone': billPhone,
-        'billSplitPayment': 0,
-        'billSplitPaymentArgs': '',
-        'billPaymentChannel': 2,
+    'userSecretKey' : '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
+    'categoryCode' : 'amt3vw1j',
+    'billName' : billName,
+    'billDescription' : billDesc,
+    'billPriceSetting':0,
+    'billPayorInfo':1,
+    'billAmount':int(billAmount),
+    'billReturnUrl':'https://theolivetrees.edu.my/management/login/payment_made_olive',
+    'billCallbackUrl':'https://theolivetrees.edu.my/management/login/payment_made_olive',
+    'billExternalReferenceNo' : billExtId,
+    'billTo':billIC,
+    'billEmail':billEmail,
+    'billPhone':billPhone,
+    'billSplitPayment':0,
+    'billSplitPaymentArgs':'',
+    'billMultiPayment':1,
+    'billPaymentChannel':0,
+    'billDisplayMerchant':1,
+    'billContentEmail':'Done'
     }
-    response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
+    response = requests.post('https://toyyibpay.com/index.php/api/createBillMultiPayment', data)
+    # response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
     result = response.json()
 
     if 'BillCode' in result[0]:

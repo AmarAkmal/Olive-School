@@ -6,7 +6,9 @@
 
     function accountViewCtrl($scope, $uibModal, $http, invoice_id, toastr, $rootScope, editableOptions, editableThemes, $uibModalStack) {
         $scope.items = [];
+
         $scope.desc = "";
+        $scope.countBil = 0;
         loadData();
 
         function loadData() {
@@ -36,6 +38,7 @@
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
                 $scope.bill_code = result.bill_code;
+                $scope.bill_detail = result.bill_detail;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
                 loaderModal.close()
                 calculate();
@@ -47,7 +50,9 @@
 
 
         }
-
+        $scope.countBilV = function(data) {
+            $scope.countBil = $scope.countBil + parseInt(data)
+        };
         $scope.attachment_deleted = [];
         $scope.removeAtt = function (index) {
             if ($scope.attachment_lama[index].id) {

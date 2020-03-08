@@ -49,7 +49,41 @@
                            name="year" ng-model="is_pay_status"/>
                 </div>
             </div>
+
+            <div class="col-sm-12" style="padding: 10px 15px 0px 15px;">
+                <label>Collection Payment</label>
+                <table class="table table-bordered table-hover table-condensed">
+                    <tr>
+
+                        <td>
+                            Payment Date
+                        </td>
+                        <td>
+                            Status
+                        </td>
+                         <td>
+                            Paid Amount
+                        </td>
+                    </tr>
+                    <tr ng-repeat="item in bill_detail">
+
+                        <td>{{ item.billPaymentDate }}</td>
+                        <td>Successful</td>
+                        <td>{{ item.billpaymentAmount }}</td>
+
+                    </tr>
+                    <tr ng-if="bill_detail.length == 0">
+                        <td colspan="3"> No payment Made </td>
+                    </tr>
+                    <!--<tr>
+                        <td colspan="2"> TOTAL</td>
+                        <td>{{ countBil }}</td>
+                    </tr>-->
+                </table>
+            </div>
+
             <div class="col-md-12" style="padding-top: 20px;">
+                <label>Invoice Detail</label>
                 <div include-with-scope="../static/app/pages/account/widgets/updateItemTable.html"></div>
             </div>
             <div class="col-sm-12" style="padding-top: 10px;">
