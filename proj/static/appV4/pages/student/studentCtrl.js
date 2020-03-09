@@ -20,7 +20,7 @@
 
 
     function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
-        $scope.role = role ;
+        $scope.role = role;
 
         $scope.formData = {};
         $scope.formData.student_name = "";
@@ -111,6 +111,17 @@
 
         };
 
+        $scope.prev = function () {
+            if ($scope.pagenum > 1) {
+                $scope.pagenum -= 1;
+            }
+            loadData();
+        };
+        $scope.next = function () {
+            $scope.pagenum += 1;
+            $scope.goto.page = $scope.pagenum;
+            loadData();
+        };
 
         $scope.gopage = function () {
 
