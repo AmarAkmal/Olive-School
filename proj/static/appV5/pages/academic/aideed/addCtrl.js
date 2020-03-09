@@ -114,7 +114,7 @@
                     });
 
                     $scope.submit = function () {
-                        arrayVir = []
+                        arrayVir = [];
                         angular.forEach($scope.skill_name, function (value, key) {
                             let object = {};
                             object['id'] = value.id;

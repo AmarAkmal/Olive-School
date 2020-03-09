@@ -2,21 +2,17 @@
     'use strict';
 
 
-    angular.module('BlurAdmin.pages.account').controller('account_listCtrl', ['$scope', '$uibModal', '$http', 'toastr', '$rootScope', '$uibModalStack', account_listCtrl]);
+    angular.module('BlurAdmin.pages.academic').controller('aideed_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', '$uibModalStack', aideed_listCtrl]);
 
 
-    function account_listCtrl($scope, $uibModal, $http, toastr, $rootScope, $uibModalStack) {
+    function aideed_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
         $scope.role = role;
         $scope.formData = {};
 
-
-        $scope.formData.receipt_no = "";
-        $scope.formData.code = "";
         $scope.formData.student_name = "";
-        $scope.formData.total = "";
-        // $scope.formData.status = "";
-
-
+        $scope.formData.student_ic = "";
+        $scope.formData.class = "";
+        $scope.formData.code = "";
         //#### Page Number #####//
         $scope.goto = {};
         $scope.goto.page = 1;
@@ -26,26 +22,21 @@
         $scope.selectedList = {};
         $scope.selection = [];
 
-        $scope.formData.status = {
-            'selected': {id: 'All', name: 'All'},
-            'options': [{id: 'All', name: 'All'}, {id: 0, name: 'Pending'}, {id: 1, name: 'Paid'}]
-        };
-        $scope.formData.status.selected = {id: 'All', name: 'All'};
-        $scope.$on('load_list_account', function () {
+        $scope.$on('load_list_academic_aideed', function () {
+            $uibModalStack.dismissAll();
             loadData();
-        });
 
+        });
         loadData();
 
         function loadData() {
             $scope.formData.isAllSelected = false;
-            $http.get(ip_server + 'account/list/' + $scope.pagenum, {
+            $http.get(ip_server + 'aideed/list/' + $scope.pagenum, {
                 params: {
-                    receipt_no: $scope.formData.receipt_no,
-                    code: $scope.formData.code,
                     student_name: $scope.formData.student_name,
-                    total: $scope.formData.total,
-                    status: $scope.formData.status.selected.id
+                    student_ic: $scope.formData.student_ic,
+                    code: $scope.formData.code,
+                    class: $scope.formData.class
                 },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
@@ -88,13 +79,23 @@
                     }
                 }
 
-
             }).catch(function (error) {
                 alert("Connection Error");
-                $uibModalStack.dismissAll();
+                // $uibModalStack.dismissAll();
             });
         }
 
+        $scope.prev = function () {
+            if ($scope.pagenum > 1) {
+                $scope.pagenum -= 1;
+            }
+            loadData();
+        };
+        $scope.next = function () {
+            $scope.pagenum += 1;
+            $scope.goto.page = $scope.pagenum;
+            loadData();
+        };
 
         $scope.getfilter = function () {
 
@@ -141,18 +142,16 @@
             $scope.selection = [];
             $scope.formData.isAllSelected = false;
 
-            $scope.formData.receipt_no = "";
-            $scope.formData.code = "";
+            // $scope.formData.select_sem.selected = "All";
             $scope.formData.student_name = "";
-            $scope.formData.total = "";
-            $scope.formData.status.selected = {id: 'All', name: 'All'};
-
+            $scope.formData.ic_no = "";
+            $scope.formData.year = "";
 
             loadData();
 
-        }
+        };
 
-        //    ############################################
+        // --------------------------------start modal ------------------------------------------
         $scope.delete = function () {
             var selection = [];
             angular.forEach($scope.selectedList, function (selected, bind) {
@@ -166,6 +165,8 @@
                     animation: true,
                     templateUrl: '../static/app' + gversion + '/pages/asset/widgets/alert.html',
                     size: "sm",
+                    backdrop: 'static',
+                    keyboard: false,
                     resolve: {
                         items: function () {
                             return selection;
@@ -177,17 +178,17 @@
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '../static/app' + gversion + '/pages/asset/widgets/delete.html',
-                    // controller: 'dltReportCtrl',
-                    // controllerAs: 'dAssetCtrl',
                     size: "sm",
+                    backdrop: 'static',
+                    keyboard: false,
                     resolve: {
                         list_del: function () {
                             return selection;
-                        }
+                        },
+
                     },
                     controller: function ($scope, $uibModalInstance, $uibModal, list_del) {
                         $scope.confirmDel = function () {
-
                             loaderModal = $uibModal.open({
                                 animation: true,
                                 templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
@@ -196,28 +197,35 @@
                                 keyboard: false,
                             });
 
-                            $http.delete(ip_server + 'account/deleted_account/' + JSON.stringify(list_del)).then(function (response) {
-                                if (response.data.status === "OK") {
-                                    toastr.success('Data has been deleted !', 'Success');
-                                    $uibModalStack.dismissAll();
-                                    $rootScope.$broadcast('load_list_account');
-
-                                } else {
-                                    toastr.error("Data hasn't been deleted.", 'Error!');
-                                    loaderModal.close();
-                                    $uibModalStack.dismissAll();
-                                    $rootScope.$broadcast('load_list_account');
-
-                                }
-
-                            }).catch(function (error) {
-                                alert("Connection Error");
-                                loaderModal.close();
-
+                            var data = $.param({
+                                data: JSON.stringify({
+                                    "item_id": list_del
+                                })
                             });
 
 
-                            // }
+                            $http.post(ip_server + 'aideed/delete', data, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+                                }
+                            }).then(function (response) {
+                                if (response.data['status'] == "OK") {
+                                    toastr.success('Data has been deleted.', 'Success!');
+                                    loaderModal.close();
+                                    $uibModalStack.dismissAll();
+                                    $rootScope.$broadcast('load_list_academic_aideed');
+
+                                } else {
+                                    toastr.error("Data hasn't been updated.", 'Error!');
+                                }
+
+
+                            }).catch(function (error) {
+                                alert("Connection Error");
+                                loaderModal.close()
+
+                            });
+
 
                         }; //function end
                     }, //controller end
@@ -233,46 +241,32 @@
                 });
             }
         };
-
-        $scope.add_invoice = function () {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                keyboard: false,
-                backdrop: 'static',
-                templateUrl: '../static/app' + gversion + '/pages/account/widgets/create_invoice.html',
-                controller: 'account_createCtrl',
-                size: 'lg',
-
-            });
-
-            modalInstance.result.finally(function () {
-                // loadDatauser();
-            });
-
-        };
-
-
         $scope.view = function (id) {
             var modalInstance = $uibModal.open({
                 animation: true,
+
+                templateUrl: '../static/app' + gversion + '/pages/academic/aideed/widgets/view.html',
+                controller: 'aideedViewCtrl',
+                size: 'lg',
                 keyboard: false,
                 backdrop: 'static',
-                templateUrl: '../static/app' + gversion + '/pages/account/widgets/update_invoice.html',
-                controller: 'accountViewCtrl',
-                size: 'lg',
                 resolve: {
-                    invoice_id: function () {
+                    items: function () {
                         return id;
                     }
                 }
-
             });
 
-            modalInstance.result.finally(function () {
-                // loadDatauser();
-            });
+            // modalInstance.result.then(function () {
+            //     loadData();
+            // }, function () {
+            //     // $log.info('Modal dismissed at: ' + new Date());
+            // });
 
         };
+
+
+        // --------------------------------end modal ------------------------------------------
 
     }
 

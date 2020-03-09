@@ -1,31 +1,50 @@
+var rootScope;
 (function () {
     'use strict';
-    angular.module('BlurAdmin.pages.student').directive('studentbirthday', function () {
-        return function (scope, element, $rootScope) {
+    // angular.module('BlurAdmin.pages.event').directive('studentbirthday', function () {
+    //     return function (scope, element, $rootScope) {
+    //
+    //         element.datepicker({
+    //             dateFormat: 'dd MM yy', showOtherMonths: true, selectOtherMonths: true,
+    //             changeYear: true,
+    //             onSelect: function (selectedDate,) {
+    //                 scope.student_birthday = selectedDate;
+    //                 // rootScope.$broadcast('load_list_report')
+    //
+    //
+    //             }
+    //         });
+    //     };
+    // });
 
-            element.datepicker({
-                dateFormat: 'dd MM yy', showOtherMonths: true, selectOtherMonths: true,
-                changeYear: true,
-                onSelect: function (selectedDate,) {
-                    scope.student_birthday = selectedDate;
-                    // rootScope.$broadcast('load_list_report')
+    angular.module('BlurAdmin.pages.event')
+        .directive('dateselecter', function () {
+            return function (scope, element, $rootScope) {
+
+                element.datepicker({
+                    dateFormat: 'dd MM yy', showOtherMonths: true, selectOtherMonths: true,
+                    changeYear: true,
+                    onSelect: function (selectedDate,) {
+                        scope.formData.date_selected = selectedDate;
+                        rootScope.$broadcast('load_list_event')
 
 
-                }
-            });
-        };
-    });
+                    }
+                });
+            };
+        })
+        .controller('studentEventListCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', "$uibModalStack", studentEventListCtrl]);
 
-    angular.module('BlurAdmin.pages.student').controller('student_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', "$uibModalStack", student_listCtrl]);
 
-
-    function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
-        $scope.role = role ;
+    function studentEventListCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
+        $scope.role = role;
+        rootScope = $rootScope;
 
         $scope.formData = {};
         $scope.formData.student_name = "";
         $scope.formData.student_ic = "";
-        $scope.formData.student_intake = "";
+        $scope.formData.date_selected = "";
+        $scope.formData.desc = "";
         //#### Page Number #####//
         $scope.goto = {};
         $scope.goto.page = 1;
@@ -35,7 +54,7 @@
         $scope.selectedList = {};
         $scope.selection = [];
 
-        $scope.$on('load_list_student', function () {
+        $scope.$on('load_list_event', function () {
             loadData();
         });
 
@@ -43,11 +62,12 @@
 
         function loadData() {
             $scope.formData.isAllSelected = false;
-            $http.get(ip_server + 'student/list_student/' + $scope.pagenum, {
+            $http.get(ip_server + 'student/list_event/' + $scope.pagenum, {
                 params: {
                     student_name: $scope.formData.student_name,
                     student_ic: $scope.formData.student_ic,
-                    student_intake: $scope.formData.student_intake
+                    date_selected: $scope.formData.date_selected,
+                    desc: $scope.formData.desc
                 },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
@@ -94,6 +114,17 @@
             });
         }
 
+        $scope.prev = function () {
+            if ($scope.pagenum > 1) {
+                $scope.pagenum -= 1;
+            }
+            loadData();
+        };
+        $scope.next = function () {
+            $scope.pagenum += 1;
+            $scope.goto.page = $scope.pagenum;
+            loadData();
+        };
         $scope.getfilter = function () {
 
             $scope.filterflag = true;
@@ -141,7 +172,8 @@
 
             $scope.formData.student_name = "";
             $scope.formData.student_ic = "";
-            $scope.formData.student_intake = "";
+            $scope.formData.date_selected = "";
+            $scope.formData.desc = "";
 
             loadData();
 
@@ -194,14 +226,8 @@
                                 keyboard: false,
                             });
 
-                            var data = $.param({
-                                data: JSON.stringify({
-                                    "item_id": list_del
-                                })
-                            });
 
-
-                            $http.post(ip_server + 'student/delete_student', data, {
+                            $http.delete(ip_server + 'student/delete_event/' + JSON.stringify(list_del), {
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                                 }
@@ -210,10 +236,11 @@
                                     toastr.success('Data has been deleted.', 'Success!');
                                     loaderModal.close();
                                     $uibModalStack.dismissAll();
-                                    $rootScope.$broadcast('load_list_student');
+                                    $rootScope.$broadcast('load_list_event');
 
                                 } else {
                                     toastr.error("Data hasn't been updated.", 'Error!');
+                                    loaderModal.close();
                                     // $scope.dismissM = '$close()'
                                 }
 
@@ -243,8 +270,8 @@
             var modalInstance = $uibModal.open({
                 animation: true,
 
-                templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
-                controller: 'studentViewCtrl',
+                templateUrl: '../static/app' + gversion + '/pages/event/widgets/updateEvent.html',
+                controller: 'studentEventViewCtrl',
                 size: 'lg',
                 keyboard: false,
                 backdrop: 'static',
@@ -258,7 +285,6 @@
             modalInstance.result.then(function () {
                 loadData();
             }, function () {
-                // $log.info('Modal dismissed at: ' + new Date());
             });
 
         };
@@ -266,8 +292,8 @@
             var modalInstance = $uibModal.open({
                 animation: true,
                 keyboard: false,
-                templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
-                controller: 'student_createCtrl',
+                templateUrl: '../static/app' + gversion + '/pages/event/widgets/createEvent.html',
+                controller: 'studentEventCreateCtrl',
                 size: 'lg',
 
             });

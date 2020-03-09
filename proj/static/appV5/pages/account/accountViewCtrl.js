@@ -40,7 +40,7 @@
                 $scope.bill_code = result.bill_code;
                 $scope.bill_detail = result.bill_detail;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';
-                loaderModal.close()
+                loaderModal.close();
                 calculate();
             }).catch(function (error) {
                 alert("Connection Error");

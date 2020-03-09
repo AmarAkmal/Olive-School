@@ -29,7 +29,7 @@
             }).then(function (result) {
                 result = result.data;
                 $scope.id = result.id;
-                $scope.ic = result.student_ic
+                $scope.ic = result.student_ic;
                 $scope.student_name = result.student_name + "(" + result.student_ic + ")";
                 $scope.student_ic = result.student_ic;
                 $scope.date_event = result.date_event;

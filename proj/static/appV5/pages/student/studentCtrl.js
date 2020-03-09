@@ -1,20 +1,31 @@
 (function () {
     'use strict';
+    angular.module('BlurAdmin.pages.student').directive('studentbirthday', function () {
+        return function (scope, element, $rootScope) {
+
+            element.datepicker({
+                dateFormat: 'dd MM yy', showOtherMonths: true, selectOtherMonths: true,
+                changeYear: true,
+                onSelect: function (selectedDate,) {
+                    scope.student_birthday = selectedDate;
+                    // rootScope.$broadcast('load_list_report')
 
 
-    angular.module('BlurAdmin.pages.academic').controller('academic_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', '$uibModalStack', academic_listCtrl]);
+                }
+            });
+        };
+    });
+
+    angular.module('BlurAdmin.pages.student').controller('student_listCtrl', ['$scope', '$uibModal', 'baProgressModal', '$http', 'toastr', '$window', '$rootScope', "$uibModalStack", student_listCtrl]);
 
 
-    function academic_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
+    function student_listCtrl($scope, $uibModal, baProgressModal, $http, toastr, $window, $rootScope, $uibModalStack) {
         $scope.role = role;
+
         $scope.formData = {};
-        $scope.formData.select_sem = {'selected': [], 'options': ['All', '1', '2', '3']};
-        $scope.formData.select_sem.selected = "All";
-
-
         $scope.formData.student_name = "";
-        $scope.formData.ic_no = "";
-        $scope.formData.year = "";
+        $scope.formData.student_ic = "";
+        $scope.formData.student_intake = "";
         //#### Page Number #####//
         $scope.goto = {};
         $scope.goto.page = 1;
@@ -24,21 +35,19 @@
         $scope.selectedList = {};
         $scope.selection = [];
 
-        $scope.$on('load_list_academic', function () {
-
+        $scope.$on('load_list_student', function () {
             loadData();
-            $uibModalStack.dismissAll();
         });
+
         loadData();
 
         function loadData() {
             $scope.formData.isAllSelected = false;
-            $http.get(ip_server + 'academic/list/' + $scope.pagenum, {
+            $http.get(ip_server + 'student/list_student/' + $scope.pagenum, {
                 params: {
                     student_name: $scope.formData.student_name,
-                    student_ic: $scope.formData.ic_no,
-                    year: $scope.formData.year,
-                    sem: $scope.formData.select_sem.selected
+                    student_ic: $scope.formData.student_ic,
+                    student_intake: $scope.formData.student_intake
                 },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
@@ -57,10 +66,9 @@
                     $scope.pagenum = $scope.totalpagenum
                 }
 
-                if (response.count_result == 0) {
+                if (response.count_result == 0) {    /*Control last page no data */
                     $scope.goto.page = 1;
                     $scope.pagenum = 1;
-
 
                 }
                 if ($scope.pagenum > 4) {
@@ -80,7 +88,6 @@
                         }
                     }
                 }
-
             }).catch(function (error) {
                 alert("Connection Error");
                 $uibModalStack.dismissAll();
@@ -104,6 +111,17 @@
 
         };
 
+        $scope.prev = function () {
+            if ($scope.pagenum > 1) {
+                $scope.pagenum -= 1;
+            }
+            loadData();
+        };
+        $scope.next = function () {
+            $scope.pagenum += 1;
+            $scope.goto.page = $scope.pagenum;
+            loadData();
+        };
 
         $scope.gopage = function () {
 
@@ -132,10 +150,9 @@
             $scope.selection = [];
             $scope.formData.isAllSelected = false;
 
-            $scope.formData.select_sem.selected = "All";
             $scope.formData.student_name = "";
-            $scope.formData.ic_no = "";
-            $scope.formData.year = "";
+            $scope.formData.student_ic = "";
+            $scope.formData.student_intake = "";
 
             loadData();
 
@@ -143,6 +160,7 @@
 
         // --------------------------------start modal ------------------------------------------
         $scope.delete = function () {
+
             var selection = [];
             angular.forEach($scope.selectedList, function (selected, bind) {
                 if (selected) {
@@ -194,7 +212,7 @@
                             });
 
 
-                            $http.post(ip_server + 'academic/delete', data, {
+                            $http.post(ip_server + 'student/delete_student', data, {
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
                                 }
@@ -203,16 +221,17 @@
                                     toastr.success('Data has been deleted.', 'Success!');
                                     loaderModal.close();
                                     $uibModalStack.dismissAll();
-                                    $rootScope.$broadcast('load_list_academic');
+                                    $rootScope.$broadcast('load_list_student');
 
                                 } else {
                                     toastr.error("Data hasn't been updated.", 'Error!');
+                                    // $scope.dismissM = '$close()'
                                 }
 
 
                             }).catch(function (error) {
                                 alert("Connection Error");
-                                loaderModal.close()
+                                loaderModal.close();
 
                             });
 
@@ -235,13 +254,13 @@
             var modalInstance = $uibModal.open({
                 animation: true,
 
-                templateUrl: '../static/app' + gversion + '/pages/academic/widgets/update.html',
-                controller: 'academicViewCtrl',
+                templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
+                controller: 'studentViewCtrl',
                 size: 'lg',
                 keyboard: false,
                 backdrop: 'static',
                 resolve: {
-                    id: function () {
+                    items: function () {
                         return id;
                     }
                 }
@@ -254,18 +273,12 @@
             });
 
         };
-
-
-        // --------------------------------end modal ------------------------------------------
-
-
-        $scope.add = function () {
+        $scope.add_student = function () {
             var modalInstance = $uibModal.open({
                 animation: true,
                 keyboard: false,
-                backdrop: 'static',
-                templateUrl: '../static/app' + gversion + '/pages/academic/widgets/create.html',
-                controller: 'academicCreateCtrl',
+                templateUrl: '../static/app' + gversion + '/pages/student/widgets/create_student.html',
+                controller: 'student_createCtrl',
                 size: 'lg',
 
             });
@@ -275,6 +288,8 @@
             });
 
         };
+        $scope.select_intake = {'selected': 'All', 'options': ['1', '2', '3']};
+        // --------------------------------end modal ------------------------------------------
 
 
     }

@@ -13,7 +13,7 @@
                 method: 'GET',
                 url: ip_server + 'aideed/get_subject'
             }).then(function (result) {
-                $scope.subject_name = []
+                $scope.subject_name = [];
                 // if (alreadyChooseSub.length > 0) {
                 for (var x in result.data) {
                     // alreadyChooseSub.includes(result.data[x].id)
@@ -29,10 +29,10 @@
                     method: 'GET',
                     url: ip_server + 'aideed/get_skill/band?subject_id=' + $scope.subject_name.selected.id
                 }).then(function (result) {
-                    $scope.skill_name = result.data[0]['skill']
+                    $scope.skill_name = result.data[0]['skill'];
                     $scope.band_name = result.data[0]['band']
                 });
-            }
+            };
             $scope.submit = function () {
 
                 let arrayVir = [];
