@@ -121,6 +121,7 @@ class Invoice(db.Model):
         self.year = year
         self.month = month
         self.total_pay = total_pay
+        self.transactionid_toyyib = 0.00
 
 
 class InvoiceDetail(db.Model):

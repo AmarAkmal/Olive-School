@@ -72,6 +72,10 @@
                         <td>{{ item.billpaymentAmount }}</td>
 
                     </tr>
+                    <tr>
+                        <td colspan="2">Balance</td>
+                        <td>{{ totalBlance }}</td>
+                    </tr>
                     <tr ng-if="bill_detail.length == 0">
                         <td colspan="3"> No payment Made </td>
                     </tr>

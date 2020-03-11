@@ -30,13 +30,13 @@
                 $scope.year = result.year.toString() + result.month.toString();
 
                 $scope.desc = result.desc;
-                console.log(result.is_pay);
                 $scope.is_pay = result.is_pay;
                 $scope.is_pay_status = result.is_pay_status;
                 $scope.attachment_lama = result.attachment;
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
+                $scope.totalBlance = result.amount_bil;
                 $scope.bill_code = result.bill_code;
                 $scope.bill_detail = result.bill_detail;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';

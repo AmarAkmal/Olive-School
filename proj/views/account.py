@@ -236,7 +236,11 @@ def get_invoice():
 
     if get_detail.billcode_toyyib:
         dictV['bill_code'] = get_detail.billcode_toyyib
-        dictV['bill_detail'] = get_collection_payment(get_detail.billcode_toyyib)
+        infoToyyib = get_collection_payment(get_detail.billcode_toyyib)
+        dictV['bill_detail'] = infoToyyib['bil_detail']
+        # print(float(get_detail.total_pay))
+        # print(float(infoToyyib['amout_bil']))
+        dictV['amount_bil'] = "%.2f" % (float(get_detail.total_pay) - float(infoToyyib['amout_bil']))
     else:
         dictV['bill_code'] = "None"
 
@@ -394,19 +398,25 @@ def deleted_account(data):
 
 # @bp_account.route('/get_collection_payment/<data>')
 def get_collection_payment(data):
+    totalAmount = 0
+    # print(data)
     dataV = {
         'billCode': data,
         'billpaymentStatus': 1
     }
     req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', dataV)
+    # print(req.text)
     if "No data found!" in req.text:
         bill_paid = []
         pass
     else:
         bill_paid = req.json()
         # print(bill_paid)
+        for item in bill_paid:
+            totalAmount = totalAmount + float(item['billpaymentAmount'])
 
-    return bill_paid
+    return {'bil_detail': bill_paid, 'amout_bil': totalAmount}
+
 
 #########################3# TOYYIB PAY #################################################
 def call_bank_toyyib():
@@ -435,27 +445,26 @@ def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, 
     #     'billPaymentChannel': 2,
     # }
 
-
     data = {
-    'userSecretKey' : '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
-    'categoryCode' : 'amt3vw1j',
-    'billName' : billName,
-    'billDescription' : billDesc,
-    'billPriceSetting':0,
-    'billPayorInfo':1,
-    'billAmount':int(billAmount),
-    'billReturnUrl':'https://theolivetrees.edu.my/management/login/payment_made_olive',
-    'billCallbackUrl':'https://theolivetrees.edu.my/management/login/payment_made_olive',
-    'billExternalReferenceNo' : billExtId,
-    'billTo':billIC,
-    'billEmail':billEmail,
-    'billPhone':billPhone,
-    'billSplitPayment':0,
-    'billSplitPaymentArgs':'',
-    'billMultiPayment':1,
-    'billPaymentChannel':0,
-    'billDisplayMerchant':1,
-    'billContentEmail':'Done'
+        'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
+        'categoryCode': '2w4vgxc0',
+        'billName': billName,
+        'billDescription': billDesc,
+        'billPriceSetting': 0,
+        'billPayorInfo': 1,
+        'billAmount': int(billAmount),
+        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
+        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
+        'billExternalReferenceNo': billExtId,
+        'billTo': billIC,
+        'billEmail': billEmail,
+        'billPhone': billPhone,
+        'billSplitPayment': 0,
+        'billSplitPaymentArgs': '',
+        'billMultiPayment': 1,
+        'billPaymentChannel': 0,
+        'billDisplayMerchant': 1,
+        'billContentEmail': 'Done'
     }
     response = requests.post('https://toyyibpay.com/index.php/api/createBillMultiPayment', data)
     # response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
@@ -473,13 +482,18 @@ def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, 
 @bp_account.route('/mobile_get_invoice', methods=['GET'])
 def mobile_get_invoice():
     student_id = request.args.get("student_id")
+    invId = request.args.get("invId")
     student = Student.query.filter_by(id=student_id).first()
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).order_by(Invoice.created_by.asc()).first()
+    get_detail = Invoice.query.filter_by(id=invId).order_by(
+        Invoice.created_by.asc()).first()
     dictV = dict()
     if get_detail:
+        infoToyyib = get_collection_payment(get_detail.billcode_toyyib)
+        dictV["balance"] = dictV['amount_bil'] = "%.2f" % (float(get_detail.total_pay) - float(infoToyyib['amout_bil']))
+        dictV['bill_detail'] = infoToyyib['bil_detail']
 
         dictV["invoice_no"] = get_detail.receipt_no
         # dictV["student_id"] = get_detail.id
@@ -525,11 +539,13 @@ def mobile_get_amount():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).order_by(Invoice.created_by.asc()).first()
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).order_by(
+        Invoice.created_by.asc()).first()
 
     if get_detail:
         data = {
-            'billCode': get_detail.billcode_toyyib}
+            'billCode': get_detail.billcode_toyyib,
+            'billpaymentStatus': 1}
         req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
         if "No data found!" in req.text:
             pass
@@ -538,9 +554,9 @@ def mobile_get_amount():
             if bill_paid == 1:
                 get_detail.is_pay = True
                 db.session.commit()
-        return jsonify({'total': "%.2f" % float(get_detail.total_pay),
+        return jsonify({'total': "%.2f" % (float(get_detail.total_pay) - float(get_detail.transactionid_toyyib)),
                         'invoice_no': get_detail.receipt_no,
-                        'status': 'success'})
+                        'status': 'success', 'id':get_detail.id })
     else:
         return jsonify({'total': "0.00",
                         'invoice_no': 'No invoice available.',
@@ -550,8 +566,21 @@ def mobile_get_amount():
 @bp_account.route('/update_payment')
 def update_payment():
     inv = Invoice.query.filter_by(billcode_toyyib=request.args.get("billCode")).first()
+    totalAmount = 0
+
+    data = {
+        'billCode': request.args.get("billCode"),
+        'billpaymentStatus': 1}
+    req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
+    bill_paid = req.json()
+
+    for item in bill_paid:
+        totalAmount = totalAmount + float(item['billpaymentAmount'])
+
     if request.args.get("statusId") == '1':
-        inv.is_pay = True
+        inv.transactionid_toyyib = "%.2f" % float(totalAmount)
+        if float(totalAmount) == float(inv.total_pay):
+            inv.is_pay = True
     else:
         inv.is_pay = False
     # request.args.get("statusId")
@@ -568,22 +597,26 @@ def mobile_history_payment():
     if not student:
         return "invoice does not exist"
 
-    get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=1, is_deleted=0).order_by(
+    get_detail = Invoice.query.filter_by(student_id=student.id, is_deleted=0).order_by(
         Invoice.date_pay.desc()).all()
+
     list = dict()
     list['data'] = []
     if get_detail:
         for x in get_detail:
-            dict1 = dict()
-            dict1['id'] = x.id
-            dict1['inv_no'] = x.receipt_no
-            dict1['date_pay'] = x.date_pay.strftime("%d/%m/%Y")
-            dict1['paid'] = x.total_pay
-            list['data'].append(dict1)
+            if x.is_pay == 1 or float(x.transactionid_toyyib) > 0:
+                dict1 = dict()
+                infoToyyib = get_collection_payment(x.billcode_toyyib)
+                dict1['bill_detail'] = infoToyyib['bil_detail']
+                dict1['bill_amount'] = "%.2f" % float(infoToyyib['amout_bil'])
+                dict1['id'] = x.id
+                dict1['inv_no'] = x.receipt_no
+                dict1['date_pay'] = x.date_pay.strftime("%d/%m/%Y")
+                dict1['paid'] = x.total_pay
+                list['data'].append(dict1)
         return jsonify({'data': list['data']})
     else:
         return jsonify({'data': list['data']})
-
 
 # @bp_account.route('/add_toyyib_acc_with_id')
 # def add_toyyib_acc_with_id():
