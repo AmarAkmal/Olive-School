@@ -83,6 +83,10 @@ def list_student(pagenum):
                 dict1['status'] = "Pending"
 
             dict1['total'] = "%.2f" % float(x.total_pay)
+            if x.transactionid_toyyib == '' or x.transactionid_toyyib == 'null':
+                dict1['balance'] = 0.00
+            else:
+                dict1['balance'] = "%.2f" % float(float(x.total_pay) - float(x.transactionid_toyyib))
             get_detail = InvoiceDetail.query.filter_by(payment_id=x.id, is_deleted=0).all()
             dict1['invoice_detail'] = []
 
