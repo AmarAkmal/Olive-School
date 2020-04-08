@@ -24,24 +24,7 @@
                            class="form-control"
                            ng-model="invoice_no">
                 </div>
-                <div class="col-sm-6" style="padding-top: 10px;">
-                    <label>Bill Code Toyyib</label>
-                    <input readonly type="text"
-                           style="max-width: 100%;min-width: 100%;resize: none;"
-                           class="form-control"
-                           ng-model="bill_code">
-                </div>
-            </div>
-
-            <div class="col-sm-12" style="padding: 10px 0px 0px 0px;">
-                <div class="col-sm-6">
-                    <label>Code Invoice</label>
-                    <input readonly
-                           class="form-control"
-                           type="text"
-                           name="year" ng-model="year"/>
-                </div>
-                <div class="col-sm-6">
+                 <div class="col-sm-6" style="padding-top: 10px;">
                     <label>Status Payment - Date Payment</label>
                     <input readonly
                            class="form-control"
@@ -50,11 +33,30 @@
                 </div>
             </div>
 
+            <!--<div class="col-sm-12" style="padding: 10px 0px 0px 0px;">
+                <div class="col-sm-6">
+                    <label>Status Payment - Date Payment</label>
+                    <input readonly
+                           class="form-control"
+                           type="text"
+                           name="year" ng-model="is_pay_status"/>
+                </div>
+                <div class="col-sm-6">
+                    <label>Bill Code Toyyib</label>
+                    <input readonly type="text"
+                           style="max-width: 100%;min-width: 100%;resize: none;"
+                           class="form-control"
+                           ng-model="bill_code">
+                </div>
+            </div>-->
+
             <div class="col-sm-12" style="padding: 10px 15px 0px 15px;">
                 <label>Collection Payment</label>
                 <table class="table table-bordered table-hover table-condensed">
                     <tr>
-
+                        <td>
+                            Bill Code
+                        </td>
                         <td>
                             Payment Date
                         </td>
@@ -66,18 +68,22 @@
                         </td>
                     </tr>
                     <tr ng-repeat="item in bill_detail">
-
+                        <td>{{ item.bill_code }}</td>
                         <td>{{ item.billPaymentDate }}</td>
-                        <td>Successful</td>
+                        <td>{{ item.statusPD }}</td>
                         <td>{{ item.billpaymentAmount }}</td>
 
                     </tr>
-                    <tr>
-                        <td colspan="2">Balance</td>
+                    <tr ng-if="bill_detail.length != 0">
+                        <td colspan="3">Total Paid</td>
+                        <td>{{ paidAmount }}</td>
+                    </tr>
+                    <tr ng-if="bill_detail.length != 0">
+                        <td colspan="3">Payment Balance</td>
                         <td>{{ totalBlance }}</td>
                     </tr>
                     <tr ng-if="bill_detail.length == 0">
-                        <td colspan="3"> No payment Made </td>
+                        <td colspan="4"> No payment made </td>
                     </tr>
                     <!--<tr>
                         <td colspan="2"> TOTAL</td>

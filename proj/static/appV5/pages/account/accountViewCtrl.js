@@ -36,7 +36,8 @@
                 $scope.invoice_no = result.invoice_no;
                 $scope.items = result.invoice_detail;
                 $scope.total = result.total;
-                $scope.totalBlance = result.amount_bil;
+                $scope.paidAmount = result.amount_bil;
+                $scope.totalBlance = result.balance;
                 $scope.bill_code = result.bill_code;
                 $scope.bill_detail = result.bill_detail;
                 $scope.student_name = result.student_name + '(' + result.student_ic + ')';

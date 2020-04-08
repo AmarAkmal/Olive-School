@@ -60,9 +60,20 @@ def mobile_login():
     return jsonify({"status": "Failed"})
 
 
-@bp_login.route('/payment_made_olive')
-def payment_made():
+@bp_login.route('/payment_made_olive/<invID>')
+def payment_made(invID):
+    pd = PaidDetail.query.filter_by(inv_id=invID, bill_code=request.args.get("billcode"), status='billCode').first()
+    inv = Invoice.query.filter_by(id=invID, is_deleted=False).first()
+    if request.args.get("status_id") == '1':
+        amount = float(inv.transactionid_toyyib) + float(pd.amount)
+        inv.transactionid_toyyib = amount
+        pd.status = 'Paid'
+        if float(amount) == float(inv.total_pay):
+            inv.date_pay = datetime.now()
+            inv.is_pay = True
+    db.session.commit()
     return render_template('payment.html')
+
 
 @bp_login.route('/iep')
 def iep():

@@ -97,6 +97,7 @@ class Invoice(db.Model):
     year = db.Column(db.String(32))
     month = db.Column(db.String(32))
     desc = db.Column(db.TEXT)
+    paid = db.relationship("PaidDetail", backref="invoice", cascade="all, delete-orphan")
     payment_detail = db.relationship("InvoiceDetail", backref="invoice", cascade="all, delete-orphan")
     attchement_detail = db.relationship("PaymentAttachment", backref="invoice", cascade="all, delete-orphan")
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -263,3 +264,18 @@ class Aideed(db.Model):
         self.id = uuid.uuid4().hex
         self.classB = classB
         self.code = code
+
+
+class PaidDetail(db.Model):
+    id = db.Column(db.String(32), primary_key=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    bill_code = db.Column(db.String(100))
+    amount = db.Column(db.DECIMAL)
+    status = db.Column(db.String(100))
+    inv_id = db.Column(db.ForeignKey('invoice.id', ondelete="CASCADE", onupdate="CASCADE"))
+
+    def __init__(self, bill_code, amount, status):
+        self.id = uuid.uuid4().hex
+        self.bill_code = bill_code
+        self.amount = amount
+        self.status = status

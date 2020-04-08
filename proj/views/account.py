@@ -182,25 +182,25 @@ def add_invoice():
                     t.student_id = student_payment.id
                     db.session.add(t)
 
-            description = "Yuran yang dikenakan atas pelajar " + get_student.ic_no + " BerJumlah : RM " + total_pay
-
-            inv = Invoice.query.filter_by(receipt_no=receipt_no).first()
-            parent = Parent.query.filter_by(student_id=get_student.id, type='father').first()
-            if parent.email:
-                email = parent.email
-            else:
-                email = 'theolivetreesit@gmail.com'
-
-            if parent.phone:
-                phone = parent.phone
-            else:
-                phone = '01156568441'
-
-            if '/' in receipt_no:
-                receipt_no = receipt_no.replace('/', '-')
-            response = create_invoice_toyyib(receipt_no, description, str(total_pay).replace('.', ''), inv.id, email,
-                                             parent.name, phone)
-            inv.billcode_toyyib = response
+            # description = "Yuran yang dikenakan atas pelajar " + get_student.ic_no + " BerJumlah : RM " + total_pay
+            #
+            # inv = Invoice.query.filter_by(receipt_no=receipt_no).first()
+            # parent = Parent.query.filter_by(student_id=get_student.id, type='father').first()
+            # if parent.email:
+            #     email = parent.email
+            # else:
+            #     email = 'theolivetreesit@gmail.com'
+            #
+            # if parent.phone:
+            #     phone = parent.phone
+            # else:
+            #     phone = '01156568441'
+            #
+            # if '/' in receipt_no:
+            #     receipt_no = receipt_no.replace('/', '-')
+            # response = create_invoice_toyyib(receipt_no, description, str(total_pay).replace('.', ''), inv.id, email,
+            #                                  parent.name, phone)
+            # inv.billcode_toyyib = response
 
         db.session.commit()
         response = {"status": "OK"}
@@ -238,15 +238,26 @@ def get_invoice():
     else:
         dictV["is_pay_status"] = 'Pending - ' + valueDate
 
-    if get_detail.billcode_toyyib:
-        dictV['bill_code'] = get_detail.billcode_toyyib
-        infoToyyib = get_collection_payment(get_detail.billcode_toyyib)
-        dictV['bill_detail'] = infoToyyib['bil_detail']
-        # print(float(get_detail.total_pay))
-        # print(float(infoToyyib['amout_bil']))
-        dictV['amount_bil'] = "%.2f" % (float(get_detail.total_pay) - float(infoToyyib['amout_bil']))
-    else:
-        dictV['bill_code'] = "None"
+    dictV['bill_detail'] = []
+    pd = PaidDetail.query.filter_by(inv_id=get_detail.id).all()
+    if pd:
+        amountBill = 0
+        for x in pd:
+            dictG = dict()
+            amountBill = float(amountBill) + float(x.amount)
+            dictG["billPaymentDate"] = x.date_created
+            dictG["bill_code"] = x.bill_code
+            dictG["billpaymentAmount"] = "%.2f" % float(x.amount)
+            if x.status == 'billCode':
+                dictG["statusPD"] = 'Pending'
+            elif x.status == 'Paid':
+                dictG["statusPD"] = 'Paid'
+            else:
+                dictG["statusPD"] = 'Failed'
+            dictV['bill_detail'].append(dictG)
+
+        dictV['amount_bil'] = "%.2f" % float(amountBill)
+        dictV['balance'] = "%.2f" % (float(get_detail.total_pay) - float(amountBill))
 
     get_att = PaymentAttachment.query.filter_by(student_id=get_detail.id, is_deleted=0).all()
     dictV['attachment'] = []
@@ -430,14 +441,35 @@ def call_bank_toyyib():
 
 
 def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, billIC, billPhone):
+    data = {
+        'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
+        'categoryCode': '2w4vgxc0',
+        # 'userSecretKey': '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
+        # 'categoryCode': 'amt3vw1j',
+        'billName': billName,
+        'billDescription': billDesc,
+        'billPriceSetting': 1,  ###For fixed amount bill, set it to 0. For dynamic bill (user can key in the amount paid), set it to 1
+        'billPayorInfo': 0,     ### If you want to create open bill without require payer information, set it to 0. If you need payer information, set it to 1
+        'billAmount': int(billAmount),  # 100 = RM 1
+        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive/'+billExtId,
+        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive'+billExtId,
+        'billExternalReferenceNo': billExtId,
+        'billTo': billIC,
+        'billEmail': billEmail,
+        'billPhone': billPhone,
+        'billSplitPayment': 0,
+        'billSplitPaymentArgs': '',
+        'billPaymentChannel': 2,
+    }
+
     # data = {
-    #     'userSecretKey': '1wi1kc9b-8njp-w4tu-k7i3-ttftidpvbiqq',
-    #     'categoryCode': 'amt3vw1j',
+    #     'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
+    #     'categoryCode': '2w4vgxc0',
     #     'billName': billName,
     #     'billDescription': billDesc,
-    #     'billPriceSetting': 0,  ###For fixed amount bill, set it to 0. For dynamic bill (user can key in the amount paid), set it to 1
-    #     'billPayorInfo': 0,     ### If you want to create open bill without require payer information, set it to 0. If you need payer information, set it to 1
-    #     'billAmount': int(billAmount),  # 100 = RM 1
+    #     'billPriceSetting': 0,
+    #     'billPayorInfo': 1,
+    #     'billAmount': int(billAmount),
     #     'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
     #     'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
     #     'billExternalReferenceNo': billExtId,
@@ -446,32 +478,13 @@ def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, 
     #     'billPhone': billPhone,
     #     'billSplitPayment': 0,
     #     'billSplitPaymentArgs': '',
-    #     'billPaymentChannel': 2,
+    #     'billMultiPayment': 1,
+    #     'billPaymentChannel': 0,
+    #     'billDisplayMerchant': 1,
+    #     'billContentEmail': 'Done'
     # }
-
-    data = {
-        'userSecretKey': '22kwipwm-o1ll-gnby-a0um-y7yzq7vuwvwg',
-        'categoryCode': '2w4vgxc0',
-        'billName': billName,
-        'billDescription': billDesc,
-        'billPriceSetting': 0,
-        'billPayorInfo': 1,
-        'billAmount': int(billAmount),
-        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
-        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive',
-        'billExternalReferenceNo': billExtId,
-        'billTo': billIC,
-        'billEmail': billEmail,
-        'billPhone': billPhone,
-        'billSplitPayment': 0,
-        'billSplitPaymentArgs': '',
-        'billMultiPayment': 1,
-        'billPaymentChannel': 0,
-        'billDisplayMerchant': 1,
-        'billContentEmail': 'Done'
-    }
-    response = requests.post('https://toyyibpay.com/index.php/api/createBillMultiPayment', data)
-    # response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
+    # response = requests.post('https://toyyibpay.com/index.php/api/createBillMultiPayment', data)
+    response = requests.post('https://toyyibpay.com/index.php/api/createBill', data)
     result = response.json()
 
     if 'BillCode' in result[0]:
@@ -495,10 +508,16 @@ def mobile_get_invoice():
         Invoice.created_by.asc()).first()
     dictV = dict()
     if get_detail:
-        infoToyyib = get_collection_payment(get_detail.billcode_toyyib)
-        dictV["balance"] = dictV['amount_bil'] = "%.2f" % (float(get_detail.total_pay) - float(infoToyyib['amout_bil']))
-        dictV['bill_detail'] = infoToyyib['bil_detail']
+        dictV["balance"] = "%.2f" % (float(get_detail.total_pay) - float(get_detail.transactionid_toyyib))
+        dictV['bill_detail'] = []
+        pd = PaidDetail.query.filter_by(inv_id=get_detail.id).all()
+        if pd:
+            for x in pd:
+                dictG = dict()
+                dictG["billPaymentDate"] = x.date_created
+                dictG["billpaymentAmount"] = "%.2f" % float(x.amount)
 
+                dictV['bill_detail'].append(dictG)
         dictV["invoice_no"] = get_detail.receipt_no
         # dictV["student_id"] = get_detail.id
         dictV["student_ic"] = get_detail.student.ic_no
@@ -545,53 +564,42 @@ def mobile_get_amount():
 
     get_detail = Invoice.query.filter_by(student_id=student.id, is_pay=0, is_deleted=0).order_by(
         Invoice.created_by.asc()).first()
-
+    print(get_detail)
     if get_detail:
-        data = {
-            'billCode': get_detail.billcode_toyyib,
-            'billpaymentStatus': 1}
-        req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
-        if "No data found!" in req.text:
-            pass
-        else:
-            bill_paid = req.json()[0]["billpaymentStatus"]
-            if bill_paid == 1:
-                get_detail.is_pay = True
-                db.session.commit()
         return jsonify({'total': "%.2f" % (float(get_detail.total_pay) - float(get_detail.transactionid_toyyib)),
                         'invoice_no': get_detail.receipt_no,
-                        'status': 'success', 'id':get_detail.id })
+                        'status': 'success', 'id':get_detail.id})
     else:
         return jsonify({'total': "0.00",
                         'invoice_no': 'No invoice available.',
                         'status': 'no-pending'})
 
-
-@bp_account.route('/update_payment')
-def update_payment():
-    inv = Invoice.query.filter_by(billcode_toyyib=request.args.get("billCode")).first()
-    totalAmount = 0
-
-    data = {
-        'billCode': request.args.get("billCode"),
-        'billpaymentStatus': 1}
-    req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
-    bill_paid = req.json()
-
-    for item in bill_paid:
-        totalAmount = totalAmount + float(item['billpaymentAmount'])
-
-    if request.args.get("statusId") == '1':
-        inv.transactionid_toyyib = "%.2f" % float(totalAmount)
-        if float(totalAmount) == float(inv.total_pay):
-            inv.is_pay = True
-    else:
-        inv.is_pay = False
-    # request.args.get("statusId")
-    inv.orderid_toyyib = request.args.get("orderId")
-    inv.date_pay = datetime.now()
-    db.session.commit()
-    return "OK"
+#
+# @bp_account.route('/update_payment')
+# def update_payment():
+#     inv = Invoice.query.filter_by(billcode_toyyib=request.args.get("billCode")).first()
+#     totalAmount = 0
+#
+#     data = {
+#         'billCode': request.args.get("billCode"),
+#         'billpaymentStatus': 1}
+#     req = requests.post('https://toyyibpay.com/index.php/api/getBillTransactions', data)
+#     bill_paid = req.json()
+#
+#     for item in bill_paid:
+#         totalAmount = totalAmount + float(item['billpaymentAmount'])
+#
+#     # if request.args.get("statusId") == '1':
+#     inv.transactionid_toyyib = "%.2f" % float(totalAmount)
+#     if float(totalAmount) == float(inv.total_pay):
+#         inv.is_pay = True
+#     else:
+#         inv.is_pay = False
+#     # request.args.get("statusId")
+#     inv.orderid_toyyib = request.args.get("orderId")
+#     inv.date_pay = datetime.now()
+#     db.session.commit()
+#     return "OK"
 
 
 @bp_account.route('/mobile_history_payment')
@@ -603,19 +611,26 @@ def mobile_history_payment():
 
     get_detail = Invoice.query.filter_by(student_id=student.id, is_deleted=0).order_by(
         Invoice.date_pay.desc()).all()
-
     list = dict()
     list['data'] = []
     if get_detail:
         for x in get_detail:
-            if x.is_pay == 1 or float(x.transactionid_toyyib) > 0:
-                dict1 = dict()
-                infoToyyib = get_collection_payment(x.billcode_toyyib)
-                dict1['bill_detail'] = infoToyyib['bil_detail']
-                dict1['bill_amount'] = "%.2f" % float(infoToyyib['amout_bil'])
+            dict1 = dict()
+            pd = PaidDetail.query.filter_by(inv_id=x.id,status='Paid').all()
+            if pd:
+                dict1['bill_detail'] = []
+                paidAmount = 0
+                for d in pd:
+                    dict2 = dict()
+                    paidAmount = paidAmount + float(d.amount)
+                    dict2['billPaymentDate'] = d.date_created.strftime("%d/%m/%Y")
+                    dict2['billpaymentAmount'] = "%.2f" % float(d.amount)
+                    dict1['bill_detail'].append(dict2)
+
+                dict1['bill_amount'] = "%.2f" % float(paidAmount)
                 dict1['id'] = x.id
                 dict1['inv_no'] = x.receipt_no
-                dict1['date_pay'] = x.date_pay.strftime("%d/%m/%Y")
+                dict1['date_pay'] = x.date_created.strftime("%d/%m/%Y")
                 dict1['paid'] = x.total_pay
                 list['data'].append(dict1)
         return jsonify({'data': list['data']})
@@ -653,3 +668,46 @@ def mobile_history_payment():
 #         inv.billcode_toyyib = response
 #
 #         return jsonify({'status':response})
+
+
+@bp_account.route('/mobile_create_bill')
+def mobile_create_bill():
+    inv_id = request.args.get("invId")
+    amount = request.args.get("amount")
+    inv = Invoice.query.filter_by(id=inv_id).first()
+
+    if inv:
+
+        description = "Yuran yang dikenakan atas pelajar " + inv.student.ic_no + \
+                      " berJumlah RM " + "%.2f" % (float(inv.total_pay) - float(inv.transactionid_toyyib))
+
+        totalAmount = "%.2f" % float(amount)
+
+        parent = Parent.query.filter_by(student_id=inv.student.id, type='father').first()
+        if parent.email:
+            email = parent.email
+        else:
+            email = 'theolivetreesit@gmail.com'
+
+        if parent.phone:
+            phone = parent.phone
+        else:
+            phone = '01156568441'
+
+        receipt_no = inv.receipt_no
+        if '/' in receipt_no:
+            receipt_no = receipt_no.replace('/', '-')
+
+        response = create_invoice_toyyib(receipt_no, description, str(totalAmount).replace('.', ''), inv.id, email,
+                                         parent.name, phone)
+        if response == 'Failed':
+            return jsonify({'billCOde': 'None', 'status': 'Failed'})
+        else:
+            pd = PaidDetail(bill_code=response,amount=totalAmount,status='billCode')
+            pd.inv_id = inv.id
+            db.session.add(pd)
+        db.session.commit()
+
+        return jsonify({'billCOde': response, 'status': 'OK'})
+    else:
+        return jsonify({'billCOde': 'None', 'status': 'Failed'})

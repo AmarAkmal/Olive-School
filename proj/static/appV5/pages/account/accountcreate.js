@@ -27,8 +27,8 @@
             var data = {
                 "user_id": user_id,
                 "student_id": $scope.student_name.selected.id,
-                "year": $scope.year,
-                "month": $scope.month,
+                "year": 2020,
+                "month": 12,
                 "invoice_no": $scope.invoice_no,
                 "items": $scope.items,
                 "desc": $scope.desc,
