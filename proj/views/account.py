@@ -510,7 +510,7 @@ def mobile_get_invoice():
     if get_detail:
         dictV["balance"] = "%.2f" % (float(get_detail.total_pay) - float(get_detail.transactionid_toyyib))
         dictV['bill_detail'] = []
-        pd = PaidDetail.query.filter_by(inv_id=get_detail.id).all()
+        pd = PaidDetail.query.filter_by(inv_id=get_detail.id, status='Paid').all()
         if pd:
             for x in pd:
                 dictG = dict()
