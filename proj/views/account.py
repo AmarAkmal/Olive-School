@@ -239,7 +239,7 @@ def get_invoice():
         dictV["is_pay_status"] = 'Pending - ' + valueDate
 
     dictV['bill_detail'] = []
-    pd = PaidDetail.query.filter_by(inv_id=get_detail.id).all()
+    pd = PaidDetail.query.filter_by(inv_id=get_detail.id, status='Paid').all()
     if pd:
         amountBill = 0
         for x in pd:
