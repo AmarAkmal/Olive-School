@@ -6,8 +6,14 @@ class BaseConfig(object):
     # DATABASE_URI = 'sqlite://:memory:'
     # SQLALCHEMY_DATABASE_URI ='sqlite:///test.db'
     UPLOAD_FOLDER = 'static/uploads'  # changed to relative path
-    # CELERY_BROKER_URL = 'redis://:madi0122146026@192.168.5.30:6379'
-    # CELERY_BACKEND = 'redis://:madi0122146026@192.168.5.30:6379'
+
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = '465'
+    MAIL_USERNAME = 'unull.solution@gmail.com'
+    MAIL_PASSWORD = '!@#P@ssw0rd1231'
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
     VERSION = 'V6'
     HOSTNAME = 'https://theolivetrees.edu.my/management/'
 

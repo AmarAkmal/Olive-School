@@ -24,7 +24,7 @@
                            class="form-control"
                            ng-model="invoice_no">
                 </div>
-                 <div class="col-sm-6" style="padding-top: 10px;">
+                <div class="col-sm-6" style="padding-top: 10px;">
                     <label>Status Payment - Date Payment</label>
                     <input readonly
                            class="form-control"
@@ -63,8 +63,14 @@
                         <td>
                             Status
                         </td>
-                         <td>
+                        <td>
                             Paid Amount
+                        </td>
+                        <td>
+                            <div align="center">
+                                Action
+                            </div>
+
                         </td>
                     </tr>
                     <tr ng-repeat="item in bill_detail">
@@ -72,6 +78,13 @@
                         <td>{{ item.billPaymentDate }}</td>
                         <td>{{ item.statusPD }}</td>
                         <td>{{ item.billpaymentAmount }}</td>
+                        <td>
+                            <div align="center">
+                                <button style="border-radius: 25px;" ng-click="send_email(invoice_no,item.bill_code)"
+                                        class="btn btn-primary ion-email"></button>
+                            </div>
+
+                        </td>
 
                     </tr>
                     <tr ng-if="bill_detail.length != 0">
@@ -83,7 +96,7 @@
                         <td>{{ totalBlance }}</td>
                     </tr>
                     <tr ng-if="bill_detail.length == 0">
-                        <td colspan="4"> No payment made </td>
+                        <td colspan="4"> No payment made</td>
                     </tr>
                     <!--<tr>
                         <td colspan="2"> TOTAL</td>
@@ -99,8 +112,8 @@
             <div class="col-sm-12" style="padding-top: 10px;">
                 <label>Remark</label>
                 <input readonly
-                           class="form-control"
-                           type="text" ng-model="desc"/>
+                       class="form-control"
+                       type="text" ng-model="desc"/>
                 <!--<textarea style="max-width: 100%;min-width: 100%;resize: none;"
                           class="form-control"
                           required
@@ -115,7 +128,8 @@
                         <li ng-repeat="x in  attachment_lama">
                             <i class="file-icon ion-document"></i>
                             <span class="file-name"></span>{{ x.name }} -
-                            <a style="color: white;" download href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">
+                            <a style="color: white;" download
+                               href="../static/uploads/{{student_id}}/{{ x.id }}/{{ x.name }}">
                                 <u>Download</u></a>
                         </li>
                     </ul>

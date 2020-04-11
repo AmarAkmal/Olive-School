@@ -1,11 +1,16 @@
-import os, shutil
-from datetime import timedelta, datetime
 import math
-from flask import Blueprint, render_template, request, jsonify, json, abort
-from werkzeug.utils import secure_filename
-from proj.model import *
-from sqlalchemy import or_
+import os
+import shutil
+from datetime import datetime
+
 import requests
+from flask import Blueprint, request, jsonify
+from flask_mail import Message
+from sqlalchemy import or_
+from werkzeug.utils import secure_filename
+
+from proj import app, mail
+from proj.model import *
 
 bp_account = Blueprint('bp_account', __name__)
 
@@ -448,11 +453,13 @@ def create_invoice_toyyib(billName, billDesc, billAmount, billExtId, billEmail, 
         # 'categoryCode': 'amt3vw1j',
         'billName': billName,
         'billDescription': billDesc,
-        'billPriceSetting': 1,  ###For fixed amount bill, set it to 0. For dynamic bill (user can key in the amount paid), set it to 1
-        'billPayorInfo': 0,     ### If you want to create open bill without require payer information, set it to 0. If you need payer information, set it to 1
+        'billPriceSetting': 1,
+        ###For fixed amount bill, set it to 0. For dynamic bill (user can key in the amount paid), set it to 1
+        'billPayorInfo': 0,
+        ### If you want to create open bill without require payer information, set it to 0. If you need payer information, set it to 1
         'billAmount': int(billAmount),  # 100 = RM 1
-        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive/'+billExtId,
-        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive'+billExtId,
+        'billReturnUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive/' + billExtId,
+        'billCallbackUrl': 'https://theolivetrees.edu.my/management/login/payment_made_olive' + billExtId,
         'billExternalReferenceNo': billExtId,
         'billTo': billIC,
         'billEmail': billEmail,
@@ -568,11 +575,12 @@ def mobile_get_amount():
     if get_detail:
         return jsonify({'total': "%.2f" % (float(get_detail.total_pay) - float(get_detail.transactionid_toyyib)),
                         'invoice_no': get_detail.receipt_no,
-                        'status': 'success', 'id':get_detail.id})
+                        'status': 'success', 'id': get_detail.id})
     else:
         return jsonify({'total': "0.00",
                         'invoice_no': 'No invoice available.',
                         'status': 'no-pending'})
+
 
 #
 # @bp_account.route('/update_payment')
@@ -616,7 +624,7 @@ def mobile_history_payment():
     if get_detail:
         for x in get_detail:
             dict1 = dict()
-            pd = PaidDetail.query.filter_by(inv_id=x.id,status='Paid').all()
+            pd = PaidDetail.query.filter_by(inv_id=x.id, status='Paid').all()
             if pd:
                 dict1['bill_detail'] = []
                 paidAmount = 0
@@ -636,6 +644,7 @@ def mobile_history_payment():
         return jsonify({'data': list['data']})
     else:
         return jsonify({'data': list['data']})
+
 
 # @bp_account.route('/add_toyyib_acc_with_id')
 # def add_toyyib_acc_with_id():
@@ -703,7 +712,7 @@ def mobile_create_bill():
         if response == 'Failed':
             return jsonify({'billCOde': 'None', 'status': 'Failed'})
         else:
-            pd = PaidDetail(bill_code=response,amount=totalAmount,status='billCode')
+            pd = PaidDetail(bill_code=response, amount=totalAmount, status='billCode')
             pd.inv_id = inv.id
             db.session.add(pd)
         db.session.commit()
@@ -711,3 +720,70 @@ def mobile_create_bill():
         return jsonify({'billCOde': response, 'status': 'OK'})
     else:
         return jsonify({'billCOde': 'None', 'status': 'Failed'})
+
+
+######### SEND EMAIL FOR RECEIPT ##############
+@bp_account.route('/send_receipt', methods=['POST'])
+def send_receipt():
+    try:
+        data = json.loads(request.data)
+        # print(data)
+        invoice_no = data["invoice_no"]
+        bill_code = data["bill_code"]
+        get_invoice = Invoice.query.filter_by(receipt_no=invoice_no, billcode_toyyib=bill_code).first()
+        # print(get_invoice.student.ic_no)
+        # total = 0
+        # for x in get_invoice:
+        #     total = total + int(x.total_pay)
+        if not get_invoice:
+            status = {'status': 'failed'}
+            return jsonify(status)
+        get_parent_email = Parent.query.filter_by(student_id=get_invoice.student.id).all()
+
+        email_receive = []
+
+        for x in get_parent_email:
+            if '@' in x.email:
+                email_receive.append(x.email)
+                print(x.email)
+        if not email_receive:
+            status = {'status': 'no email'}
+            return jsonify(status)
+        ##### process html and data ####
+
+        payment_date_data = get_invoice.date_pay.strftime("%d/%m/%Y %H:%M")
+        invoice_data = invoice_no
+        bill_code_data = bill_code
+
+        student_ic_data = get_invoice.student.ic_no
+        student_name_data = get_invoice.student.name
+
+        # amount_data = get_invoice.total_pay
+        total_amount_data = get_invoice.total_pay
+        #
+        file = open('proj/templates/html_receipt_email.html', 'r', )
+        template_file_content = file.read()
+        template_file_content = template_file_content \
+            .replace('paymentDateData', payment_date_data) \
+            .replace('invoiceData', invoice_data) \
+            .replace('billCodeData', bill_code_data) \
+            .replace('studentIcData', student_ic_data) \
+            .replace('studentNameData', student_name_data) \
+            .replace('totalAmountData', total_amount_data)
+        # .replace('amountData', amount_data)
+
+        file.close()
+
+        msg = Message('OLIVE TREES SCHOOL:Your Payment Was Successfull',
+                      sender=('Do-Not-Reply', 'Do-Not-Reply@gmail.com'),
+                      recipients=email_receive)
+
+        msg.html = template_file_content
+        with app.app_context():
+            mail.send(msg)
+        status = {'status': 'ok'}
+    except Exception as e:
+        print(e)
+        status = {'status': 'failed'}
+    return jsonify(status)
+    # return jsonify(status)

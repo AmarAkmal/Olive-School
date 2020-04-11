@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 import os
 import proj.config
@@ -22,6 +23,7 @@ from flask_cors import CORS
 
 # create tables
 db = SQLAlchemy(app)
+mail = Mail(app)
 from proj import model
 # db.drop_all()
 db.create_all()

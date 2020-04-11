@@ -51,7 +51,8 @@
 
 
         }
-        $scope.countBilV = function(data) {
+
+        $scope.countBilV = function (data) {
             $scope.countBil = $scope.countBil + parseInt(data)
         };
         $scope.attachment_deleted = [];
@@ -61,6 +62,73 @@
             }
             $scope.attachment_lama.splice(index, 1);
         };
+
+        $scope.send_email = function (invoiceNo, billCodeId) {
+            console.log(invoiceNo, billCodeId)
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: '../static/app' + gversion + '/pages/asset/widgets/confirmation.html',
+                // controller: 'dltReportCtrl',
+                // controllerAs: 'dAssetCtrl',
+                size: "sm",
+                resolve: {
+                    invoiceNo: function () {
+                        return invoiceNo;
+                    },
+                    billCodeId: function () {
+                        return billCodeId;
+                    }
+                },
+                controller: function ($scope, $uibModalInstance, $uibModal, invoiceNo, billCodeId) {
+                    $scope.invoiceNo = invoiceNo;
+                    $scope.billCodeId = billCodeId;
+                    $scope.confirmSend = function () {
+
+                        loaderModal = $uibModal.open({
+                            animation: true,
+                            templateUrl: '../static/app' + gversion + '/pages/asset/widgets/loader.html',
+                            size: 'sm',
+                            backdrop: 'static',
+                            keyboard: false,
+                        });
+                        var data = JSON.stringify({
+                            invoice_no: $scope.invoiceNo,
+                            bill_code: $scope.billCodeId
+                        })
+
+                        $http.post(ip_server + 'account/send_receipt', data, {
+                                transformRequest: angular.identity,
+                                headers: {'Content-Type': undefined}
+                            }
+                        ).then(function (response) {
+                            if (response.data.status === "ok") {
+                                toastr.success('Email has been send !', 'Success');
+                                $rootScope.$broadcast('load_list_account');
+                                loaderModal.close();
+                            } else if (response.data.status === "no email") {
+                                toastr.warning('Opps! No email to send,please set student parent email', 'Warning');
+                                $rootScope.$broadcast('load_list_account');
+                                loaderModal.close();
+                            } else {
+                                toastr.error("Email hasn't been send.", 'Error!');
+                                loaderModal.close();
+                            }
+
+                        }).catch(function (error) {
+                            alert("Connection Error");
+                            loaderModal.close();
+
+                        });
+
+
+                        // }
+
+                    }; //function end
+                }, //controller end
+
+
+            });
+        }
 
         // $scope.student_name.selected = {'ic_no': items.student_ic, 'name': items.student_name}
         $scope.submit = function () {

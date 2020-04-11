@@ -1,0 +1,13 @@
+<div class="modal-content">
+    <div class="modal-header bg-warning">
+        <span>Confirmation</span>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to send email for <strong>invoice no:{{invoiceNo}} </strong> and <strong>bill code
+        {{billCodeId}} </strong> ?
+    </div>
+    <div class="modal-footer" style="text-align: center">
+        <button type="button" class="btn btn-primary" ng-click="confirmSend();$close()">Yes</button>
+        <button type="button" class="btn btn-primary" ng-click="$dismiss()">No</button>
+    </div>
+</div>
